@@ -360,10 +360,10 @@ def render_readme(data, metrics):
 
 ### Current milestone, next action, destination readiness
 
-- **Current milestone:** `W2-M4` *Microsoft retail OS inquiry (unsent)* — DRAFT `INQUIRY-2026-11-22-001` with 6 verbatim questions, definitions table, routes A/B1-B4, O1-O5; external action blocked until owner authorizes.
-- **Next actionable:** `NA-1` Owner sends inquiry via Route A (account team) or B1 `ID@XBOX.com` after confirming contact identity — do NOT enroll Partner Center / accept NDA. Outcome O1 moves to CONDITIONALLY FEASIBLE; O2/O3 confirms boundary.
-- **Independent work:** `W6` UEFI probe can proceed as **separate product** `PC-hardware-report` only after owner re-approves it separately — not Xbox PC evidence.
-- **Dependent work:** `W7` genuine execution + `W8` physical validation blocked until Microsoft response + `W6-M4` physical logs.
+- **Current milestone:** `W2-M4` *Microsoft retail OS inquiry (unsent)* — packet `INQUIRY-READINESS-2026-11-22-001` ready with 6 questions (Q6 neutral clarification), definitions table, routes A/B1-B4 with calibrated limits, O1-O5; external action blocked until owner authorizes.
+- **Next actionable:** `NA-1` Owner sends inquiry via Route A (preferred internal routing if account relationship exists) or B1 `ID@XBOX.com` (documented initial contact, ask to route if out of scope) — do NOT enroll Partner Center / accept NDA. O1 alone does NOT set feasibility; `CONDITIONALLY FEASIBLE` only when four conditions met (artifact/provenance, route+agreement, explicit PC authorization, hardware/configuration docs); O2/O3 confirms boundary.
+- **Independent work:** `W6` UEFI probe is separate product `PC-hardware-report` (spec only) — not Xbox PC evidence; genuine readiness stays `0/4 NOT CURRENTLY DEMONSTRATED`.
+- **Dependent work:** `W7-M1` remains `BLOCKED` (inquiry unsent, not complete) + `W7` genuine execution + `W8` physical validation blocked until Microsoft response + `W6-M4` physical logs.
 
 | Metric | Value |
 |--------|-------|

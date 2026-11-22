@@ -2,8 +2,8 @@
   "project": "XboxPC",
   "version": "1.0.0",
   "generatedAt": "2026-11-22",
-  "branch": "arena/f59d27eb-xboxpc",
-  "commit": "1eac66c",
+  "branch": "arena/7ff9d1c6-xboxpc",
+  "commit": "f4cf313",
   "destination": "Genuine, unmodified Xbox Series X retail OS booting directly on non-Xbox x86-64 PC hardware, without a host operating system, emulator, or security bypass.",
   "evidenceClasses": [
     "VERIFIED",
@@ -134,18 +134,18 @@
         {
           "id": "W2-M4",
           "title": "Microsoft retail OS inquiry (unsent)",
-          "description": "Six-question inquiry INQUIRY-2026-11-22-001 (Q1 complete image / Q2 PC-target / Q3 GDKX scope / Q4 research program / Q5 deployment auth / Q6 written confirmation) + definitions + routes A/B + O1-O5.",
+          "description": "Six-question inquiry INQUIRY-2026-11-22-001 (Q1 complete image / Q2 PC-target / Q3 GDKX scope / Q4 research program / Q5 deployment auth / Q6 neutral PC-offering clarification) + definitions with observable objective first + routes A/B with calibrated recipient limits + O1-O5.",
           "status": "completed",
-          "evidence": "research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md \u2014 DRAFT DO NOT SUBMIT, all contact routes from verified Microsoft domains",
+          "evidence": "research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md + docs/decisions/W2-M4-inquiry-readiness-packet.md (calibration pass 2026-11-22 \u2014 audit, recipient evidence with limits, O1 four-condition gating, checklist, authorization)",
           "evidenceClass": "DOCUMENTED",
           "type": "documentation",
-          "completionCriteria": "Draft contains all 6 verbatim questions, attachment table \u00a74, routes A/B1-B4/O1-O5, review sign-off; external action blocked until owner authorizes",
+          "completionCriteria": "Packet prepared (draft + owner packet ready): all 6 Qs with Q6 neutral clarification, definitions \u00a74 observable objective first + hypothesis labeled, routes A/B1-B4 with fetched Microsoft sources and explicit limits (A enables download access, not exclusive policy authority; B1 documented initial contact with routing request; response time UNKNOWN; no invented contacts), O1-O5 matrix with four-condition gating, send-checklist, authorization \u2014 inquiry remains UNSENT, W7-M1 remains BLOCKED",
           "dependencies": [
             "W2-M1",
             "W2-M2",
             "W2-M3"
           ],
-          "blocker": "Awaiting owner authorization to send via ID@XBOX.com / account team \u2014 response determines CONDITIONALLY FEASIBLE vs maintained NOT CURRENTLY DEMONSTRATED"
+          "blocker": "Inquiry UNSENT \u2014 awaiting owner authorization to send via Route A (preferred internal routing if account relationship exists) or B1 ID@XBOX.com (documented initial contact, route to platform/OS or licensing team if out of scope); feasibility remains NOT CURRENTLY DEMONSTRATED until O1 four conditions (artifact/provenance/route+agreement/PC-authorization/configuration) established"
         }
       ]
     },
@@ -366,11 +366,11 @@
           "evidence": "FEASIBILITY_FINAL_REVIEW.md \u00a72.5 item #1 + MICROSOFT_RETAIL_OS_INQUIRY.md Q1-Q2 awaiting send",
           "evidenceClass": "UNKNOWN",
           "type": "research",
-          "completionCriteria": "Microsoft written response (O1 COMPLETE IMAGE AVAILABLE) with program name/URL + acquisition procedure \u2014 or authoritative O2/O3 boundary confirmation",
+          "completionCriteria": "Microsoft written response (O1) establishing all four conditions: identifiable artifact+provenance, legitimate acquisition route+agreement, explicit standard-PC deployment authorization, supported hardware/configuration + deployment docs \u2014 or authoritative O2/O3 boundary confirmation \u2014 not a bare yes",
           "dependencies": [
             "W2-M4"
           ],
-          "blocker": "No legitimate retail OS artifact for non-Xbox hardware in searched public sources \u2014 requires Microsoft cooperation"
+          "blocker": "No legitimate retail OS artifact for non-Xbox hardware in searched public sources \u2014 requires Microsoft cooperation; inquiry UNSENT (W2-M4 packet prepared, W7-M1 not complete)"
         },
         {
           "id": "W7-M2",
@@ -439,14 +439,14 @@
     "overallProgress": "50.0% (12/24)",
     "milestoneProgress": "50.0% (12/24 completed)",
     "genuineExecutionReadiness": "0.0% (0/4 on W7+W8 critical path \u2014 research completion does NOT inflate this)",
-    "nextMilestone": "W2-M4 \u2192 W7-M1 (Microsoft inquiry send \u2192 await O1-O5 response) \u2014 owner authorization required",
-    "currentPhase": "Phase 5.5 HOLD (merged 1eac66c) \u2014 awaiting owner decision on inquiry send; diagnostic probe is separate product",
+    "nextMilestone": "W2-M4 packet prepared (calibration pass) \u2014 inquiry UNSENT, W7-M1 remains BLOCKED; await owner send via Route A (preferred internal routing if available) or B1 ID@XBOX.com (documented initial contact)",
+    "currentPhase": "Phase 5.5 HOLD (base 8771211, head f4cf313 on arena/7ff9d1c6-xboxpc) \u2014 inquiry readiness packet ready, unsent; diagnostic probe is separate product (spec only); genuine readiness 0/4 NOT CURRENTLY DEMONSTRATED",
     "majorBlockers": [
-      "No legitimate retail OS artifact for generic PC in searched public sources (W7-M1)",
-      "Toolchain missing (gnu-efi/ovmf/qemu) + no hardware provisioned (W6-M2/W6-M4)",
+      "No legitimate retail OS artifact for generic PC in searched public sources (W7-M1 BLOCKED \u2014 inquiry UNSENT, not complete)",
+      "Toolchain missing (gnu-efi/ovmf/qemu) + no hardware provisioned (W6-M2/W6-M4) \u2014 probe is separate product",
       "Board/firmware surface gaps (ACPI/SMBIOS dump, SMCFW, cert chain) remain UNKNOWN (W1-M3/W3-M2)"
     ],
-    "destinationReadiness": "Destination requires W7-M1\u2192W7-M2 + W6-M4 + W5-M2 \u2014 all blocked. Research 50.0% \u2260 readiness 0.0%."
+    "destinationReadiness": "Destination requires W7-M1\u2192W7-M2 + W6-M4 + W5-M2 \u2014 all blocked. Research 50.0% (12/24) \u2260 readiness 0.0% (0/4). NOT CURRENTLY DEMONSTRATED preserved."
   },
   "nextActions": [
     {
@@ -454,8 +454,8 @@
       "title": "Owner reviews & sends Microsoft inquiry",
       "owner": "Project Owner Lamar",
       "dependsOn": "REVIEW_INDEX.md + MICROSOFT_RETAIL_OS_INQUIRY.md",
-      "action": "Authorize Route A (account team) or B1 ID@XBOX.com email with 6 questions + definitions table; keep unsent until explicit send authorization",
-      "outcome": "O1 moves feasibility to CONDITIONALLY FEASIBLE; O2/O3 confirms boundary (no PC image); O4/O5 requires clarification"
+      "action": "Authorize Route A (preferred internal routing if account relationship exists) or B1 ID@XBOX.com (documented initial contact \u2014 ask to route to Xbox platform/OS or licensing team if out of scope) with 6 questions + definitions table; keep UNSENT until explicit send authorization; response time UNKNOWN",
+      "outcome": "O1 states image exists \u2014 feasibility remains NOT CURRENTLY DEMONSTRATED until four conditions met (artifact/provenance, legitimate route+agreement, explicit PC deployment authorization, supported hardware/configuration + deployment docs); O2/O3 confirms boundary as stated; O4/O5 requires clarification \u2014 W7-M1 not complete on packet alone"
     },
     {
       "id": "NA-2",
