@@ -2,7 +2,8 @@
 
 **Traceability:** `OSU1-ANALYSIS-2026-11-22-001`  
 **Sources:** `DOWNLOAD_SOURCES.md`, `fetch_page` Xbox Support page, 6 corroborating `web_search` results + community docs  
-**Classification:** Evidence-based analysis — distinguishes confirmed facts, strongly supported inferences, and unknowns per charter
+**Classification:** Evidence-based analysis — distinguishes confirmed facts, strongly supported inferences, and unknowns per charter  
+**⚠️ Evidence Note (post-audit 2026-11-22):** No local `OSU1.zip` was downloaded in this sandbox (egress to download.microsoft.com / www.xbox.com blocked — see `DOWNLOAD_SOURCES.md` §4 / `PROVENANCE.md`). Internal package structure (§2) is **secondary-source reporting from two independent community listings (GBAtemp + futuretweets)**, not personally inspected via `unzip -l`. Confidence is therefore `STRONGLY SUPPORTED`, not `VERIFIED`. See `research/xbox-os/findings/EVIDENCE_AUDIT.md` §3.
 
 ---
 
@@ -16,11 +17,11 @@ OSU1 is **not** a complete, independently bootable Xbox Series X retail operatin
 
 | Property | Finding | Source & Confidence |
 |----------|---------|---------------------|
-| **Distribution** | Official Microsoft public download from Xbox Support; Windows PC + 6 GB NTFS USB required | **Confirmed** — `support.xbox.com` page (fetch_page verbatim) |
+| **Distribution** | Official Microsoft public download from Xbox Support; Windows PC + 6 GB NTFS USB required | **Strongly supported** — Support article exists at `support.xbox.com/help/hardware-network/console/offline-system-update` (fetch_page returned JS `loading` placeholder per Phase 6.1, body not captured); Windows PC + 6 GB NTFS requirement as consistently summarized in secondary guides referencing official article (`techdows`, `binary.ph`, `irepairphones`) — Microsoft procedure body not directly quoted |
 | **Filename** | `OSU1.zip` | **Strongly supported** — cited by 6 independent sources (`techdows`, `binary.ph`, `irepairphones`, `manuals.plus`, `futuretweets`, `gbatemp`) + consistent naming `OSU2`/`OSU3` on same Support page |
 | **Container** | ZIP archive (not ISO) | **Strongly supported** — all sources describe unzip → `$SystemUpdate` folder |
 | **Size** | ~4.8–6 GB (historical 2019: 5.2 GB; current: "up to 6 GB" per 6 GB USB requirement) | **Inferred** — Microsoft does not publish size on page shell; range from community measurements. No authoritative current number without direct download. Marked as `estimated_range` in manifest. |
-| **Placement** | Extract contents to USB root must contain exact folder `$SystemUpdate` (dollar sign + exact case) | **Confirmed** — both official page summary and `futuretweets` example: `E:\` → `└─ $SystemUpdate` with `bootanim.dat`, `empty.bin`, `RM_Signature.bin`, `sys_main.xvd`, … |
+| **Placement** | Extract contents to USB root must contain exact folder `$SystemUpdate` (dollar sign + exact case) | **Strongly supported** — as consistently summarized from community guides referencing official article + `futuretweets` example: `E:\` → `└─ $SystemUpdate` with `bootanim.dat`, `empty.bin`, `RM_Signature.bin`, `sys_main.xvd`, …); official Support article body not directly fetched (JS loading placeholder per Phase 6.1) — not Microsoft-quoted verbatim |
 
 ---
 
@@ -87,7 +88,7 @@ This is **how** OSU1 is consumed: Xbox Startup Troubleshooter compares OSU1 payl
 | **Complete boot ROM/Boot chain** | Support page describes update applied *from within* "Xbox Startup Troubleshooter" — the console's existing boot ROM + Troubleshooter menu must already work. You get there by holding `Bind` + `Eject` + Power, which invokes on-device firmware preceding any USB read. OSU1 cannot replace that firmware; it runs *under* it. | **Strongly supported inference** |
 | **Standalone firmware images (SoC init, ACPI tables, board-specific BLDR)** | No such files in reported `$SystemUpdate` manifest; those live in onboard flash (NAND/embedded) per HotChips 2020 Series X teardown | **Unknown but absent from manifest** |
 | **Hardware root-of-trust keys** | OSU1's `RM_Signature.bin` implies images are signed by Microsoft retail keys that the console's already-fused hardware verifies; OSU1 does not *provide* trust anchor, it is *verified by* it | **Strongly supported** (see Retail Requirements doc) |
-| **Generic PC boot components (UEFI shim, ACPI, GPU firmware for desktops)** | `OSU1.zip` is zipped `$SystemUpdate` only; no EFI partition image, no `bootx64.efi`; XboxOne HDD script separate step copies boot animation assets `bootanim.dat` but still relies on Xbox partitions | **Confirmed by absence** |
+| **Generic PC boot components (UEFI shim, ACPI, GPU firmware for desktops)** | Reported `$SystemUpdate` layout from community listings contains no EFI partition image or `bootx64.efi`; XboxOne HDD repair flow notes separate `bootanim.dat` handling but remains Xbox-partition-dependent | **Not found in reported secondary-source manifest; authoritative package manifest unavailable — completeness beyond reported files UNKNOWN (absence from reported list does not independently prove boot-chain absence)** |
 
 ---
 
@@ -124,13 +125,13 @@ To *disprove* this analysis (i.e., prove OSU1 *is* a full OS image), evidence wo
 2. Independent verification that such image boots in QEMU+OVMF without Xbox hardware
 3. Microsoft documentation stating PC boot is supported
 
-None of those have been found despite exhaustive `web_search` across 6 sources + fetch_page of official docs. The honest status is **failure to demonstrate OSU1 sufficiency**.
+None of those have been found in bounded search across searched public sources (6 community sources + fetches of GitHub GDK, GDK access-resources, Hot Chips pdf, xboxoneresearch wiki; Support article body returned JS loading placeholder per Phase 6.1, not captured). Absence is **NOT FOUND IN SEARCHED PUBLIC SOURCES**, not proof of non-existence. The honest status is **failure to demonstrate OSU1 sufficiency in searched sources**.
 
 ---
 
 ## 7. References
 
-- `fetch_page` https://support.xbox.com/help/hardware-network/console/offline-system-update — §1
+- `support.xbox.com/help/hardware-network/console/offline-system-update` — Support article existence verified at URL; body returned JS loading placeholder per Phase 6.1 (not directly quoted) — §1 details as summarized from secondary community guides referencing official article
 - `techdows.com/how-to-do-an-offline-xbox-update.html` — chunk 0, table "Xbox offline system update files: OSU1, OSU2 or OSU3?"
 - `binary.ph/2026/05/14/offline-xbox-series-x-s-updates...` — `$SystemUpdate` layout
 - `gbatemp.net/threads/xbox-one-internal-hard-drive-upgrade...p496212` — internal partition + XVD list

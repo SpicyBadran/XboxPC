@@ -1,0 +1,791 @@
+diff --git a/research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md b/research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md
+new file mode 100644
+index 0000000..8452c02
+--- /dev/null
++++ b/research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md
+@@ -0,0 +1,203 @@
++# MICROSOFT_RETAIL_OS_INQUIRY.md — Prepared Inquiry to Establish Authorized Retail OS Acquisition Route
++
++**Traceability:** `INQUIRY-2026-11-22-001`  
++**Branch:** `arena/00f8e176-xboxpc` @ `dc01bc1` (+ Phase 5 audit)  
++**Prepared:** 2026-11-22 UTC — **DRAFT for Owner review only — DO NOT SUBMIT**  
++**Author Roles:** Documentation & Evidence Agent (inquiry draft), Security Research Reviewer (legal boundary check), Verification Agent (contact-route verification)  
++**Method:** Distinguishes OSU1 / Public GDK / GDKX recoveries / Complete retail OS image; contact routes are only those fetched from authoritative Microsoft domains (no invented representatives)  
++**Status:** Ready for owner approval — external action blocked until owner authorizes
++
++---
++
++## 1. Objective (Unchanged)
++
++Establish by **authorized, documented Microsoft response** whether a route exists to **legitimately obtain the genuine Xbox Series X retail operating system** (the HostOS + SystemOS + hypervisor + retail boot chain that runs natively on Xbox Series X — the same stack referenced in charter §2 Success Definition and Phase 5 `BOOT_CHAIN.md`) for execution on **standard x86-64 PC hardware**:
++
++- Genuine, unmodified Microsoft OS components
++- Direct boot on non-Xbox PC hardware (generic modern AMD/Intel PC — charter Tier 1 reference)
++- No Windows/Linux host underneath
++- No emulator or dashboard clone substituting for the retail OS
++- No hardware trust bypass (preserve retail signatures)
++
++**This inquiry does NOT request:** game SDK samples, GDK tooling, OSU1 re-explanation, Insider preview access, hardware discounts, or bypass of security controls.
++
++---
++
++## 2. Background Provided to Microsoft (For Context — Included in Cover Note)
++
++To prevent misreading this as a game-publishing request, every submission will include this framing:
++
++> **Context:** Our research organization maintains a PC compatibility investigation (“XboxPC”) under charter `CHARTER-2026-11-22-001`. We have independently audited public artifacts:
++> - **OSU1 (support.xbox.com/.../offline-system-update)** is a **public update payload** (`$SystemUpdate/*.xvd` + `RM_Signature.bin` applied via Xbox Startup Troubleshooter to existing `System Update` A/B slots per community-reported layout from GBAtemp/futuretweets referencing official article; Support article existence verified at URL, body returned JS loading placeholder per Phase 6.1 — Microsoft names it Offline System Update, not factory image) — STRONGLY SUPPORTED as not a full OS nor independently bootable.
++> - **Public GDK (github.com/microsoft/GDK, id 348416224)** is a **game SDK** for building Win32+GDK games that target Xbox/PC/cloud — explicitly missing Xbox console graphics driver/Shader Compiler/console environment APIs (README § “missing … only in GDKX”).
++> - **Secure Xbox Downloads (aka.ms/gdkdl, learn.microsoft.com/.../access-resources)** is documented as **“Latest release of software and recoveries of the GDK, offline docs, Submission Validator”** — not a retail OS image for generic PC; personal MSAs no longer supported; Secure Downloads requires Partner Center Xbox-provisioned account + valid GDK Agreement + Entra ID tenant + MS representative enablement (`MICROSOFT_ACCESS.md`).
++> - No public or authorized-secure page in our searched public sources (bounded search: support.xbox.com article shell not captured, GitHub GDK, learn.microsoft.com GDK access-resources, community storage threads) was found to advertise a retail OS image for generic PC deployment (NOT FOUND IN SEARCHED PUBLIC SOURCES; internal existence UNKNOWN).
++>
++> We seek only a **yes/no/qualified** answer on whether such an authorized image exists, per the six questions below, to record the official authorization boundary.
++
++---
++
++## 3. The Six Formal Questions (To Be Asked Verbatim)
++
++> **Q1 — Complete retail OS image:** Does Microsoft provide, through any authorized program (public download, Partner Center Secure Downloads, managed developer program, research license, or other documented offering), a **complete Xbox Series X retail operating system image** (the HostOS + SystemOS + hypervisor + associated boot chain that executes natively on retail console hardware — the deliverable described in charter success criteria and `BOOT_CHAIN.md` §2)?
++>
++> **Q2 — PC-target configuration:** Is there a **Microsoft-supported, Microsoft-documented PC-target image or deployment configuration** of that retail OS for standard x86-64 PC hardware (generic modern AMD or Intel desktop with UEFI, NVMe, discrete/integrated GPU — Tier 1 family) that boots directly without a Windows/Linux host?
++>
++> **Q3 — GDKX recovery scope:** Are **GDKX recovery packages** available via Secure Xbox Downloads **exclusively intended for licensed Xbox development kits** (Xbox-derived SoC hardware with dev firmware), rather than as deployment artifacts for generic PC hardware?
++>
++> **Q4 — Authorized research access:** Is there an **authorized research or documentation program** (beyond ID@Xbox publishing) that provides access to the retail boot chain and required platform documentation (fused root-of-trust description, HSP/Pluton Xbox-instance behavior, SMU/SCP handshake outline, ACPU/SM BIOS surface expected by retail OS) sufficient to evaluate PC feasibility without bypass?
++>
++> **Q5 — Deployment authorization:** Does Microsoft **support or authorize** deployment or redistribution of retail Xbox OS components (signed hypervisor, HostOS/SystemOS XVDs, retail signing root) onto non-Xbox PC hardware — or, conversely, can Microsoft confirm that **no such deployment is supported**?
++>
++> **Q6 — Recorded distinction:** If no such route exists for standard PC targets, can Microsoft **confirm that distinction in writing** for the project’s feasibility record — i.e., that OSU1 is an update package, public GDK is a game SDK, GDKX recoveries are for Dev Kit, and **none of the three constitutes a PC-bootable retail OS image**?
++
++**Deliverable expectation:** A written answer (email, Partner Center message, or linked doc page) attributable to Microsoft — not community speculation — that can be cited in `FEASIBILITY_FINAL_REVIEW.md` update with URL + date.
++
++---
++
++## 4. Definitions (Included as Attachment to Prevent Conflation)
++
++| Term (our usage) | What it is | What it is not | Source that establishes distinction |
++|------------------|------------|----------------|------------------------------------|
++| **OSU1** | Public offline **update package** from `support.xbox.com/.../offline-system-update`: `OSU1.zip` → `$SystemUpdate/*.xvd` (host/system/systemaux/systemmisc/systemtools/updater/SettingsTemplate) + `bootanim.dat`/`empty.bin`/`RM_Signature.bin`, applied from within Xbox Startup Troubleshooter to pre-existing `System Update` A/B partitions. ~4.8–6 GB, version-gated (greyed out if past version). | Not a complete OS, not a disk image, not independently bootable, not firmware, not boot ROM, not PC-compatible. Xbox One repair `gbatemp.net/threads 496212` shows A/B copying model; TechDows documents version gate. | `fetch_page` Support page shell + `DOWNLOAD_SOURCES.md` §1 + `OSU1_ANALYSIS.md` + 5 community corroborations |
++| **Public GDK** | Microsoft Game Development Kit (public, `github.com/microsoft/GDK`): common tools/libs/docs to build **games** for Xbox Game Pass for PC (Win10/11), Xbox consoles (game target), cloud. Distribution via WinGet `Microsoft.Gaming.GDK`, NuGet `Microsoft.GDK.Windows`, vcpkg `ms-gdk`. Missing Xbox console driver/Shader Compiler/console env APIs. | Not the retail OS, not hypervisor, not HostOS/SystemOS, not boot chain. README explicitly: “Xbox console gfx driver + Shader Compiler … currently only in GDKX” | GitHub API id `348416224` private false stars 1741 commit `d773744` README 17186 B + `learn.microsoft.com/.../access-resources` public vs secure split |
++| **GDKX / Secure Downloads** | Controlled GDK + Xbox Extensions installer + **recoveries of the GDK** + offline docs + Submission Validator + NDA samples. Requires Partner Center Xbox-provisioned account + valid GDK Agreement + Entra tenant + **MS representative** enable of `aka.ms/gdkdl`. Personal MSAs excluded. | Not a retail OS image for generic PC. Even behind auth, listed contents are “recoveries of the **GDK**” (not “retail Xbox OS image for PC”). No line advertises PC deployment. | `fetch_page` access-resources ch 0–1 + `MICROSOFT_ACCESS.md` §3–5 + onboarding docs `devdocs.xbox.com/home/onboarding` checklist |
++| **Complete retail OS image (object of inquiry)** | **Observable objective:** Genuine, unmodified, Microsoft retail-signed Xbox Series X OS that boots retail console hardware to dashboard/system services without a Windows/Linux host, emulator, or dashboard clone — i.e., what “boots the Xbox” rather than what “builds games for Xbox.” **Internal architectural model (hypothesis, not Microsoft definition):** Our research hypothesizes this *may* involve a Host partition / hypervisor / System partition (e.g., `host.xvd` / `hvax64` / `system.xvd` per Xbox One-observed `BOOT_CHAIN.md` §1), but this is not asserted to be Microsoft’s package naming, a confirmed Series X specification, or an offered deliverable. **Question to Microsoft:** Whether Microsoft offers *any* complete, authorized, PC-targeted retail OS image/configuration satisfying the observable objective, regardless of internal package naming/architecture. | Not OSU1 (update of some XVDs), not GDK, not GDKX game toolchain. Would need to be a Microsoft-signed, PC-targeted image to satisfy charter. None documented as offered. | Charter §2 success table + Hot Chips 2020 pdf (360.4 mm² 15.3B transistors, 16 GB GDDR6 10+6, GPU 52 CU 12 TF, HSP SHACK MSP 4crypto/4hash/2decomp) + Xbox One Research wiki bootloaders |
++
++*Attaching this table avoids the common misinterpretation “OSU1 contains system.xvd hence is the OS” and “GDKX recoveries are OS images for PC” — both rejected by evidence audit (`EVIDENCE_AUDIT.md` S1–S10).*
++
++---
++
++## 5. Official Microsoft Contact Routes — Research Results (Do Not Invent)
++
++> Per instruction: prioritize (A) existing partner contact if available to owner, then (B) documented GDK support / developer-partner channels. No invented email/address.
++
++### 5.1 Route A — Existing Xbox Developer-Partner Contact (Highest Priority, If Available)
++
++| Channel | What it is | When to use | Source |
++|---------|------------|-------------|--------|
++| Existing **Microsoft account team / Xbox developer program representative** for your organization (if already onboarded to ID@Xbox/Partner Center) — the same `Microsoft representative` referenced in access-resources for Secure Downloads: *“You must contact your Microsoft representative to enable access to the secure download site.”* | Account-team-managed inquiry — Microsoft explicitly routes Secure Downloads enablement through this person, so they are the only party able to confirm what Secure Downloads **does not** contain. | Owner already has Partner Center Xbox-provisioned account (check `PARTNER_ORG` before using) | `fetch_page learn.microsoft.com/.../access-resources?view=gdk-2604` ch 0 § “Accessing secure resources” — important box verbatim |
++
++> If owner has such a contact, **this is the only route that can authoritatively answer Q3/Q5/Q6** (whether Secure Downloads contains retail image for PC — the docs say “recoveries of GDK,” but a human can confirm negative in writing).
++
++### 5.2 Route B — Documented GDK Developer Support Channels (No Prior Partnership Required for Initial Contact)
++
++| # | Official Channel | URL / Identifier | Purpose per Microsoft | What to ask | Evidence |
++|---|-----------------|------------------|-----------------------|-------------|----------|
++| B1 | **Microsoft Developer Support — ID@Xbox Program** | `https://developer.microsoft.com/en-us/windows/support` → section **“ID@XBOX Program” — “Email ID@XBOX.com”**; landing page `https://developer.microsoft.com/en-us/games/partner` → “Ready to publish on XBOX? → Join ID@XBOX” | “For questions about the ID@XBOX program including game publishing, console questions, onboarding to the program and **XBOX DevKits**, contact the team directly. Email ID@XBOX.com” | Submit Q1–Q6 as **policy clarification, not onboarding**: “We are evaluating feasibility of an authorized research path to retail OS image for standard x86-64 PC (not a game publishing plan). Does such a path exist? See attached definitions.” — avoids misrouting as game pitch | `fetch_page developer.microsoft.com/en-us/windows/support` (Nov 21 2022) + `web_search GDK support ID@Xbox` result id=1 |
++| B2 | **Microsoft Q&A — How can I obtain GDK hardware / Unable to access GDK download** | `https://learn.microsoft.com/en-us/answers/questions/1663748/how-can-i-obtain-the-gdk-hardware` and `https://learn.microsoft.com/en-us/answers/questions/5884771/unable-to-access-to-download-gdk-for-xbox-development` (both `learn.microsoft.com` official Q&A) | Official Microsoft-staff answers on GDK/GDKX access: requirements are organizational Entra ID tenant associated with **onboarded** Xbox Development partner in Partner Center; Secure Downloads needs **GDK Agreement + MS rep enable** | Post Q1–Q6 as **follow-up question** on one of these threads (or new question tagged `gaming-gdk`) if B1 email confirmation not yet sought — Microsoft external staff explicitly answer there and cite `GDK Agreement` terms | Both threads fetched via `web_search` “how can I obtain GDK hardware” — Microsoft external staff answers cite GDK Agreement |
++| B3 | **Xbox GDK Developer Forum** | `https://aka.ms/gdkforum` (aka.ms shortlink → forum; listed on `devdocs.xbox.com/home/onboarding-access/access-resources` “GDK developer forum: Post questions and report issues to the XBOX team” + `learn.microsoft.com` GDK docs “Get help” area) | Developer Q&A with Xbox engineering team; accessible after at least limited onboarding (see below). Microsoft engineering monitors. | Ask Q3/Q5 directly after Step B4 limited exploration: “Are GDKX recoveries at `aka.ms/gdkdl` exclusively for Xbox dev kits?” — Microsoft staff routinely clarify scope there | `web_search` “Access GDK dev resources devdocs.xbox.com access-resources” result id=2 + onboarding checklist |
++| B4 | **Xbox Partner Onboarding Checklist (read-only, no registration)** | `https://devdocs.xbox.com/home/onboarding` (Xbox Game Development Documentation) — full checklist: *Register as Xbox partner → Enroll to Partner Center (accept App Developer Agreement, receive Seller ID) → Apply to ID@XBOX (business info + game concept, await 10–15 business days to 3 weeks, sign Title Licensing Agreement + GDK License Agreement) → Complete onboarding via SupplierWeb + Entra ID free creation → EDS account for dev kits* | Read-only route identification — lets owner **evaluate eligibility** without creating accounts | Review prerequisites: legal entity, DUNS recommended, shipping address, NDA, ≥18, country where MS does business, Microsoft Entra capability, willingness to sign GDK Agreement — **no registration, agreement acceptance, or hardware purchase occurs now** | `fetch_page devdocs.xbox.com/home/onboarding` + `web_search ID@Xbox programSelection` |
++| B5 | **Xbox Insider Program (not for this inquiry, noted to avoid misdirection)** | `https://www.xbox.com/en-us/developers/insiders` | Playtest audience expansion, not developer onboarding; community sources confirm “OSU are not an option for preview builds” — **preview OSU path is separate and also not generic PC**. | Do not use for Q1–Q6 — Insider is game-playtest, not research OS image program | `fetch_page` Insider program article + Reddit 2019 note |
++
++### 5.3 Route C — Community / Non-Authoritative (Informational Only, Not Asking)
++
++| Channel | Why listed | Action |
++|---------|------------|--------|
++| GitHub Discussions at `github.com/microsoft/GDK` | Public GDK repo has Discussions enabled — community can explain GDK vs GDKX README distinction but **cannot provide retail OS image or authorization answer** | Do not use for Q1–Q6; read-only |
++
++### 5.4 Program Requirements Evidence (What Would Be Required If Owner Chose to Onboard — Not Requested Now)
++
++| Requirement | Detail | Source |
++|-------------|--------|--------|
++| **Legal entity** | Must be legal business (studio/publisher), obtain DUNS recommended, provide shipping address, legal name/DBA | `devdocs.xbox.com/home/onboarding` checklist prerequisites |
++| **Partner Dashboard + NDA** | Register as Xbox partner via Xbox Partner Dashboard at `developer.microsoft.com/en-us/games/partner` → NDA (usually ~20 min–3 days) | Same checklist Step 1 |
++| **Partner Center** | Enroll to Partner Center, accept App Developer Agreement, receive Seller ID | Checklist Step 2 + `learn.microsoft.com/.../access-resources` public vs secure |
++| **ID@Xbox application** | Submit game concept for approval (10–15 business days up to 3 weeks typical), sign Title Licensing Agreement + **GDK License Agreement** | Checklist Step 3 |
++| **Entra ID + MS Rep** | Association of Microsoft Entra ID tenant with Partner Center (free creation if none) + adding users + Microsoft representative enable of `aka.ms/gdkdl` Secure Downloads | `learn.microsoft.com/.../set-up-organization` + access-resources Secure note |
++| **Secure Downloads** | Even then, contents = GDK software + **recoveries of GDK** + offline docs + Submission Validator + NDA samples (games-focused) — **no line lists retail OS for PC** | Access-resources § Secure resources (verified direct quote) |
++| **Dev Kit hardware** | EDS account created ~1 week after GDK Agreement → order kits (separate cost, not PC hardware) | Checklist Step 4 |
++| **MSA deprecation** | Personal Microsoft Accounts (MSAs) **no longer supported** for secure Xbox resources — **organizational Entra account required** | `fetch_page access-resources` Important alert box |
++
++> The table establishes that even **full onboarding** does not demonstrably grant Q1’s retail-image-for-PC artifact — the charter’s “without requiring an Xbox console” criterion intentionally excludes Dev Kit hardware even if owner obtained it.
++
++---
++
++## 6. Decision Outcomes (What Each Response Means)
++
++| Outcome code | Microsoft response | What it establishes | Technical implications (boot-chain terms) | Recommended owner decision |
++|--------------|--------------------|---------------------|-------------------------------------------|----------------------------|
++| **O1 COMPLETE RETAIL IMAGE AVAILABLE** | “Yes — Microsoft does provide a complete Xbox Series X retail OS image via [specific program: e.g., `aka.ms/gdkdl` category *‘Xbox OS Recovery — PC Target’* / new managed research program], and this image is authorized for standard x86-64 PC hardware.” | **Authorized acquisition path exists** — the missing feasibility piece (RISK-001) is closed; charter success criterion *Genuine OS provenance* becomes achievable. | Retail signing root (Xbox CA) would need to be accompanied by a **PC-enrollable trust/provisioning flow** (HSP/Pluton Xbox identity for PC, or single signed `hvax64`/HostOS variant built for PC firmware) — otherwise image would fail hardware-ROTL (see `BOOT_CHAIN.md` §2 #2 #3). Request MS to specify: signing variant, required PC Secure Boot enrollment (Xbox `db`), required SOC/board support list, hypervisor PC build, memory-layout config for DDR5+discrete GPU vs unified GDDR6, GPU driver for PC. | **Pause other work; document the exact authorized acquisition process + technical requirements; do not acquire image until owner authorizes new GDK Agreement/NDA scope and has recorded hash-provenance procedure (`PROVENANCE.md` + `SHA256SUMS.txt` expansion).** |
++| **O2 DEV-KIT RECOVERY ONLY** | “Secure Downloads at `aka.ms/gdkdl` contains **GDK/GDKX recoveries exclusively intended for licensed Xbox development kits** (Xbox-derived SoC dev firmware). There is no Microsoft-supported retail OS image for generic PC deployment.” | Confirms **documented recoveries are Dev Kit-only** — aligns with public docs *“recoveries of the GDK”* and charter Part I §3 *Dev Kit ≠ PC* distinction. Does **not** establish PC feasibility; closes *conditional* misreading that “GDKX maybe holds PC image.” | No transfer to generic PC: Dev Kit recoveries contain Xbox SoC firmware + hypervisor tuned for Xbox SoC GDDR6/GPU/MC/SCP. No path to Tier 1 generic AMD/Intel desktop. | Record in `FEASIBILITY_FINAL_REVIEW.md` addendum: **“Microsoft confirms GDKX recoveries are Dev Kit-only; no generic PC image offered.”** — retain `NOT CURRENTLY DEMONSTRATED`; reassess only if owner later proposes custom board (scenario D) which still needs retail signing and is *not standard PC*. |
++| **O3 NO PC DEPLOYMENT SUPPORT** | “Microsoft does not support or authorize deployment of retail Xbox OS components (signed hypervisor, HostOS/SystemOS XVDs, retail signing root) onto non-Xbox hardware. Deployment targets are limited to Xbox hardware families (retail + licensed dev kit).” | **Authoritative authorization boundary** — confirms **no Microsoft-supported path** exists for charter objective as presently defined. This response does **not** prove impossibility (see reviewer fix #2), but it does establish that *no authorized route exists*. | Hardens trust boundary: Xbox CA not in PC `db`, Xbox HSP/Pluton identity not provisionable to generic PC (PCWorld 2020 “Xbox security approach for PCs” was for Windows security, not Xbox OS portability), no PC-target hypervisor image to request. Any bypass would violate `SECURITY.md`/`ENGINEERING_RULES.md` (no key extraction/Secure Boot bypass). | **Accept as formal closure of authorized route** (not proof of no technical possibility). Record boundary; keep project alive as research per owner review §3: *preserve evidence, do not purchase hardware, do not start diagnostic probe until re-authorized as separate product*. |
++| **O4 NO RESPONSE** | No reply within reasonable window (e.g., 20 business days, acknowledging ID@Xbox game-concept approval backlog of 10–15 days) or auto-generated “contact your account team” deflection | **No new evidence** — neither confirms nor denies authorized path. Retain existing verdict and documented lack of public PC image. | No change to technical blockers — all 10 dependency rows remain calibrated as before. | **Retain `NOT CURRENTLY DEMONSTRATED`**. Re-offer inquiry via alternate route (B2 Q&A post) after Owner approves; do not loop automatically. |
++| **O5 AMBIGUOUS RESPONSE** | “The GDK/GDKX contains tools to build games that run on Xbox consoles and PC via Game Pass / cloud; publishing on Xbox requires ID@Xbox.” — or discussion of OSU1 / Inside previews / PlayFab — without answering Q1–Q2 | Fails to distinguish OSU1/public GDK/GDKX recovery/retail OS image (the table in §4 was attached to prevent this). Ask was misunderstood as game-publishing question. | No technical implication until clarified — ambiguity does not resolve trust block #1. | **Identify exactly what needs clarification**: resend attachment table §4 with sharper emphasis: *“We are NOT asking how to build a game that runs on Xbox OR PC. We are asking whether Microsoft distributes the Xbox Series X retail operating system itself as a PC-bootable image, distinct from those.”* — require Owner approval before follow-up. |
++
++---
++
++## 7. Prepared Inquiry Text (Submission-Ready, Owner-Reviewed Before Send)
++
++> **Subject line (email route B1):** *Research inquiry — Authorized retail Xbox Series X OS image for standard x86-64 PC hardware (distinguishing OSU1 / Public GDK / GDKX recovery)*
++
++> Dear Microsoft ID@Xbox / GDK team,
++>
++> We are a research group conducting an authorized-artifact feasibility study of **Xbox platform portability** under charter `XboxPC — Genuine Xbox Series X Retail OS on Standard PC Hardware`. We have completed an independent public-evidence audit (2026-11-22, branch `arena/00f8e176-xboxpc` @ `dc01bc1`) that distinguishes **OSU1 update packages, Public GDK (game SDK), and GDKX recoveries (Dev Kit-targeted)** — all verified from `support.xbox.com`, `github.com/microsoft/GDK`, `learn.microsoft.com/.../access-resources`, `devdocs.xbox.com/home/onboarding`, and Hot Chips 2020 Xbox Series X silicon presentation. **No public or documented secure artifact in our sweep constituted a complete retail OS image for generic PC.**
++>
++> We write only to establish the **authorized acquisition boundary** — not to request a bypass, developer hardware purchase, or agreement acceptance before your answer.
++>
++> **Our objective (for context):** *Genuine, unmodified, Microsoft retail-signed Xbox Series X OS that boots retail console hardware to dashboard/system services — observable on retail console — to boot directly on standard x86-64 PC hardware (generic modern AMD/Intel desktop, UEFI, NVMe, discrete GPU) without a Windows/Linux host, emulator, or dashboard clone, while preserving retail signatures. Our internal research model hypothesizes this may involve Host partition / hypervisor / System partition components (e.g., `host.xvd` / `hvax64` / `system.xvd` per Xbox One-observed `BOOT_CHAIN.md` map), but we do not assert these are Microsoft-defined package names or a confirmed Series X packaging specification; we ask only whether Microsoft offers any complete, authorized PC-targeted image/configuration satisfying the observable objective, regardless of internal naming.*
++>
++> **Definitions attached:** A one-page table distinguishing OSU1 (`OSU1.zip` → `$SystemUpdate/*.xvd` update payload applied via Xbox Startup Troubleshooter to System Update A/B partitions), Public GDK (`github.com/microsoft/GDK` game SDK missing console driver/Shader Compiler/GDKX APIs), and GDKX/Secure Downloads (*“recoveries of the GDK” + offline docs + Submission Validator* per `learn.microsoft.com/.../access-resources`, requiring Partner Center Xbox-provisioned account + GDK Agreement + Entra ID + MS rep enable) — included to prevent conflation.
++>
++> **Formal questions (verbatim — requested as written record for feasibility file):**
++>
++> 1. Does Microsoft provide, through any authorized program, a **complete Xbox Series X retail OS image** (as defined above) as a distributable artifact?
++> 2. Is there a **Microsoft-supported, Microsoft-documented PC-target image/configuration** of that retail OS for standard x86-64 PC hardware booting directly without a Windows/Linux host?
++> 3. Are **GDKX recovery packages at `aka.ms/gdkdl` exclusively intended for licensed Xbox development kits** (Xbox-derived SoC hardware with dev firmware)?
++> 4. Is there an **authorized research/documentation program** that grants access to the retail boot chain and required platform docs (HSP/Pluton Xbox identity, SMU/SCP handshake, ACPI/SMBIOS surface) for feasibility evaluation?
++> 5. Does Microsoft **support or authorize** deployment of retail Xbox OS components (retail-signed hypervisor, HostOS/SystemOS XVDs, retail signing root) onto non-Xbox hardware — or can Microsoft confirm **no such deployment is supported**?
++> 6. If no PC-target route exists, can Microsoft **confirm that distinction in writing** (OSU1=update, public GDK=game SDK, GDKX recoveries=Dev Kit-only, none=PC-bootable retail OS)?
++>
++> **What we need from you:** A short written reply (email, Partner Center message, or link to authoritative doc page) attributable to Microsoft stating, for each question, **yes/no with program name/URL, or “no such offering is provided.”** Community citations or Q&A threads are insufficient for our evidence standard — we will cite your response by URL+date in our `FEASIBILITY_FINAL_REVIEW.md` and `MICROSOFT_ACCESS.md`.
++>
++> **What we will not do without explicit next-step authorization from you and our owner:** register organizations, accept NDAs/GDK Agreements, submit concept applications, acquire dev kit hardware, enable Secure Downloads, download restricted materials, modify OSU1, or attempt to boot retail components — all blocked until you confirm a path exists. **This inquiry itself requires no action beyond a written answer.**
++>
++> Please advise whether this inquiry should be redirected to a specific team (e.g., ID@Xbox vs. Xbox Developer Program), or whether a Microsoft representative call is preferred. We can provide charter documents and audit evidence on request.
++>
++> Respectfully,
++> Lamar — Project Owner, XboxPC (charter `CHARTER-2026-11-22-001`)
++> [Organizational contact as enrolled in Microsoft directory, if any; otherwise general inquiry contact]
++>
++> Attachments: §4 Definitions table (1 page) + §1 context paragraph (this email)
++
++**Variant for Microsoft Q&A post (route B2):** Same body truncated to 2000-char limit, attach table as image or gist link; tag `gaming-gdk` + `xbox-developer-program`.
++
++---
++
++## 8. Technical Implications Summary (For Owner Decision)
++
++| Outcome | What we learn | What we still don’t know even with MS answer | Owner action |
++|---------|---------------|---------------------------------------------|--------------|
++| O1 Complete image available | Charter’s “legitimate route” piece closed; authorization boundary lifted | Exact trust provisioning still needed (Xbox CA enrollment, HSP/Pluton PC identity, GDDR6 MC config for DDR5+discrete GPU, GPU driver for PC, hypervisor PC build — per `RETAIL_OS_REQUIREMENTS.md`) — MS would need to publish those requirements alongside image | Request MS-published technical requirements document; do **not** download until Owner approves agreement scope + provenance procedure |
++| O2 Dev-kit recovery only | Public docs confirmed by MS | Same blockers remain for generic PC | Record, retain verdict |
++| O3 No PC deployment support (most likely per current docs) | Authoritative negative on **authorized** route — establishes boundary, **does not prove impossibility** (reviewer fix #2) | Whether an unauthorized but technically conceivable implementation exists (custom board D + retail signing would still be needed — a console SKU decision, not software workaround) | Record boundary; project stays alive as research (owner review §3); no hardware purchase |
++| O4 No response | No new evidence | Unchanged | Retain `NOT CURRENTLY DEMONSTRATED`; offer alternate route after owner approval |
++| O5 Ambiguous | Misrouted as publishing question | Same as O4 + need clarification | Send §3 follow-up with emphasized distinction |
++
++---
++
++## 9. Evidence of Applicable Requirements (Fetched, Not Assumed)
++
++- `fetch_page https://learn.microsoft.com/en-us/gaming/gdk/docs/gdk-dev/development-downloads/access-resources?view=gdk-2604` (chunks 0–1) — public vs secure split, personal MSAs no longer supported, Secure = *“Latest release of software and recoveries of the GDK”* (verbatim), MS rep enable.
++- `fetch_page https://learn.microsoft.com/en-us/gaming/gdk/docs/gdk-dev/get-started/overviews/set-up-organization?view=gdk-2604` — Partner Center + free Entra ID creation steps, Seller ID, user management.
++- `fetch_page https://devdocs.xbox.com/home/onboarding` — full ID@Xbox onboarding checklist (Register partner → NDA → Partner Center Seller ID → ID@Xbox concept approval 10–15 days to 3 weeks → TLA + GDK License → SupplierWeb + Entra → EDS dev kits).
++- `https://developer.microsoft.com/en-us/windows/support` — **ID@XBOX Program — Email ID@XBOX.com** (official GDK hardware question answers: contact representative; shipping via ID Setup).
++- `https://learn.microsoft.com/en-us/answers/questions/5884771/...` — staff answer: organizational Entra ID required for Secure Downloads; personal MSA fails.
++- `https://hc32.hotchips.org/.../HotChips2020_GPU_Microsoft_Jeff_Andrews_v2.pdf` slides — HSP/Pluton SHACK + MSP blocks (verified HW, not boot ladder).
++- GitHub API `microsoft/GDK` — id 348416224 private false (verified).
++- `developer.microsoft.com/en-us/games/partner` — Xbox Publishing guide; `aka.ms/gdkforum` — GDK developer forum.
++
++All URLs re-verifiable; no invented inbox or representative name included.
++
++---
++
++## 10. Recommended Owner Decision (Per Request §5)
++
++> **Approve this inquiry document as written; authorize Owner (Lamar) — not agent — to send it via Route B1 email `ID@XBOX.com` (or via existing account team contact if available — Route A) after confirming organizational contact identity. Do NOT authorize: Partner Center enrollment, NDA/GDK Agreement acceptance, GDKX download, dev kit purchase, Q&A posting, or registration.
++>
++> Upon receipt of Microsoft written answer (any of O1–O5), update `FEASIBILITY_FINAL_REVIEW.md` addendum with response citation and re-derive feasibility only on new evidence. Until then, retain `NOT CURRENTLY DEMONSTRATED`, preserve research assets, and defer diagnostic probe (Phase 6) as separate product until that boundary is settled.
++
++---
++
++*Prepared for Owner review — do not submit, register, accept agreements, or download restricted materials until Owner authorizes. All external actions remain blocked per `AGENTS.md` + `ENGINEERING_RULES.md` + prompt §3.*  
++*Git verification for this file: `git diff` + `git status --porcelain` must show all six changed files (5 untracked + 1 modified) before staging — per reviewer fix #3.*
+diff --git a/research/xbox-os/documentation/BOOT_CHAIN.md b/research/xbox-os/documentation/BOOT_CHAIN.md
+new file mode 100644
+index 0000000..7de7e0d
+--- /dev/null
++++ b/research/xbox-os/documentation/BOOT_CHAIN.md
+@@ -0,0 +1,117 @@
++# BOOT_CHAIN.md — Best-Supported Understanding of Xbox Series X Boot Chain & Dependencies
++
++**Traceability:** `BOOTCHAIN-2026-11-22-001`  
++**Branch:** `arena/00f8e176-xboxpc` @ `dc01bc1` (+ audited)  
++**Sources:** Verified Hot Chips 2020 pdf (8/17/20, Jeff Andrews / Mark Grossman), Xbox One Research wiki *Bootloaders / Bootchain overview* (2024-03-26), Xbox One Research wiki *FAQ*, Hot Chips live-blog (AnandTech, 09:07PM–09:15PM), ITIGIC HSP/Pluton, Tom’s Hardware / PCWorld Pluton lineage, GBAtemp partition thread, Support page OSU1/Troubleshooter docs  
++**Method:** For every stage: known component → available public docs → required HW/firmware → present in OSU1? → via public GDK? → via GDKX? → unknown. Unknowns explicitly labeled. No invented component names/filenames/cryptographic formats beyond sourced ones.
++
++> This is a Phase 5 feasibility document — it **maps** the boot chain, it does not **boot** it. No bootloader code, no binary modification, no proprietary firmware dumped.
++
++---
++
++## 1. Overview Diagram (Publicly Supported Model)
++
++**Caution:** Diagram assembles Xbox One Research wiki bootloaders (directly quoted) with Hot Chips 2020 Series X SoC overview (HSP/Pluton, MSP, GDDR6, SoC Fabric). Series X “might differ slightly … different primary bootmedium (SSD instead of eMMC Flash)” per wiki — so Series X deltas are noted.
++
++```
++                        ┌─────────────────────────────────────────────┐
++                        │ Power-On: Southbridge → SMC (0SMCBL ROM)    │  ← Wiki: 0SMCBL ROM (factory), 1SMCBL Flash 1smcbl_*.bin, 2SMCBL SMCFW smcfw.bin
++                        │           SMC.mainloop powers Security Proc │     SMC → SP Powerup SP (verified for Xbox One)
++                        └──────────────────────┬──────────────────────┘
++                                               │ HOTCHIPS: HSP/Pluton Root-of-Trust, SHACK exist in Series X (VERIFIED)
++                        ┌──────────────────────▼──────────────────────┐
++                        │ Security Processor (SP)                   │  ← Wiki: 0SP ROM factory → 1SP →2SP patched in boot.bin
++                        │ SP verifies fuses, certs, decrypts 2BL   │     Critical boot.bin stage
++                        │ (key = fuses + flash per Xbox One R&D)   │     HOTCHIPS: SHACK = Secure Hardware Crypto Keys (VERIFIED)
++                        └──────────────────────┬──────────────────────┘
++                                               │ sp->cpu: Decrypt/Load 2BL
++                        ┌──────────────────────▼──────────────────────┐
++                        │ x64 CPU: 2BL                              │  ← Wiki: 2BL → initializes APU/system fabric, loads SCP FW
++                        │ 2BL → SCP FW → Host VBI → hvax64         │     + keytable upload, hypervisor load
++                        │ (SCP = Streaming Crypto Processor)       │     Series X: PCIe8x Gen4 fabric, I/O hub, GDDR6 560GB/s (HOTCHIPS)
++                        └──────────────────────┬──────────────────────┘
++                                               │ cpu→hv: Load hvax64 (Hydra Hyper-V fork, ~80% rewritten)
++                        ┌──────────────────────▼──────────────────────┐
++                        │ Hydra Hypervisor (Host/Parent Partition) │  ← Wiki + Homebrew Retro: HostOS ~90 MB, SPLEAP anti-EoP
++                        │ Isolates HostOS / SystemOS / GameOS VMs  │     Host: manager for SRA(Sys)/ERA(Game) via VBI/VBI drivers
++                        │ + Security Processor handshake            │     HOTCHIPS: SPLEAP HW (verified)
++                        └──────────────────────┬──────────────────────┘
++                                               │ Host VBI → host.xvd (Flash/HDD/NVMe per generation)
++                        ┌──────────────────────▼──────────────────────┐
++                        │ HostOS (Host VBI / host.xvd)              │  ← Wiki: Load Host VBI → host.xvd (Flash for Xbox One)
++                        │ Drivers ↔ hardware + hypervisor calls    │     Series X: Host XVD likely on NVMe System partition (INFERRED)
++                        │ Optional: Show Recovery Menu             │     Recovery → Xbox Startup Troubleshooter (Support page)
++                        └──────────────────────┬──────────────────────┘
++                                               │ HostOS path: System VBI (HDD/NVMe) → system.xvd
++                        ┌──────────────────────▼──────────────────────┐
++                        │ SystemOS (System VBI / system.xvd)        │  ← Wiki: Load System VBI → system.xvd → Start Game
++                        │ Dashboard, Guide, UWP, settings, XMA    │     GBAtemp: System Update partition 9A056AD7... with A/B slots
++                        │ Mount system-related XVDs                │     OSU1 supplies system/systemaux/systemmisc/systemtools XVDs
++                        └──────────────────────┬──────────────────────┘
++                                               │ SystemOS → HostOS: Request VM Start (Game)
++                        ┌──────────────────────▼──────────────────────┐
++                        │ GameOS / TitleOS (ERA/GameCore VBI)      │  ← Wiki: ERA/GameCore VBI → era.xvd/gamecore.xvd (Game XVC)
++                        │ Game execution sandbox (Code Integrity)  │     Homebrew 2026: GameCore replaced ERA
++                        └─────────────────────────────────────────────┘
++```
++
++**Series X-specific addenda (from Hot Chips):** GDDR6 20 channels x16 @14Gbps →560 GB/s, GPU 52 CUs @1.825 GHz 12 TFLOPS, 2x Zen2 clusters (4C/8T 4 MB L3 each, SPLEAP per-cluster), I/O Hub x8 PCIe Gen4, Internal 1 TB NVMe x2 PCIe4 + external slot x2 PCIe4 + Blu-Ray, HSP/Pluton RoT + MSP crypto/hash/decomp @ SSD BW (>5 GB/s crypto, >6 GB/s decomp). These sit under the SOC initial blocks above SP→2BL.
++
++---
++
++## 2. Stage-by-Stage Table — Known Component vs Evidence vs Availability
++
++| # | Power → Retail OS Stage | Known Component(s) (sourced) | Available Public Documentation | Required HW / Firmware | Present in public OSU1 (`$SystemUpdate/*.xvd`)? | Via public GDK? | Via authorized GDKX? | Exact Implementation Unknown |
++|---|------------------------|------------------------------|-------------------------------|------------------------|-----------------------------------------------|----------------|---------------------|------------------------------|
++| 1 | **Power-on & SoC init** | Southbridge SMC 0SMCBL ROM (factory) + APU fuse/voltage + GDDR6 MC training, 360.4 mm² SoC bringup | Xbox One wiki SMC 0/1/2; Hot Chips SOC Specs physical/ block diagram (verified) | Scarlett SoC fused ROM, board flash (SMC FW), GDDR6 320-bank train sequence | **No** — SMC FW / SOC init not in `$SystemUpdate`; OSU1 cannot power-on SoC generically | **No** — GDK targets games, not SoC init | **Maybe docs** — but board/ROM not distributable | Exact Series X 0SMCBL/1SMCBL filenames for Series X; voltage train table |
++| 2 | **Hardware Root of Trust (HSP/Pluton)** | HSP/Pluton Root-of-Trust, SHACK, emCPUs, SPLEAP (Hot Chips slide 7) + SP 0SP ROM →1SP→2SP (wiki) | **Hot Chips verified** SHACK/HSP/MSP exist; 09:07PM live-blog “HSP/Pluton RoT” | Scarlett SoC HSP/Pluton fused keys, fuses/per-console certs | **No** — `RM_Signature.bin` is validated *against* RoT, not it; RoT is fused in SoC | **No** | NDA topics maybe describe Xbox HSP API, not retail keys | Series X per-stage SP verification key IDs / cert chain |
++| 3 | **Secure-boot stages (SP→2BL→SCP)** | Wiki: SP→Decrypt/Load 2BL, CPU→SCP Decrypt/Load SCP FW + Decrypt/Upload keytable + Host VBI | Xbox One wiki diagram + SPBL `0SP ROM / 1SP+2SP in boot.bin`; Xbox One Research “keys = fuses+flight + header obfuscation” discussion | SP ROM, `boot.bin` (1SP/2SP), 2BL, SCP FW blob, keytable | **No** — boot.bin/SCP FW not in OSU1 `$SystemUpdate`; 2BL is pre-Troubleshooter | **No** | **Maybe GDKX** has console graphics driver → SCP-adjacent, but not boot-chain signing material | Series X exact 2BL name/size / SCP blob version / keytable format |
++| 4 | **Platform Security Processor (attestation/anti-rollback/XMA+audio companion)** | HSP plus Logan (4 DSP), MOVAD Opus SRC, CFPU2 2×4 FP-DSP (Hot Chips slide 7), Southbridge SMC companion, XMA HW >300 rt channels | Hot Chips “Audio: Logan/MOVAD/CFPU2” + “Security and Decompression” split; Xbox One research XMA offload | HSP isolated bus cert, anti-rollback counters, HDCP/HDR + audio companion blocks | **No** | **No** (audio DSP unrelated) | GDKX NDA audio/docs maybe | Companion bus protocol / attestation call order |
++| 5 | **Hypervisor (Hydra) — hvax64** | Wiki: `Load hvax64` from Host VBI; Hydra is Hyper-V fork (~80% rewritten), runs HostOS/SystemOS/GameOS VMs via VBI | Wiki Bootloaders “Load hvax64 → Load Host VBI”; FAQ “Hydra” + 09:15PM “SPLEAP: HW to prevent EoP” | Scarlett Hypervisor binary `hvax64` (signed, loaded before HostOS) | **No** — OSU1 provides `host.xvd` *content*, not verified hypervisor image itself (HostOS VBI path includes hypervisor load) | **No** | **Not confirmed** — GDKX provides *game-target* runtime, not retail hypervisor binary | Exact `hv*` binary hash / entrypoint / per-CPU SPLEAP hook for Series X |
++| 6 | **Kernel & System Partition (HostOS / host.xvd → SystemOS / system.xvd)** | Wiki: Host VBI→host.xvd (Flash), optionally Recovery Menu, critical system.xvd path: HostOS→Load System VBI (HDD/NVMe)→system.xvd; GBAtemp System Update `A/`/`B/` slots (Xbox One community-observed, Series X slot count INFERRED) | Wiki Host VBI/System VBI sections + GBAtemp GPT table + `OSU1_ANALYSIS.md` §2.2 (community-reported) | HostOS binary + SystemOS + system-*.xvd set (`system/systemaux/systemmisc/systemtools/SettingsTemplate`) + updater | **Partial — reported update slices**: community-reported `$SystemUpdate` lists `host.xvd, system.xvd, systemaux.xvd, systemmisc.xvd, systemtools.xvd, SettingsTemplate.xvd, updater.xvd` as **replacement XVD slices** (secondary-source listing, not Microsoft-quoted; authoritative manifest unavailable), not full host/system flash image | **No** | **Not demonstrably** — publicly advertised Secure Downloads are GDK recoveries, not full Host/System OS (full restricted inventory UNKNOWN) | Series X exact VBI content list / slot semantics for NVMe vs eMMC layout |
++| 7 | **Graphics & Display — GPU, SFS, DXR/VRS/Mesh, MSP decomp @ SSD BW** | Hot Chips: 52 CUs @1.825 GHz 12 TFLOPS, SFS Shader Feedback Streaming (64 KB mipmap), DXR/VRS/Mesh, XVA 2:1 BCPack + Opus + Zlib; SOC: Display processor HDR/WCG + HDMI 2.1 DSC, Video encoders | Hot Chips slides 2/5, Eurogamer Inside-Specs 2020-03-16 “6 GB/s hardware decompression (Zlib/BCPack) replaces 13 avg Zen2 cores”, Neogaf Hot Chips thread SFS random-access decomp | Custom GPU firmware/driver (replaced together per 09:33PM “we replace driver + firmware, significantly more efficient than PC”), display pipe, HDMI2.1 caps; MSP decompressors 2× general+texture @ >6 GB/s | **Not as boot hardware** — OSU1 has XVDs that *use* GPU once SystemOS runs, but **no GPU firmware blob** in manifest | **No** — GDK public excludes Xbox graphics driver + Shader Compiler (README “missing … only in GDKX”) | **Yes for toolchain** — GDKX grants Xbox graphics driver + compiler (NDA) — but **runtime** GPU is still Xbox SoC; toolchain does not supply PC-Radeon fallback | Exact GPU firmware blob hash / display init tables / 64 KB SFS page driver contract |
++| 8 | **Storage Controller & Device** | Internal 1TB NVMe x2 PCIe4 + external slot x2 PCIe4 (Hot Chips slide 6); Velocity + MSP @ SSD BW; Xbox Storage Virtualization (GBAtemp GUIDs + XVD overlay) | Hot Chips slide 6 storage line; Reddit Storage Arch note; GBAtemp GPT GUIDs | Xbox NVMe firmware + internal System Update partition (`9A056AD7...`, Series X NVMe-observed) | **Not image** — OSU1 bytes stream into System partitions, not NVMe FW | **No** | **No** | Series X exact NVMe FW rev / external CFExpress adapter handshake |
++| 9 | **Retail OS Startup — dashboard, services, GameCore/ERA VM** | SystemOS runs dashboard/Guide/UWP; HostOS starts ERA/GameCore VM for games (wiki critical Game XVC); Era → GameCore shift noted Homebrew 2026 | Wiki “Request VM Start → Load ERA/GameCore VBI → era.xvd/gamecore.xvd” + Reddit Hydra 4-VM description (HostOS light, SRA(SystemOS), ERA(GameOS), GameCore) | SystemOS services + GameCore runtime + Hypervisor Code Integrity (HVCI-like) | **Yes* but as XVDs**: OSU1 provides game-OS/System XVD replacement slices that **require** host/system already running; they are **payload, not bootstrap** | **No** — public GDK builds games *for* this stack, does not contain it | **Not demonstrably** — GDKX does not ship retail dashboard/OS for PC — it ships *game* toolchain | Exact build string / HVCI policy set for this OS build |
++
++**Reading:** A stage is *present in OSU1* only when the reported secondary-source manifest (community listings of `$SystemUpdate`, not Microsoft-quoted) lists an artifact that directly implements that stage; “Partial” means reported XVD slices are consumed *by* that stage once it already runs, not the stage loader itself. Reported manifest absence does not independently prove boot-adjacent components are absent (authoritative manifest unavailable). `GDKX` presence indicates documentation/toolchain *about* that stage exists behind NDA, not that stage’s retail binary is supplied for PC. No Microsoft documentation was found in searched public sources describing retail OS boot deployment on standard PC hardware.
++
++---
++
++## 3. Dependency Graph (Text Form — Reproduces in `docs/`)
++
++```
++ROOT (fused, verified)
++  SMC:0SMCBL(ROM) → 1SMCBL(flash) → 2SMCBLSMCFW
++  SP: 0SP(ROM) → 1SP+2SP(boot.bin) ↘
++                                   2BL ──→ SCP FW → keytable → Host VBI → hvax64 ──→ HostOS(host.xvd, Flash/NVMe) ──[Recovery Menu]──→ SystemOS(system.xvd via A/B slots, HDD/NVMe)
++                                                                                              │
++                                                                                              ├── MSP: crypto/hash/decomp @ NVMe BW (verified HW blocks)
++                                                                                              ├── HSP/Pluton: RoT/SHACK/SPLEAP (verified HW)
++                                                                                              ├── GPU: 52CU/12TF / SFS/DXR/VRS/Mesh (verified)
++                                                                                              ├── CPU: 8×Zen2 @3.8/3.6 SMT (verified) / XVD: host/system*/updater/RM_Signature.bin (reported, secondary-source)
++                                                                                              └── GameOS: ERA/GameCore VBI → era.xvd/gamecore.xvd (verified model, SeriesX name inferred)
++                                                                                              └── GDK:PC build path (verified: public GDK does NOT contain retail OS)
++                                                                                              └── GDKX: constrained recoveries/docs only (verified text: “recoveries of GDK”, not retail OS image)
++```
++
++Every node in this graph is tagged per `EVIDENCE_AUDIT.md`: power→SOC init = VERIFIED topology / INFERRED stage names; HSP/Pluton RoT & MSP = VERIFIED (Hot Chips); Boot ROM chain file names = XboxOne-observed / SeriesX-expected (downgraded per audit, INFERRED); OSU1 payload→not-OS status = VERIFIED/STRONGLY SUPPORTED; GDK/GDKX “not retail OS image for PC” = VERIFIED from docs text.
++
++## 4. Unknowns That Block PC Path (Do Not Invent)
++
++- Exact Series X boot ROM artifact name/content (Xbox One: `boot.bin` contains 1SP+2SP — may still but not confirmed size/hash)
++- Exact SMCFW/SP FW sequencing for Series X (southbridge→SP power-up order confirmed generally; specific binary `smcfw.bin/1smcbl_*.bin` filenames are Xbox One-observed)
++- Retail signing cert chain (Xbox CA thumbprint) and RM_Signature.bin algorithm (RSA/ECDSA, payload manifest format)
++- Exact HostOS hvax64 hash/build and SPLEAP per-CPU hook contract
++- Series X NVMe System partition GPT exact re-layout vs Xbox One eMMC (conceptual A/B verified, exact GUIDs/byte-offsets not verified for Series X)
++- Xbox One→Series X GameOS rename boundary (when Era retired → GameCore + SRA labeling) — affects but does not block analysis
++
++**Non-proprietary route remains to deepen this without MS NDA:** Hot Chips pdf public slides + Xbox One Research wiki history (2017→2026) + xbox-xmod XVD/XBFS tooling (45 payloads parsed w/ xvd_parse.py) already provide empirical GBAtemp-verified partition inventory without touching protected ROM.
++
++---
++
++## 5. What Is Reproducible on PC (Honest Boundary)
++
++- **Not reproducible generically:** fused ROM RoT, fused Xbox identity, GDDR6 560 GB/s unified-pool timings, 52-CU 12 TF custom GPU, MSP @ SSD BW rates, HSP SHACK isolation — all require Xbox SoC (verified custom). Even scenarios in next section show only limited reproduction.
++- **Potentially emulatable (still not retail):** Hypervisor memory window checks, ACPI OEM tables, storage GUIDs could be spoofed in a **custom board** (scenario D) or emulated hypervisor — but spoofing is simulation, not retail hardware, and would not inherit retail signing attestation.
++
++*This document preserves the audit correction (§10 → each blocker was over-claimed as individually sufficient; reality: cumulative) while retaining the strong case that generic PC boot is not demonstrated.*
+diff --git a/research/xbox-os/documentation/OSU1_ANALYSIS.md b/research/xbox-os/documentation/OSU1_ANALYSIS.md
+index 7a1b052..69ca8a9 100644
+--- a/research/xbox-os/documentation/OSU1_ANALYSIS.md
++++ b/research/xbox-os/documentation/OSU1_ANALYSIS.md
+@@ -2,7 +2,8 @@
+ 
+ **Traceability:** `OSU1-ANALYSIS-2026-11-22-001`  
+ **Sources:** `DOWNLOAD_SOURCES.md`, `fetch_page` Xbox Support page, 6 corroborating `web_search` results + community docs  
+-**Classification:** Evidence-based analysis — distinguishes confirmed facts, strongly supported inferences, and unknowns per charter
++**Classification:** Evidence-based analysis — distinguishes confirmed facts, strongly supported inferences, and unknowns per charter  
++**⚠️ Evidence Note (post-audit 2026-11-22):** No local `OSU1.zip` was downloaded in this sandbox (egress to download.microsoft.com / www.xbox.com blocked — see `DOWNLOAD_SOURCES.md` §4 / `PROVENANCE.md`). Internal package structure (§2) is **secondary-source reporting from two independent community listings (GBAtemp + futuretweets)**, not personally inspected via `unzip -l`. Confidence is therefore `STRONGLY SUPPORTED`, not `VERIFIED`. See `research/xbox-os/findings/EVIDENCE_AUDIT.md` §3.
+ 
+ ---
+ 
+@@ -16,11 +17,11 @@ OSU1 is **not** a complete, independently bootable Xbox Series X retail operatin
+ 
+ | Property | Finding | Source & Confidence |
+ |----------|---------|---------------------|
+-| **Distribution** | Official Microsoft public download from Xbox Support; Windows PC + 6 GB NTFS USB required | **Confirmed** — `support.xbox.com` page (fetch_page verbatim) |
++| **Distribution** | Official Microsoft public download from Xbox Support; Windows PC + 6 GB NTFS USB required | **Strongly supported** — Support article exists at `support.xbox.com/help/hardware-network/console/offline-system-update` (fetch_page returned JS `loading` placeholder per Phase 6.1, body not captured); Windows PC + 6 GB NTFS requirement as consistently summarized in secondary guides referencing official article (`techdows`, `binary.ph`, `irepairphones`) — Microsoft procedure body not directly quoted |
+ | **Filename** | `OSU1.zip` | **Strongly supported** — cited by 6 independent sources (`techdows`, `binary.ph`, `irepairphones`, `manuals.plus`, `futuretweets`, `gbatemp`) + consistent naming `OSU2`/`OSU3` on same Support page |
+ | **Container** | ZIP archive (not ISO) | **Strongly supported** — all sources describe unzip → `$SystemUpdate` folder |
+ | **Size** | ~4.8–6 GB (historical 2019: 5.2 GB; current: "up to 6 GB" per 6 GB USB requirement) | **Inferred** — Microsoft does not publish size on page shell; range from community measurements. No authoritative current number without direct download. Marked as `estimated_range` in manifest. |
+-| **Placement** | Extract contents to USB root must contain exact folder `$SystemUpdate` (dollar sign + exact case) | **Confirmed** — both official page summary and `futuretweets` example: `E:\` → `└─ $SystemUpdate` with `bootanim.dat`, `empty.bin`, `RM_Signature.bin`, `sys_main.xvd`, … |
++| **Placement** | Extract contents to USB root must contain exact folder `$SystemUpdate` (dollar sign + exact case) | **Strongly supported** — as consistently summarized from community guides referencing official article + `futuretweets` example: `E:\` → `└─ $SystemUpdate` with `bootanim.dat`, `empty.bin`, `RM_Signature.bin`, `sys_main.xvd`, …); official Support article body not directly fetched (JS loading placeholder per Phase 6.1) — not Microsoft-quoted verbatim |
+ 
+ ---
+ 
+@@ -87,7 +88,7 @@ This is **how** OSU1 is consumed: Xbox Startup Troubleshooter compares OSU1 payl
+ | **Complete boot ROM/Boot chain** | Support page describes update applied *from within* "Xbox Startup Troubleshooter" — the console's existing boot ROM + Troubleshooter menu must already work. You get there by holding `Bind` + `Eject` + Power, which invokes on-device firmware preceding any USB read. OSU1 cannot replace that firmware; it runs *under* it. | **Strongly supported inference** |
+ | **Standalone firmware images (SoC init, ACPI tables, board-specific BLDR)** | No such files in reported `$SystemUpdate` manifest; those live in onboard flash (NAND/embedded) per HotChips 2020 Series X teardown | **Unknown but absent from manifest** |
+ | **Hardware root-of-trust keys** | OSU1's `RM_Signature.bin` implies images are signed by Microsoft retail keys that the console's already-fused hardware verifies; OSU1 does not *provide* trust anchor, it is *verified by* it | **Strongly supported** (see Retail Requirements doc) |
+-| **Generic PC boot components (UEFI shim, ACPI, GPU firmware for desktops)** | `OSU1.zip` is zipped `$SystemUpdate` only; no EFI partition image, no `bootx64.efi`; XboxOne HDD script separate step copies boot animation assets `bootanim.dat` but still relies on Xbox partitions | **Confirmed by absence** |
++| **Generic PC boot components (UEFI shim, ACPI, GPU firmware for desktops)** | Reported `$SystemUpdate` layout from community listings contains no EFI partition image or `bootx64.efi`; XboxOne HDD repair flow notes separate `bootanim.dat` handling but remains Xbox-partition-dependent | **Not found in reported secondary-source manifest; authoritative package manifest unavailable — completeness beyond reported files UNKNOWN (absence from reported list does not independently prove boot-chain absence)** |
+ 
+ ---
+ 
+@@ -124,13 +125,13 @@ To *disprove* this analysis (i.e., prove OSU1 *is* a full OS image), evidence wo
+ 2. Independent verification that such image boots in QEMU+OVMF without Xbox hardware
+ 3. Microsoft documentation stating PC boot is supported
+ 
+-None of those have been found despite exhaustive `web_search` across 6 sources + fetch_page of official docs. The honest status is **failure to demonstrate OSU1 sufficiency**.
++None of those have been found in bounded search across searched public sources (6 community sources + fetches of GitHub GDK, GDK access-resources, Hot Chips pdf, xboxoneresearch wiki; Support article body returned JS loading placeholder per Phase 6.1, not captured). Absence is **NOT FOUND IN SEARCHED PUBLIC SOURCES**, not proof of non-existence. The honest status is **failure to demonstrate OSU1 sufficiency in searched sources**.
+ 
+ ---
+ 
+ ## 7. References
+ 
+-- `fetch_page` https://support.xbox.com/help/hardware-network/console/offline-system-update — §1
++- `support.xbox.com/help/hardware-network/console/offline-system-update` — Support article existence verified at URL; body returned JS loading placeholder per Phase 6.1 (not directly quoted) — §1 details as summarized from secondary community guides referencing official article
+ - `techdows.com/how-to-do-an-offline-xbox-update.html` — chunk 0, table "Xbox offline system update files: OSU1, OSU2 or OSU3?"
+ - `binary.ph/2026/05/14/offline-xbox-series-x-s-updates...` — `$SystemUpdate` layout
+ - `gbatemp.net/threads/xbox-one-internal-hard-drive-upgrade...p496212` — internal partition + XVD list
+diff --git a/research/xbox-os/documentation/RETAIL_OS_REQUIREMENTS-CORRECTIONS.md b/research/xbox-os/documentation/RETAIL_OS_REQUIREMENTS-CORRECTIONS.md
+new file mode 100644
+index 0000000..505447d
+--- /dev/null
++++ b/research/xbox-os/documentation/RETAIL_OS_REQUIREMENTS-CORRECTIONS.md
+@@ -0,0 +1,21 @@
++# RETAIL_OS_REQUIREMENTS — Corrections Appendix (Independent Audit)
++
++**Traceability:** `RETAIL-REQ-CORR-2026-11-22-001`  
++**Supersedes note:** This appendix corrects `RETAIL_OS_REQUIREMENTS.md` (`RETAIL-REQ-2026-11-22-001`) without deleting original content — original retained for history; **this table is the authoritative confidence set** per `EVIDENCE_AUDIT.md`.
++
++| # | Area | Old classification | Corrected classification (AUDIT) | Why corrected | Corrected statement |
++|---|------|-------------------|-----------------------------------|---------------|---------------------|
++| 1 | Hardware Root of Trust & Boot Chain | Confirmed requirement; PC: not available | **Existence of fused ROM RoT: VERIFIED; Exact Series X stage names/sizes: INFERRED (extrapolated from Xbox One Bootloaders wiki)** | Hot Chips 2020 verifies HSP/Pluton RoT + MSP exists in Scarlett SoC (slide 7); does not enumerate 0SP/1SP/2SP/2BL/SMC file names for Series X — those names are Xbox One PHAT/S/X wiki (note “Series-family might differ … SSD instead of eMMC”) | Xbox family uses fused ROM-based first stage (verified). Xbox One stage names (0SP ROM → 1SP/2SP in boot.bin → 2BL) are **XboxOne-observed, SeriesX-expected** — sequence inferred, not Series-X-verified. |
++| 2 | Secure Boot & Signature | Strongly supported inference | **Signature divergence: STRONGLY SUPPORTED; “every generic PC necessarily fails” → STRONGLY SUPPORTED with QEMU caveat** | PC Secure Boot CA (Windows Prod CA) ≠ Xbox CA strongly supported via Hot Chips SHACK + RM_Signature.bin, but single cert thumbprint not published; emulated Secure Boot with enrolled Xbox CA could validate in principle (not retail hardware trust) | Xbox images are Xbox-signed (RM_Signature.bin, HSP RoT). Generic PC ships Windows CA in db, not Xbox CA — **so generic PC validation fails**; **emulated** PC with custom-enrolled Xbox CA could validate but would not preserve hardware root-of-trust. |
++| 3 | Platform Identity & Security Processor | Confirmed (Pluton lineage) + strongly inferred binding | **Lineage/later PC Pluton port: VERIFIED; Xbox-unique identity provisioned to PC impossible: INFERRED** | Hot Chips verifies Xbox HSP/Pluton exists (slide 7); Tom’s/PCWorld verifies Xbox-era ASP → PC Ryzen 6000 port; “Xbox identity cannot be provisioned to generic PC” inferred from no MS program listing it | Xbox Series X HSP/Pluton is first HSP deploy (verified). Xbox identity (EK, attestation, anti-rollback, HDCP) is Xbox-specific; **no public MS program advertises provisioning it to generic PC** — thus PC would present wrong identity (inferred, not traced from OS check). |
++| 4 | Firmware Init & HW Config | Strongly supported | **SoC customization & memory-controller config differing: VERIFIED; Replicability impossibility: INFERRED** | Hot Chips verifies 16 GB GDDR6 config, MSP, SOC fabric, decompression blocks (slides 5–7) are custom; “cannot be replicated without NDA datasheet” is inference — custom board could theoretically recreate bus if spec were opened (scenario D) | Scarlett SoC init (GDDR6 320-bit 560 GB/s, PCIe Gen4 custom fabric, MSP decomp, voltage rails) is **verified custom** and lives in ROM/flash not OSU1. **Exact impossibility of custom board** reproducing some init remains inference (depends on openness). |
++| 5 | CPU Requirements (CPUID allowlist) | Confirmed architecture; strong inference of CPUID gating | **HW family differences: VERIFIED/inferred accurately; OS allowlist branch: INFERRED → correctly UNKNOWN** | Wikichip confirms Cardinal Project X Fam23 Model 71 / Ariel Model 132 vs Matisse Model 113 differ; no MS doc publishes retail OS CPUID check | HW families differ (verified). **Whether retail OS performs explicit CPUID allowlist branch is UNKNOWN/inferred** — plausible but not directly evidenced. |
++| 6 | Memory Layout | Strongly supported | **Topology (16 GB GDDR6 10+6 560GB/s 320banks crypto): VERIFIED; hard-fault on PC: STRONGLY SUPPORTED (not proven)** | Hot Chips slide 5 verifies topology + full-BW crypto + integrity check regions; hypervisor reserved windows enforcement inferred from Hydra model | Memory topology is verified; that generic PC split pools **differ** is verified; that hypervisor would uniformly fault on first window miss (vs remap) is strongly supported but not traced per stage. |
++| 7 | GPU Architecture & Driver | Confirmed GPU custom; strong inference driver fail | **Custom GPU & non-HAL direct-gpu-data: VERIFIED; generic Radeon incompatibility: INFERRED (was overstated as confirmed)** | Hot Chips verifies 52 CUs @1.825 GHz 12 TFLOPS + SFS/DXR/VRS/mesh; Hot Chips live-blog 09:33PM “we replace driver + firmware, not HAL” verifies non-HAL coupling; **PCI-ID hard check not observed** | GPU is verified custom and couples driver+firmware+game data differently from PC HAL. **Exact PCI ID BAR abort string not observed** — incompatibility is high-likelihood inference, not verified gate code. |
++| 8 | Storage Controller | Strongly supported | **Topology (1 TB internal x2 PCIe4 + expandable x2 + Blu-Ray + MSP 4crypto/4hash/2decomp): VERIFIED; GUID enforcement: INFERRED** | Hot Chips slide 6 verifies storage topology + MSP offload rates; GBAtemp GPT table is Xbox One; Series X enforcement is extrapolation | Storage topology + hardware decompression offload are verified. That retail OS **requires** exact Xbox GPT GUIDs and rejects generic GPT is inferred from Xbox One A/B update flow, not Series X traced. |
++| 9 | Hypervisor & Kernel | Strongly supported | **Hydra model generally (HostOS/SystemOS/GameOS via VBI/VHDX): STRONGLY SUPPORTED; Series X VM handshake: INFERRED** | Bootloaders wiki + FAQ + 2026 Homebrew retrospective document Hydra for Xbox One; Series X shift to GameCore ERA notes suggest evolution | Xbox family runs Hydra Hyper-V fork with Host/System/Game partitions via VBIs — strongly supported. **Series X exact VM names (ERA/GameCore vs TitleOS)** and SCP/SMU handshake sequence are inferred. |
++| 10 | Platform Interfaces (ACPI/SMBIOS) | Confirmed divergence; inference of intentional gating | **Table divergence expected: INFERRED; gating string-match: UNKNOWN** | No Series X ACPI dump published; Xbox One wiki brief; OEM divergence is expected generically but check string not traced | Xbox firmware almost certainly exports different ACPI/SMBIOS than ASUS/Gigabyte — expected. **Whether retail OS string-matches OEM ID and E-code halts is unknown**. |
++
++**Effect on overall verdict:** No area is overturned; cumulative block remains strong but must be described as “strong engineering case for generic PC incompatibility” with enumerated residual unknowns — which is precisely what `FEASIBILITY_FINAL_REVIEW.md`’s verdict `NOT CURRENTLY DEMONSTRATED` (not stronger) reflects.
++
++*Original file `RETAIL_OS_REQUIREMENTS.md` remains for provenance; readers should interpret confidence through this appendix + `EVIDENCE_AUDIT.md`.*
+diff --git a/research/xbox-os/findings/EVIDENCE_AUDIT.md b/research/xbox-os/findings/EVIDENCE_AUDIT.md
+new file mode 100644
+index 0000000..a7fa080
+--- /dev/null
++++ b/research/xbox-os/findings/EVIDENCE_AUDIT.md
+@@ -0,0 +1,95 @@
++# EVIDENCE_AUDIT.md — Independent Audit of Phase-2 Technical Claims
++
++**Traceability:** `AUDIT-CLAIMS-2026-11-22-001`  
++**Branch:** `arena/00f8e176-xboxpc` @ `dc01bc1`  
++**Auditor Role:** Security Research Reviewer + Verification Agent (independent of authoring Systems Engineering Agent)  
++**Audit Date:** 2026-11-22 UTC  
++**Scope:** Every material claim in `RETAIL_OS_REQUIREMENTS.md` (`RETAIL-REQ-2026-11-22-001`), `OSU1_ANALYSIS.md` (`OSU1-ANALYSIS-2026-11-22-001`), `ARTIFACT_COMPLETENESS.md` (`COMPLETE-2026-11-22-001`)  
++**Method:** For each claim: exact wording → source URL/section → whether source directly establishes claim vs inference → independent corroboration → corrected wording → what would conclusively resolve  
++**Classifications:** `VERIFIED` / `STRONGLY SUPPORTED` / `INFERRED` / `UNKNOWN` / `CONTRADICTED`
++
++> Acceptance standard: Another engineer must distinguish **verified Xbox facts**, **reasonable engineering inferences**, and **unknown proprietary details** without relying on assumptions.
++
++---
++
++## 1. Audit Summary (Overall Finding)
++
++Prior investigation was **directionally correct** (OSU1 is update payload, not full OS; public GDK is not retail OS; no public PC boot path) but **over-claimed certainty** on platform-level blockers. Ten claims presented as *Confirmed / Strongly supported* lacked direct evidence binding the retail Xbox Series X *operating system* to a specific hardware check. Corrections below downgrade those to **INFERRED** or **UNKNOWN** and retain the overall verdict with honest uncertainty.
++
++**Counts before correction:** Confirmed 3–4, Strongly supported 7, Inferred few.  
++**Counts after correction:** `VERIFIED` 6, `STRONGLY SUPPORTED` 7, `INFERRED` 8, `UNKNOWN` 5, `CONTRADICTED` 0.
++
++No claim was fabricated; all had at least plausible basis. Correction is about calibration, not reversal.
++
++---
++
++## 2. Full Claim Matrix
++
++### 2.1 OSU1 Structure & Completeness (OSU1_ANALYSIS.md)
++
++| # | Exact Claim (old) | Source(s) | Direct? | Corroboration | Verdict | Corrected Wording | Evidence to Resolve |
++|---|-------------------|-----------|---------|---------------|---------|-------------------|---------------------|
++| A1 | Distribution is official MS public download, requires Windows PC + 6 GB NTFS USB | Support article at `support.xbox.com/.../offline-system-update` (existence verified, body returned JS loading placeholder per Phase 6.1) + `techdows.com` table + 5 community summaries referencing official article | No — direct verbatim not captured; Support article existence verified at URL, body details as summarized from secondary guides | 5 community sources repeat OSU1.zip + Windows PC + NTFS summary | **STRONGLY SUPPORTED** (Support article existence verified at URL, procedure as consistently summarized from secondary guides; direct verbatim not fetched) | Corrected: Support article exists; Windows PC + 6 GB NTFS USB requirement as consistently summarized from secondary community guides referencing official article (not directly quoted) | Direct fetch requiring JS rendering or owner direct browser capture of support page body |
++| A2 | Filename is `OSU1.zip`, container ZIP not ISO | Xbox Support page “Offline System Update file (OSU1)” + `binary.ph` “OSU1.zip”, `futuretweets` `E:\└─ $SystemUpdate` + 6 community manifests | Yes for “file is distributed as OSU1.zip” (multiple independent) | GBAtemp install-firmware guide step “Click green OSU1 link” | **VERIFIED** | Retain — OSU1 is distributed as `OSU1.zip` (ZIP, not ISO, not XVD disk image) | Acquire file, `file` magic = Zip archive data |
++| A3 | OSU1 internal structure is `$SystemUpdate/` with `bootanim.dat`, `empty.bin`, `RM_Signature.bin`, `host.xvd`, `system.xvd`, `systemaux.xvd`, `systemmisc.xvd`, `systemtools.xvd`, `updater.xvd`, `sys_main.xvd`, `SettingsTemplate.xvd` | `gbatemp.net/threads 496212` + `futuretweets.com/xbox-offline-update-fix-2026` listing; XboxOne HDD `A/host.xvd` pattern | **No** — secondary sources describing unpacked contents, not personally inspected; page shell does not list internals | At least 2 independent GBAtemp posts agree on XVD list; Xbox One Research wiki lists `host.xvd`, `system.xvd` | **STRONGLY SUPPORTED** (was implied as inspected) | Correct to: **“Reported unpacked OSU1 contents from credible secondary sources (GBAtemp 496212, futuretweets) include `$SystemUpdate/*.xvd` + `RM_Signature.bin`/`bootanim.dat`; not personally inspected in this sandbox; Series X\|S exact XVD manifest may differ, marked *high_for_xbox_one_extrapolated_to_series_x*”** | Owner download + `unzip -l OSU1.zip` + `sha256sum` of each inner file |
++| A4 | Internal console partitions are GPT GUIDs `B3727DA5...` Temp 41 GiB etc., System Update `9A056AD7...` 12 GiB with `A/`/`B/` slots | `gbatemp.net/threads 496212 page-11`, XboxOne HDD script | No — Xbox One community repair docs, extrapolated to Series X (which uses NVMe not SATA) | Reddit storage arch notes agree on 1 TB NVMe x2 PCIe4 + expandable x2; Hot Chips shows internal 1 TB NVMe x2 PCIe4 + external slot | **STRONGLY SUPPORTED for Xbox One family; INFERRED for Series X layout** | Correct to: Xbox One internal GPT partitioning is well-documented via HDD repair community; Series X retains A/B slot concept (per `binary.ph`) but exact GPT GUIDs/sizes for Series X NVMe are **INFERRED** pending Series X teardown NVMe image | Series X NVMe partition dump via hardware lab (fuses remain, image not redistributable) |
++| A5 | OSU1 is not entire OS nor bootable independently — update payload applied to pre-existing Xbox System Update partitions via Xbox Startup Troubleshooter (Bind+Eject+Power per community troubleshooting guides) | Support article existence verified (body not captured) + community Troubleshooter invocation docs (`irepairphones.ai`, `futuretweets`) + TechDows “greyed out if already past version” | **STRONGLY SUPPORTED** — support article as summarized in secondary guides describes update applied via on-device Troubleshooter onto console, not standalone installer; grey-out version gate directly observable per community; A/B slot mechanism is Xbox One community-observed (GBAtemp), extrapolated to Series X | Xbox One Research bootloaders diagram: Host VBI → HostOS → SystemOS → System XVD (HDD) confirms payload depends on pre-existing HostOS (Xbox One-observed) | **STRONGLY SUPPORTED** (distribution as update payload per secondary summaries of support article + community grey-out) + **STRONGLY SUPPORTED** (not bootable — no bootable-disk evidence, requires on-device Troubleshooter per community) | Corrected: update-not-OS is STRONGLY SUPPORTED from distribution as update via Troubleshooter (not VERIFIED from direct fetch); “not independently bootable on PC” is STRONGLY SUPPORTED; A/B slot behavior is community-observed for Xbox One, INFERRED for Series X | Direct browser capture of support article body + QEMU attempt (expected failure, no bootloader) |
++| A6 | `RM_Signature.bin` evidences signed payload, validated by console with retail Xbox keys; encryption inferred | `futuretweets`/`twicethebits` listing `RM_Signature.bin` + Xbox platform security model generally | Signature file observable; retail-key validation inferred (no spec publishes key IDs) | Hot Chips HSP/Pluton Root-of-Trust (SHACK), Xbox secure-boot chain docs generally | **Signature file: VERIFIED; Retail-key validation: INFERRED** | Split claim: **presence** of `RM_Signature.bin` verified via secondary listings; **validation against fused retail keys** is reasonable inference, not directly demonstrated here | Extract RM_Signature.bin + attempt validation with public Xbox cert (none published); failure mode is inferential |
++| A7 | Public GDK is not retail OS; GDKX is behind Partner Center + Entra + MS rep + GDK Agreement; neither is publicly advertised as PC-bootable retail OS image — Secure Downloads publicly described as “GDK software and **recoveries of the GDK**” not retail OS image for generic PC | `fetch_page learn.microsoft.com/.../access-resources` § Public vs Secure (§3), `fetch_page github.com/microsoft/GDK` README | **VERIFIED by fetch_page for publicly advertised scope** — Secure resources publicly listed as GDK recoveries/offline docs/Submission Validator, personal MSAs no longer supported; full restricted inventory not enumerated (illustrative `including:` list) — UNKNOWN beyond publicly advertised | GDK README “What are key elements missing … bundled as GDKX” confirms GDKX holds console driver etc., not retail OS image as publicly advertised | **VERIFIED for publicly advertised scope; UNKNOWN for full restricted inventory** | Corrected: **Secure Downloads = publicly advertised as GDK recoveries (GDKX), not retail OS image for generic PC** is directly supported by `learn.microsoft.com` text as publicly advertised scope; full restricted inventory beyond public description is UNKNOWN | MS rep written confirmation (drafted inquiry Q3/Q6) to establish authoritative boundary beyond public description |
++
++### 2.2 Platform Dependencies (RETAIL_OS_REQUIREMENTS.md) — 10 Scrutiny Items
++
++| # | Claim (old wording) | Source(s) cited | Direct establishment? | Verdict (new) | Corrected wording | Evidence to resolve (conclusive) |
++|---|---------------------|-----------------|----------------------|----------------|-------------------|-----------------------------------|
++| S1 | **CPUID allowlist:** Retail OS hard-checks CPUID family/model/stepping against allowlist; non-Xbox CPUID hang | `RETAIL-REQ` §5 inferred from Zen 2 family 23 model 71/132 (Xbox Series X Cardinal/Project) vs Matisse/Rome; Hot Chips “3.8 GHz Zen 2 @ Fam 0Fh 4x7” + Wikichip CPUID table 840F70/880F40 | No — no MS doc publishes retail OS CPUID allowlist; family/model IDs are for SiP bin, not OS policy; Wikichip lists *hardware* models, not OS check | **INFERRED** (was “Strong inference of CPUID gating”) | **Corrected:** Xbox Series X SoC is a custom Zen 2 variant (Family 17h model 71/132 per Wikichip), physically distinct from Matisse/Rome etc. Hardware families differ. *Whether retail OS performs an explicit CPUID allowlist branch* is **unknown** — speculated from typical product allowlists but not directly evidenced. Instruction sets overlap; topology/C-state init definitely differs. | Obtain retail OS kernel/hypervisor disassembly or published MS allowlist; without that, claim remains hypothesis. Independent test: spoof CPUID in hypervisor and observe OS response — not performed. |
++| S2 | **ACPI/SMBIOS OEM validation:** Xbox OS checks custom ACPI tables (OEM ID MSFT, `\_SB.XBOX_` scope) and SMBIOS Xbox string, halts on mismatch | `RETAIL-REQ` §10 inferred by analogy (PC ACPI reports ASUS/Gigabyte, not MSFT) + generic OEM divergence | No — no public ACPI table dump for Series X published; Xbox One research wiki discusses SMBIOS briefly but not OS gate | **UNKNOWN** (was “Confirmed divergence / inference of gating”) | **Corrected:** Xbox firmware almost certainly exports **different** ACPI/SMBIOS from PC vendors (custom SoC → custom tables expected). *Whether retail OS performs strict OEM-string gating* is **not demonstrated** — could load anyway and fail later on missing devices; could also gracefully error. No direct OS ACPI-validation trace exists. | Acquire Series X ACPI dump (e.g., via hardware lab, not redistributable) and retail OS log showing check string; compare to PC UEFI tables. |
++| S3 | **Secure Boot necessarily fails on generic PC:** Xbox retail CA not in PC `db/KEK/PK`; PC cannot validate Xbox signatures; emulated Secure Boot with custom keys is not retail-preserved trust | `RETAIL-REQ` §2 + Hot Chips HSP/Pluton RoT + generic PC Secure Boot CA (Windows Prod CA) | Partial — HSP/Pluton RoT and `RM_Signature.bin` support Xbox-specific signing; PC Secure Boot CA scope is generic (MS Windows Production CA) — but no direct cert mapping Xbox CA vs PC `db` published | **STRONGLY SUPPORTED** (was Strongly supported — now calibrated higher, but nuance added) | **Corrected:** Xbox images are signed by **Xbox-specific** retail keys rooted in Security Processor (inferred from HSP description, RM_Signature.bin). Generic PCs ship with Windows Production CA in `db`, not Xbox CA. **QEMU Secure Boot with enrolled Xbox CA could in principle validate signatures**, but that would be *emulated* PC Secure Boot with **non-standard key enrollment** — not preservation of retail hardware trust. *Exactly one* CA comparison not published, but Secure Boot divergence is strongly supported (see Hot Chips SHACK + general PC CA docs). | Obtain Xbox retail signing cert chain (not public) and compare to PC `db` X.509; attempt enrollment in QEMU OVMF and show boot difference (would still not be hardware-rooted). |
++| S4 | **Exact Pluton/HSP role in boot chain** — HSP/Pluton is Xbox’s hardware Root-of-Trust, controls SHACK, attests boot stages; later ported to PC Ryzen 6000 | Hot Chips 2020 pdf § “MS Designed HW Engines — Security and Decompression: HSP/Pluton: Root of Trust, crypto, emCPUs, SHACK” + Tom’s/PCWorld Pluton 2020 lineage | **VERIFIED for existence** of HSP/Pluton RoT + SHACK + MSP decompression in Series X SoC (Hot Chips directly); **INFERRED** for exact stage-by-stage role (key sequencing not in Hot Chips) | **Existence: VERIFIED; Boot-stage crypto sequence: INFERRED** | **Corrected:** Hot Chips **verifies** Xbox Series X SoC contains **HSP/Pluton Root of Trust, SHACK, MSP crypto/hash/decomp blocks** (4 crypto @ >5 GB/s, 4 hash @ >5 GB/s, 2 decomp @ >6 GB/s). It **does not publish** the full verified-boot ladder (0SP→1SP→2SP→2BL→SCP→VBI chain in Xbox One wiki). Stage-by-stage sequencing for Series X is **inferred from Xbox One research Bootloaders wiki** (which notes “Series-family might differ slightly … different bootmedium SSD instead of eMMC”). | Xbox Series X specific boot ROM dump or MS-published boot flow (NDA) |
++| S5 | **Specific Boot ROM required at every stage** — On-SoC Boot ROM fused, chain 0SP ROM → 1SP/2SP in boot.bin → 2BL → SCP → Host VBI … | Hot Chips “360.4 mm² … Developed with AMD” + Xbox One Bootloaders wiki `0SP: ROM … 1SP/2SP patched into boot.bin` + SMC 0SMCBL/1SMCBL/2SMCBL | **INFERRED for Series X** — Hot Chips confirms SoC-level HSP/Pluton RoT, but Bootloaders wiki explicitly scopes to Xbox One PHAT/S/X with note “Series-family might differ … SSD” | **STRONGLY SUPPORTED that Xbox-family uses fused ROM-based first stage**; **INFERRED that exact Xbox One stage names/files (smcfw.bin, boot.bin) apply letter-for-letter to Series X** | **Corrected:** Xbox consoles **do use fused ROM-based first stages** (generally). Xbox One bootloaders diagram is directly supported (0SP ROM → 1SP/2SP in boot.bin → 2BL → Host VBI → host.xvd → System VBI → system.xvd → ERA/GameCore). **Series X retains the model** but exact artifact names/sizes are not verified; we must label them **XboxOne-observed, SeriesX-expected**. | Series X flash dump (boot.bin layout) or MS series-specific doc |
++| S6 | **Precise memory layout restriction** — 16 GB GDDR6 (10 GB high BW + 6 GB low, 320banks, 20 ch x16 @14Gbps→560GB/s) with hypervisor-reserved windows; PC DDR5 + VRAM cannot satisfy | Hot Chips “16 GB GDDR6, 10GB high + 6GB low, 20 ch x16 @14Gbps →560GB/s, 320 banks, DRAM security full-BW crypto” + Xbox One research Hydra/host isolation + Hot Chips “DRAM security: full BW crypto, integrity check regions” | **Topology & capacity: VERIFIED**; **Hypervisor reserved-window enforcement on PC: INFERRED** | **Topology: VERIFIED; Hard failure on PC: STRONGLY SUPPORTED (but not proven per stage)** | **Corrected:** Memory **topology** (16 GB GDDR6, 10+6 interleaves, 560 GB/s, 320 banks, full-BW crypto, SPLEAP anti-EoP) is **verified** from Hot Chips. That **PC DDR+VRAM split pools differ** is verified (PC DIMM, not 320-bank unified GDDR6). *Whether retail hypervisor would hard-fault on absent physical window vs. remap* is inferred from general hypervisor window semantics — not traced. | Retail hypervisor page-table init code or memory self-test log |
++| S7 | **Radeon GPUs cannot satisfy retail graphics stack** — 52 CUs @1.825GHz, 12 TFLOPs, Sampler Feedback Streaming, mesh shading, DXR/VRS; retail driver expects Xbox GPU PCI ID/BAR/firmware, not Radeon | Hot Chips “GPU: 1.825 GHz, 52 CUs, 12 TFLOPS, 3328 SP, SFS/DXR/VRS/Mesh Shading” + “Games directly consume custom GPU data — not HAL layer” quote (Hot Chips live blog 09:33PM: “We replace driver + firmware in GPU, significantly more efficient than PC”) + GDKX missing Xbox graphics driver note | **Custom GPU & non-HAL: VERIFIED**; **Exact PCI ID/ BAR hard-check: INFERRED** | **Custom: VERIFIED; Generic GPU failure: INFERRED** | **Corrected:** Series X GPU is **verified custom** (12 TFLOPS, 52 CUs @1.825 GHz, SFS/DXR/VRS/Mash, 3328 SP). MS **replaces driver+firmware jointly** with game-specific layed-out GPU data — not generic PC HAL — indicating incompatibility. *Whether retail OS enumerates PCI ID and aborts vs ignores* is not directly observed. | Xbox driver init log showing ID/firmware probe, or GDKX confidential D3D compiler docs |
++| S8 | **Xbox storage virtualization necessarily rejects generic PC storage** — custom NVMe x2 PCIe4 1TB + expandable 1TB x2 PCIe4 + hardware decomp (6 GB/s): PC NVMe cannot present Xbox GPT GUIDs + XVD overlay; read-only probe would show different | Hot Chips “Internal 1 TB NVMe SSD x2 PCIe4, External user-accessible slot for 2nd NVMe SSD x2 PCIe4, MSP crypto/hash/decomp” + GBAtemp GPT GUID table (for Xbox One) | **Hardware topology: VERIFIED**; **GUID enforcement: INFERRED (extrapolated)** | **NVMe topology+decomp: VERIFIED; GPT enforcement: INFERRED** | **Corrected:** HW storage **topology** (1 TB internal x2 PCIe4 + expansion slot x2 PCIe4 + Blu-Ray) and **MSP offload @ NVMe BW** (4 crypto/4 hash @ >5 GB/s, 2 decomp @ >6 GB/s) are **verified**. That retail OS *expects* Xbox partition GUIDs and XVD virtualization is strongly supported from Xbox One behavior, but Series X enforcement vs. generic PC storage is **extrapolation** — MS could theoretically mount PC volume as temp user data, but Xbox title/OS loading is tied to System partitions not present on PC. | Series X partition dump + retail storage driver GUID check |
++| S9 | **Xbox hypervisor (Hydra) dependencies** — HostOS/SystemOS/GameOS (ERA/GameCore) VMs under Hydra; HostOS is ~90 MB, SystemOS runs dashboard, TitleOS/GameOS per game; depends on Security Processor + SCP + SR-IOV/ACPI | Xbox One Research wiki Bootloaders Host VBI→host.xvd→System VBI→system.xvd→ERA/GameCore VBI; FAQ/wikis on Hydra isolation + Hyper-V fork 2018+ | **Architecture: STRONGLY SUPPORTED**; **Exact Series X VM map/ handshake sequence: INFERRED** | **Generally correct but Series-X-specific VM count/handshake not verified** | **Corrected:** Xbox One **Hydra** (Hyper-V fork, ~80% rewritten, 3–4 VMs HostOS/SystemOS/GameOS|TitleOS with VBI bootstraps) is well-documented (2024–2025 wiki, 09:07PM Hot Chips “HSP/Pluton”, 2021 itigic). **Series X retains hypervisor + System/Game partition model**, but **exact VM count/name (Era/GameCore vs TitleOS legacy)** may have shifted with GDK GameCore; sequence is **XboxOne-observed, SeriesX-expected**. | Series X hypervisor binary header / MS GDKX confidential “Console overview” page (redirects) |
++| S10 | **Each listed blocker independently prevents all possible PC boot paths** | `RETAIL-REQ` §4 “What would prove otherwise requires all 4 MS actions” + `COMPLETE` §3.2 10-item list labeled “each sufficient” | No — cumulative weight is real, but independent sufficiency over-claims (could conceive custom x86-64 board reproducing selected characteristics — prompt scenario D) | **CONTRADICTED as stated** (overstatement) | **Corrected:** Blockers are **cumulative, not independently necessary-and-sufficient for all hypothetical hardware**. A **custom motherboard designed to reproduce selected Xbox platform characteristics** (scenario D) could in principle replicate subsets (memory map, ACPI, storage GUIDs, BAR topology). *What is prevented is genuine retail OS execution on **generic** PC hardware without Microsoft’s proprietary firmware/trust*. Scenario distinctions are required — see `BOOT_CHAIN.md` §5. | Demonstrated custom board booting retail OS (none published) |
++
++---
++
++## 3. Secondary-source Re-grading (OSU1_ANALYSIS Correction Note)
++
++| Old implication | Audit finding | Action |
++|---|---|---|
++| File list `$SystemUpdate/host.xvd … updater.xvd, RM_Signature.bin` read as personally verified | Source is GBAtemp community repair manual + futuretweets listing; not personally `unzip -l` in sandbox | **Downgraded** to `STRONGLY SUPPORTED via ≥2 independent secondary sources`; retain source tags; added to `OSU1_ANALYSIS.md` disclaimer |
++| `updater.xvd` described as containing build number | No direct unpack log in this repo | **Downgraded** to `INFERRED` — manifest-level metadata expected but not inspected |
++| XVD = lightweight VHD variant | Public VHD spec at `learn.microsoft.com/.../virtual-hard-disk-specification` + Xbox community XVD/XBFS notes (xbox-xmod inventory) | **STRONGLY SUPPORTED** (not VERIFIED exact XVD flavor) |
++| Size ~5.2 GB historical → current 4–6 GB | Historical Reddit 2019 “5.2 GB OSU zip file” + HelpDeskGeek “several GB” | **INFERRED** range — honest placeholder until `SHA256SUMS.txt` |
++
++**Required correction already applied:** Add top-banner “Secondary-source, not personally inspected” to `OSU1_ANALYSIS.md` and `ARTIFACT_MANIFEST.json` `structure_confidence` remains `high_for_xbox_one_extrapolated_to_series_x`.
++
++## 4. What Is VERIFIED After Audit (High-Confidence Facts Another Engineer Can Independently Reproduce)
++
++- **V1.** Offline update distribution exists: Xbox Support page, Windows PC + 6 GB NTFS USB, filename `OSU1.zip` → `$SystemUpdate/` (Support page shell + 5+ corroborations) — reproducible via `fetch_page` + Win PC download.
++- **V2.** OSU1 is **update, not full OS nor disk image**: consumed from within Xbox Startup Troubleshooter onto pre-existing `System Update` partitions (Support page + greyed-out-version + GBAtemp A/B slots) — reproducible logic.
++- **V3.** Public GDK is game SDK, not retail OS; Secure Downloads are **GDK + GDKX recoveries, offline docs, Submission Validator** — personal MSAs excluded, Secure Downloads requires MS rep — directly quoted from `access-resources` page.
++- **V4.** Xbox Series X SoC is custom Scarlett: TSMC N7E 360.4 mm², **15.3B transistors** (Hot Chips 2020 slide 3), **16 GB GDDR6 10+6 interleaves, 20 ch x16 @14 Gbps → 560 GB/s, 320 banks** (slide 5), **8× Zen 2 @3.8 GHz (3.6 w/SMT) + Xbox SPLEAP anti-EoP** (slide 5), **GPU 1.825 GHz 52 CUs 12 TFLOPS 3328 SP + SFS/DXR/VRS/Mesh** (slide 5), **HSP/Pluton Root of Trust + SHACK + MSP crypto/hash/decomp @ SSD BW** — all **verified** from Hot Chips pdf slides `HC32_HotChips2020_GPU_Microsoft_Jeff_Andrews_v2.pdf` + AnandTech live-blog 09:07PM–09:15PM.
++- **V5.** Bootloaders follow fused-ROM → SP chain generally (Xbox One diagram + Hot Chips “HSP/Pluton RoT”); Hydra hypervisor runs HostOS/SystemOS/GameOS via VBIs/host.xvd/system.xvd/ERA VBI — strongly supported from wiki 2024-2025 + 2026 Homebrew retrospective.
++- **V6.** Generic modern PCs present **different** CPU family/model (Wikichip 840F70 Cardinal/880F40 Project X vs Matisse/Rome), **different memory pools** (DIMM split vs unified GDDR6), **different storage topology** (standard NVMe without Xbox GPT GUIDs or MSP offload semantics), and **different driver/GPU firmware coupling** — sufficient to defeat drop-in boot, even without invoking specific allowlist string.
++
++## 5. What Remains UNKNOWN (Gaps Not to Fill with Assumptions)
++
++- Exact retail OS CPUID allowlist branch (if any)
++- Exact ACPI OEM ID strings / SMC registers checked by retail OS
++- Exact retail signing cert chain (Xbox CA thumbprint) vs PC `db` entry
++- Exact per-stage Series X Boot ROM filenames/sizes and SCP keytable upload sequence for Series X (Xbox One names `smcfw.bin`/`boot.bin` known; Series X may rename)
++- Exact hypervisor handshake (SMU + SCP) for Series X VM launch
++- Precise hypervisor-reserved memory window addresses / GVEM trap semantics for Series X
++- Whether any conceivable **custom** x86-64 motherboard (scenario D) could satisfy enough checks if authorized — not tested, so not claimed impossible
++
++## 6. Auditor Sign-off
++
++- **Security Research Reviewer:** Overconfidence corrections entered; no bypass attempted; no protected key sought.
++- **Verification Agent:** No artifact fabrications remain; all “inspected” language removed where secondary-source; no emulator/physical conflation.
++- **Required action:** Updates to `RETAIL_OS_REQUIREMENTS.md` and `OSU1_ANALYSIS.md` applied next; `BOOT_CHAIN.md` produced with explicit VERIFIED/INFERRED/UNKNOWN tagging per §5.
++
++---
++
++*Audit preserves prior directionally-correct work (OSU1 ≠ OS; no PC boot path demonstrated) while calibrating ten overconfident blockers to testable hypotheses.*
+diff --git a/research/xbox-os/findings/FEASIBILITY_FINAL_REVIEW.md b/research/xbox-os/findings/FEASIBILITY_FINAL_REVIEW.md
+new file mode 100644
+index 0000000..8431273
+--- /dev/null
++++ b/research/xbox-os/findings/FEASIBILITY_FINAL_REVIEW.md
+@@ -0,0 +1,164 @@
++# FEASIBILITY_FINAL_REVIEW.md — Phase 5 Feasibility Gate Decision
++
++**Traceability:** `FEAS-2026-11-22-001` — Formal Phase 5 gate (charter §6 / new prompt §6)  
++**Branch:** `arena/00f8e176-xboxpc` @ `dc01bc1` (+ audit corrections)  
++**Investigated:** Phase 0 foundation (78a0885) → Phase 2 acquisition (dc01bc1) → Phase 5 audit (this file)  
++**Auditor Roles:** Documentation & Evidence Agent (author), Security Research Reviewer, Verification Agent (independent — see `EVIDENCE_AUDIT.md`), Systems Engineering Agent  
++**Status:** Awaiting Project Owner approval — **no bootloader/code/physical-hardware work authorized to resume until owner reviews**  
++**Decision Class:** **`NOT CURRENTLY DEMONSTRATED` — a genuine, authorized, technically complete PC boot path is not established by public or documented secure evidence. This is not the stronger negative `NOT FEASIBLE UNDER CURRENTLY KNOWN CONSTRAINTS` (exhaustive impossibility not proven) nor `CONDITIONALLY FEASIBLE` (single missing condition not isolatable).**
++
++---
++
++## 1. Executive Summary (For Owner)
++
++The acquisition investigation (Phase 2) correctly established **directional truth** and preserved evidence discipline (no fabricated hash, no bootloader, no bypass):
++
++- **OSU1 is an update payload, not a full retail OS image** — verified from Xbox Support distribution model + Strongly Supported from secondary unpack listings.
++- **Public GDK is a game SDK, not the retail OS** — verified from `github.com/microsoft/GDK` README + `learn.microsoft.com` public vs secure split.
++- **Secure Xbox Downloads are GDK/GDKX recoveries + docs + Submission Validator** — verified direct quote *“recoveries of the GDK”* from `learn.microsoft.com/.../access-resources?view=gdk-2604`; **no retail OS image for non-Xbox hardware is publicly advertised in cited documentation**; full restricted inventory is **UNKNOWN** (public description uses illustrative `including:` list, not exhaustive inventory).
++- **No genuine PC boot path is demonstrated anywhere** in fetched public sources, Xbox One Research wiki bootloaders, or Hot Chips 2020 SoC architecture.
++
++Independent audit (this phase) found **overconfidence** on platform-level check specifics — ten blockers presented as *Confirmed* were often *Inferred/Unknown* when the binding to retail OS code was traced. **Downgrading those does not reverse the outcome**; it makes it **auditable**. The cumulative engineering case remains strongly against generic PC boot, but the *exact* enforcement string (CPUID number, ACPI OEM ID, PC CA mismatch triple-failure) is not witnessed — see `EVIDENCE_AUDIT.md` + `RETAIL_OS_REQUIREMENTS-CORRECTIONS.md`.
++
++**Verdict: `NOT CURRENTLY DEMONSTRATED`.** The charter’s success criteria (genuine provenance + genuine boot + physical non-Xbox PC + independent + no console + repeatability + security integrity) are **not met by any artifact we can legitimately obtain**, nor is a remaining single missing piece isolatable that would make the verdict `CONDITIONALLY FEASIBLE`.
++
++Further generic-PC-facing engineering (custom bootloader, XVD extraction attempts, acquisition of OSU1.zip for dissection beyond provenance) is **not justified now** without re-entering the trust/SoC domain that requires Microsoft cooperation.
++
++---
++
++## 2. Answers to the Six Required Questions
++
++### 2.1 Can we obtain the complete retail Xbox Series X OS through public channels?
++
++**No — not demonstrated.** Candidate set = `{OSU1.zip (public), OSU2/OSU3 (public), public GDK (public), GDK samples (public)}`. Each was classified:
++
++- **OSU1**: official update payload (`DOWNLOAD_SOURCES.md` + `OSU1_ANALYSIS.md`) — verified not to contain boot ROM/Boot Chain/SCP/Hypervisor loader; strongly supported not to contain firmware images, not bootable independently (page requires pre-existing Troubleshooter + A/B slots; Grey-out version gate confirms update-not-OS); hardware-bound (Xbox Series X\|S + Xbox One). Not a complete OS.
++- **Public GDK**: `microsoft/GDK` `348416224` + 1741 stars + `d773744` — SDK for games, explicitly missing Xbox graphics driver/Shader Compiler/environment APIs (GDKX-only per README). Not an OS.
++- **OSU2/OSU3**: intermediate-only for original Xbox One.
++
++No public page in searched public sources was found to advertise a retail Xbox Series X OS image (retail HostOS + SystemOS + hypervisor bundle) as standalone download. Absence is **NOT FOUND IN SEARCHED PUBLIC SOURCES** (bounded search: support.xbox.com article shell not captured, GitHub GDK, learn.microsoft.com GDK docs, Hot Chips pdf, xboxoneresearch wiki, community storage threads); internal artifact existence is **UNKNOWN** and not proven by negative search.
++
++> **Confidence:** **NOT FOUND IN SEARCHED PUBLIC SOURCES** — bounded search across support.xbox.com article shell (JS loading placeholder, body not captured), GitHub GDK, learn.microsoft.com GDK docs, Hot Chips pdf, xboxoneresearch wiki, community storage threads; **UNKNOWN** whether unpublished/internal artifact exists (unpublished ≡ not obtainable) — but charter requires *legitimate documented route*, so unpublished does not satisfy success. Do not claim VERIFIED non-existence from search absence.
++
++### 2.2 Can authorized GDKX access provide it?
++
++**Not demonstrably — and public documentation suggests not.**
++
++- `learn.microsoft.com/.../access-resources` **directly lists** Secure Resources: *“Secure Xbox downloads — A secure, high-speed download service for Xbox development resources, including: Latest release of software and **recoveries of the GDK**. Offline versions of GDK documentation. Submission Validator.”* **No line in cited Secure Resources documentation publicly advertises retail console OS image for generic PC** (public description uses illustrative `including:` list, not claimed exhaustive inventory; full restricted inventory is **UNKNOWN**).
++- GDKX README “What are key elements missing… currently only bundled as GDKX” lists console graphics driver/Shader Compiler/GDKX env APIs, not retail OS.
++- Secure Downloads requires Partner Center Xbox-provisioned account + valid GDK Agreement + Entra tenant + **MS rep enablement** (not self-service).
++- Historical precedent: Dev Kit recoveries target **Xbox dev hardware** (same SoC family), not generic-PC flashable images. Treating Dev Kit recoveries as PC OS images conflates categories (charter Part I §3) — corrected in `PC_COMPATIBILITY_SCENARIOS.md` scenario E.
++
++**Could a Microsoft insider know of an internal image that matches description?** Possibly — we cannot prove negative beyond public docs. But charter’s “legitimate *route*” must be **documented**, not rumored. On public evidence, answer is **No**.
++
++### 2.3 Is a PC-bootable retail image documented?
++
++**No.** No Microsoft-published page, Hot Chips pdf, Xbox Research wiki page, or community repair thread describes a retail Xbox image with:
++- a PC-bootable partition image (`bootx64.efi` + UEFI boot vars, PC GPT),
++- PC-compatible init for DDR/GDDR6 hybrid,
++- Windows-CA- or PC-TPM-signed payload for generic PC Secure Boot,
++- documentation of PC-side ACPI/SMBIOS adaptation.
++
++Public evidence consistently describes Xbox OS as targeting Xbox SoC/board (SoC Fabric, GDDR6, embedded GPU, SMC → SP → 2BL → Host VBI → HostOS → System VBI → SystemOS → GameOS — `BOOT_CHAIN.md` §1–2 from Xbox One wiki with Hot Chips verified SoC). **No PC-target image was found in searched public sources** (bounded search: support.xbox.com article shell not captured, GDK docs, GitHub GDK, Hot Chips pdf, bootloaders wiki, community storage threads); absence is **NOT FOUND IN SEARCHED PUBLIC SOURCES**, not proof of internal non-existence.
++
++### 2.4 Is a genuine PC boot path demonstrated anywhere?
++
++**No — not in any of six scenarios investigated:**
++
++- **A Generic AMD desktop, B Generic Intel desktop, C AMD PC with integrated Pluton + UEFI Secure Boot** — all `NOT CURRENTLY DEMONSTRATED` (strong negative technical case: SoC/firmware/GPU/storage divergence verified + retail-CA divergence strongly supported; exact enforcement strings unknown per audit — but cumulative gap suffices to defeat drop-in path).
++- **D Custom x86-64 motherboard designed to reproduce selected Xbox characteristics** — `NOT CURRENTLY DEMONSTRATED` on *standard PC hardware* charter terms; theoretically nearest to hypothesis (spoofable interfaces like ACPI names/GPT GUIDs/BAR map — see audit S10), but still requires Microsoft retail signatures for fused trust — so even tailored board **needs MS cooperation** (a console SKU decision, not a software project).
++- **E Licensed Dev Kit** — boots *because* it is Xbox hardware under GDKX — explicitly excluded from success by charter categories.
++- **F Actual Xbox Series X** — trivially boots; not generalizable (see `PC_COMPATIBILITY_SCENARIOS.md`).
++
++**Distinction preserved:** “Runs Xbox-developed games via public GDK on Windows” (e.g., `purexbox.com` Helix/ERA→Win32 note) is **not** “runs retail HostOS/SystemOS hypervisor stack”.
++
++### 2.5 What exact missing evidence would change the verdict?
++
++**Ordering by decision leverage — any one of these would materially change the feasibility picture and must be MS-published (not community-leaked) to satisfy charter:**
++
++1. **Published Microsoft artifact URL/label for “Xbox Series X retail OS recoverable image for non-Xbox hardware”** — e.g., a `support.xbox.com` or `aka.ms/gdkdl` page whose listed contents include *retail OS image with PC-compatible boot chain* (not *GDK recoveries*). Would move verdict toward `CONDITIONALLY FEASIBLE` (condition = authorized acquisition).
++2. **Published retail signing root / PC-enrollable Xbox CA** — Xbox CA thumbprint + enrollment flow showing retail OS payloads are intentionally dual-signed for PC `db`, or MS rep statement that Secure Downloads identity provisioning to generic PC is available. Would address trust blocker #1.
++3. **Published boot ROM / SMU init package for PC adaptation** — SoC init firmware (GDDR6 training, PCIe fabric linkup, thermal) redistributable for non-Xbox x86-64 boards (would imply MS intends PC targets beyond Xbox silicon — unprecedented).
++4. **Demonstrated independent reproduction** — a second *independent* party (not project) posting a bare-metal video + `BOOT_CHAIN.md`-compatible log chain on generic PC hardware that passes charter §2 verification table (provenance+signed authenticity+physical PC+no host OS+repeatability+security integrity), e.g., a security researcher at a conference, verifiable and Microsoft-cooperative (not bypass). This would push verdict to `FEASIBLE`.
++
++> **Absent any of the above, no single additional experiment *within this project* would elevate verdict.** Acquiring `OSU1.zip` alone (the previously recommended “immediate action”) now ranks **lower** than audit/chain mapping — because we already have enough secondary-source evidence to characterize OSU1, and local `unzip -l` would not produce a boot ROM or PC image.
++
++### 2.6 Is further engineering justified now?
++
++**Not on the defined objective’s current approach.**
++
++- **What is justified:** (a) Maintenance of audit + boot-chain docs as living references (low cost, high reuse for future feasibility reassessment if Microsoft publishes new path — e.g., Helix/backward-compat developments referenced in `purexbox.com 2026-07` news suggesting Xbox ERA→Win32 convergence for next-gen, not yet documented for Series X retail OS on PC); (b) **Phase 6-independent diagnostic**: a generic PC UEFI probe (our originally planned diagnostic environment — distinct from Xbox OS) remains technically justified as an **instrument** regardless of Xbox verdict (charter Part III Phase 6), *but only after explicit owner re-approval that it be pursued as a standalone PC-diagnostics product, not as “Xbox PC” evidence*.
++- **What is not justified:** Bootloader for retail OS, OSU1 XVD decryption/toolchain, attempt to enroll Xbox CA in QEMU to fake retail trust, GDKX onboarding solely for this project — all would expend effort against trust/SoC barriers that, per `EVIDENCE_AUDIT.md`, remain *strongly supported to be required* even after downgrading specific check-strings to unknown.
++
++**Recommendation: PAUSE on charter §1 objective until one of §2.5 items appears in public or authorized Microsoft documentation.** Preserve repo as evidence base (no hardware purchase, no GDKX NDA breach, no binary committed).
++
++---
++
++## 3. Formal Verdict Record
++
++| Verdict | Chosen? | Definition (from prompt §5) | This Project |
++|---------|---------|-----------------------------|--------------|
++| **FEASIBLE** | No | Documented, authorized, technically demonstrated path exists | No such path was found in searched public sources; secure docs publicly list GDK recoveries, full restricted inventory UNKNOWN |
++| **CONDITIONALLY FEASIBLE** | No | Specific missing artifact/authorization could establish path — identifiable single condition | No single isolatable condition (need multi-stage: trust + SoC init + image); D-custom board still needs MS signing |
++| **NOT CURRENTLY DEMONSTRATED** | **Yes** | Insufficient evidence to establish genuine PC boot path | **Selected — sufficient evidence that no path is demonstrated, insufficient evidence to prove exhaustive impossibility** |
++| **NOT FEASIBLE UNDER CURRENTLY KNOWN CONSTRAINTS** | No | Demonstrated technical/authorization barriers prevent objective under known constraints | Would require proving *stronger* negative (each blocker individually sufficient) — audit found that overclaim (S10 contradicted); therefore not justified |
++
++**Charter mapping:** Original charter §5 taxonomy `FEASIBLE / CONDITIONALLY FEASIBLE / NOT CURRENTLY FEASIBLE / INSUFFICIENT EVIDENCE` maps to prompt’s `NOT CURRENTLY DEMONSTRATED` ≈ `NOT CURRENTLY FEASIBLE`/`INSUFFICIENT EVIDENCE` depending on reading. This report treats them equivalently and selects the prompt’s term for audit alignment.
++
++---
++
++## 4. What Changed Since dc01bc1 (Audit Corrections Incorporated)
++
++| Old overclaim | Correction | Where |
++|---------------|-----------|-------|
++| CPUID allowlist as hard fact | Downgraded to **INFERRED/UNKNOWN** — HW families differ (verified), OS branch not witnessed | `EVIDENCE_AUDIT.md` S1 + `RETAIL_OS_REQUIREMENTS-CORRECTIONS.md` row 5 |
++| ACPI/SMBIOS OEM gating as confirmed | **UNKNOWN** — divergence expected, gating not witnessed | S2 + row 10 |
++| “Every generic PC Secure Boot necessarily fails” as absolute | Calibrated to **STRONGLY SUPPORTED with QEMU-caveat** (enrolled Xbox CA could validate but not preserve hardware trust) | S3 + row 2 |
++| Pluton/HSP role as detailed boot ladder | **Verified existence** (Hot Chips) preserved; **stage sequence** downgraded to XboxOne-observed/SeriesX-expected | S4, S5 + rows 1,3 |
++| Exact Boot ROM at every stage | **XboxOne names INFERRED for Series X** — note added | S5 + row 1 |
++| Precise memory layout hard fault | **Topology VERIFIED**, enforcement **STRONGLY SUPPORTED** (not proven per stage) | S6 + row 6 |
++| Generic Radeon cannot satisfy graphics stack | **Custom VERIFIED**, ID-check **INFERRED** | S7 + row 7 |
++| Xbox storage virtualization necessarily rejects generic PC | **Topology VERIFIED**, GUID enforcement **INFERRED** (extrapolated from Xbox One) | S8 + row 8 |
++| Hypervisor dependencies as fixed handshake | **Generally STRONGLY SUPPORTED**, Series X specifics **INFERRED** | S9 + row 9 |
++| Each blocker independently sufficient | **CONTRADICTED** — cumulative, scenario-dependent; custom board could spoof interfaces (not trust) | S10 + row 10 + `PC_COMPATIBILITY_SCENARIOS.md` §D |
++| OSU1 file list as personally inspected | **Secondary-source, not inspected** — banner added to `OSU1_ANALYSIS.md`, confidence `STRONGLY SUPPORTED` | `EVIDENCE_AUDIT.md` §3 + `RETAIL_OS_REQUIREMENTS-CORRECTIONS.md` preamble |
++
++## 5. Evidence References (Authoritative, Independently Re-verifiable)
++
++- `support.xbox.com/help/hardware-network/console/offline-system-update` — Support article existence at URL verified; body returned JS loading placeholder per Phase 6.1 audit (details as summarized from secondary community guides referencing official article, not directly quoted) — OSU1 update purpose STRONGLY SUPPORTED via consistent secondary summaries (not VERIFIED from direct fetch)
++- `fetch_page https://github.com/microsoft/GDK` + GitHub API `microsoft/GDK` `id 348416224` (private false) + `GET /contents` + `README.MD` `17186 B` `sha a20e397…` — verified GDK ≠ OS, GDKX holds console driver (VERIFIED)
++- `fetch_page https://learn.microsoft.com/en-us/gaming/gdk/docs/gdk-dev/development-downloads/access-resources?view=gdk-2604` (chunks 0–1) + `https://learn.microsoft.com/en-us/gaming/gdk/` — verified public vs secure split, **Secure = GDK recoveries + Submission Validator** (quote), MSAs no longer supported (VERIFIED)
++- `https://hc32.hotchips.org/assets/program/conference/day1/HotChips2020_GPU_Microsoft_Jeff_Andrews_v2.pdf` (slides 2–7 + 360.4 mm² 15.3B transistors, 52 CU 12 TF, 16 GB GDDR6 10+6 560 GB/s 320 banks, HSP/Pluton SHACK, MSP, Logan/MOVAD/CFPU2, Velocity, 1 TB NVMe x2 PCIe4 per Hot Chips slide 6) — **VERIFIED**
++- AnandTech live-blog 20200917 “Hot Chips 2020 Live Blog: Microsoft Xbox… (6pm PT)” 09:07PM HSP/Pluton RoT + 09:15PM 5GB/s crypto / 6 GB/s decomp — **VERIFIED**
++- Xbox One Research wiki `Bootloaders / Bootchain` + `FAQ` — SMC/SP/2BL/SCP/VBI/Hydra HostOS/SystemOS/GameOS via ERA/GameCore — **VERIFIED for Xbox One, Series-X-expected for Series family (wiki note)**
++- Wikichip CPUID Family 17h model 71 (Cardinal)/132 (Project X) — verified hardware families; Sandpile 0000_0001 leaf etc.
++- `gbatemp.net/threads 496212` GPT GUIDs + `A/host.xvd` flow + `futuretweets.com` `$SystemUpdate/` — secondary but corroborated STRONGLY SUPPORTED
++
++*No OSU1.zip, no XVD binary, no proprietary ROM/firmware, no GDKX NDA material was acquired or committed.*
++
++## 6. Next Engineering Decision (Per Prompt §7)
++
++**If verdict is NOT CURRENTLY DEMONSTRATED (it is), the single most valuable next experiment/information request is:**
++
++> **Re-verify a single authoritative Microsoft statement that an Xbox Series X retail image for generic PC is *intentionally not offered*.**
++
++Concretely: Request Owner (Lamar) to **send a scoped inquiry to the Microsoft GDK program contact** (if relationship exists) asking:
++- *“Is there a Microsoft-supported artifact that contains the **retail** Xbox Series X operating system (HostOS + SystemOS + hypervisor) as a **PC-bootable image** for standard x86-64 PC hardware, distinct from OSU1 update payloads and GDK recoveries intended for Dev Kit? If not offered, please confirm in writing for the project’s feasibility record.”*
++
++- **Result that would change feasibility:** Written confirmation of *existence* of such artifact + how authorized developers obtain it → verdict moves to `CONDITIONALLY FEASIBLE` (condition = authorized acquisition procedure) — project may then restart acquisition *after owner approval*.
++- **Result that would close current approach:** Written confirmation that **no such artifact is offered or planned**, consistent with public docs (GDK recoveries only, Xbox hardware root-of-trust not provisionable to generic PC — PCWorld 2020 “Xbox security approach *for PCs* was for Windows security, not Xbox OS portability”) → verdict remains `NOT CURRENTLY DEMONSTRATED` and project formally records *known boundary*, not missing-component hypothesis. Generic-PC objective enters maintenance, diagnostic probe may proceed as standalone product.
++
++**Do not start speculative bootloader implementation before owner decision.** Any “build boot chain anyway” work would now be **misaligned with evidence** and would produce a simulator, not the charter objective.
++
++## 7. Owner Approval Request
++
++| Decision | Options |
++|----------|---------|
++| **Accept report as final Phase 5 engineering evidence** and record verdict `NOT CURRENTLY DEMONSTRATED` | Accept / Request revision (cite which claim/tag still over/under-confident) |
++| **Authorize the single next request** (Microsoft inquiry above) — or decline as non-priority | Authorize / Defer |
++| **Authorize generic PC UEFI diagnostic probe as independent product** (not “Xbox PC” evidence) — charter Phase 6 scope with corrected naming `XboxPC-diagnostic` → `PC-hardware-report` | Authorize / Defer to Phase 6 after inquiry |
++| **Hardware purchase** (still none — charter §3, RISK-005) | Do **not** authorize |
++
++---
++
++*Prepared by Documentation & Evidence Agent. Independently reviewed by Security Research Reviewer + Verification Agent (`EVIDENCE_AUDIT.md`). Calibrated to distinguish verified Xbox facts — reasonable inferences — unknown proprietary details without relying on assumptions. Objective unchanged: genuine unmodified retail OS booting directly on non-Xbox PC hardware. No silent replacement with emulator/simulator/dashboard recreation.*
+diff --git a/research/xbox-os/findings/PC_COMPATIBILITY_SCENARIOS.md b/research/xbox-os/findings/PC_COMPATIBILITY_SCENARIOS.md
+new file mode 100644
+index 0000000..3493c5e
+--- /dev/null
++++ b/research/xbox-os/findings/PC_COMPATIBILITY_SCENARIOS.md
+@@ -0,0 +1,102 @@
++# PC_COMPATIBILITY_SCENARIOS.md — Scenario-Separate Assessment (Audit-Required)
++
++**Traceability:** `COMPAT-SCENARIOS-2026-11-22-001`  
++**Depends on:** `BOOT_CHAIN.md`, `EVIDENCE_AUDIT.md`, `RETAIL_OS_REQUIREMENTS-CORRECTIONS.md`, `DOWNLOAD_SOURCES.md`  
++**Method:** Each scenario evaluated against 10 dependency areas (§5 of RETAIL_OS_REQUIREMENTS) with explicit *known / missing / reproducible / requires authorization / demonstrated?* — never conflating “runs Xbox-developed games” with “runs retail Xbox OS”; never treating dev kit as proof of generic PC capability.
++
++---
++
++## Ground Rules
++
++| Rule | Rationale |
++|------|-----------|
++| Don’t confuse “runs games built with GDK” with “runs retail HostOS/SystemOS/GameOS” | Public GDK builds Win32+GDK games that *target* Xbox consoles/xCloud via Win32 abstraction; they do not invoke Xbox HostOS Hypervisor or SystemOS dashboard — verified by GDK README missing Xbox driver |
++| Don’t treat Dev Kit as generic PC proof | A licensed Xbox Dev Kit **is Xbox hardware** with dev firmware — boot succeeds *because* it is Xbox-trusted, not because path works on generic PC |
++| Custom board ≠ generic PC | Scenario D is intentionally included to separate “engineered to mimic selected Xbox characteristics” from “bought at retail for $800” |
++
++---
++
++## A. Generic modern AMD desktop PC (e.g., Ryzen 7000/8000 on AM5, DDR5, Radeon RX 7600–7900, UEFI 2.8+, Secure Boot with Windows CA)
++
++| Sub-question | Answer |
++|--------------|--------|
++| **What is technically known** | PC is x86-64 ISA compatible (verified). CPU is Zen 4/5 Family 19h/26h (not Fam 17h model 71/132), memory is split DDR5 5200–6000 on 2×64-bit channels (not 20×16 GDDR6 560 GB/s with 320 banks — verified Hot Chips), GPU is discrete RDNA 3/3.5 with PC Adrenalin driver (not Xbox embedded 52 CU 12 TF non-HAL GPU — verified custom), storage is standard NVMe (not Xbox GPT GUIDs or MSP offload), UEFI exports `DB/Kek/PK` Windows CA (not Xbox CA — inferred, not thumbprint-verified), HSP/Pluton may exist on Ryzen 6000+ AM5 but is PC-flavored (verified port lineage 2021, not Xbox identity) |
++| **What is missing** | Fused ROM RoT / Scarlett Boot ROM image, Xbox-fused retail keys validating `RM_Signature.bin`/XVDs, GDDR6 unified-pool 10+6 interleave timings, custom ACPI/SMBIOS OEM scope, HVax64 + HostOS host.xvd that *targets* PC firmware, GameCore image that addresses PC BARs |
++| **What could theoretically be reproduced** | CPU mode (still Zen-family), NVMe 4.0 throughput approaching Xbox raw (2.4 GB/s), display via UEFI GOP up to 4K120 — none reproduces Xbox platform config, only generic PC config |
++| **What requires MS authorization / proprietary HW** | Retail signing cert chain, Xbox HSP/Pluton identity, GDDR6 controller firmware, MSP decompressor schedule/BCPack dictionary, Xbox driver+GPU firmware coupling, GPT GUID enforcement |
++| **Genuine retail OS execution demonstrated?** | **No — not demonstrated. Cumulative divergence makes drop-in boot implausible; no independent test has booted retail `system.xvd` on any generic AMD desktop and passed attestation** |
++
++*Classification: `NOT CURRENTLY DEMONSTRATED`; strong negative but not proven exhaustive impossibility because scenario D remains theoretically conceivable (so stronger negative would exceed evidence).*
++
++## B. Generic modern Intel desktop PC (e.g., Core 13th/14th or Arrow Lake, DDR5/DDR4, GeForce RTX 40/50, UEFI + TPM 2.0 discrete)
++
++| Sub-question | Answer |
++|--------------|--------|
++| **Known** | x86-64 still, Intel CPUID Family 6 model ~0xB5/0xC5/0xA7 vs AMD 17h — even further from Cardinal/Project X; integrated security processor is Intel BootGuard/Titan-derivative (not AMD ASP/HSP); GPU is NVIDIA, entirely different driver ABI (not Xbox 52-CU RDNA2); same storage/UEFI divergences as A |
++| **Missing** | Same as A plus *greater* CPU-topology distance; Intel SMU/power/thermal tables unrelated to Scarlett; Intel I/O fabric not AMD Scalable Data Fabric |
++| **Reproducible** | Only generic x86-64 + NVMe speed; no Xbox platform characteristic reproduced more than A |
++| **Requires authorization** | Same as A; even custom x86-64 board using Intel would need to spoof AMD-specific Fabric/coherence and GPU |
++| **Demonstrated?** | **No — strictly weaker case than A** |
++
++## C. AMD PC with integrated Security Processor (Ryzen 6000+/7000 with Pluton) + modern UEFI Secure Boot (TPM 2.0 / discrete / fTPM, SHACK-capable)
++
++| Sub-question | Answer |
++|--------------|--------|
++| **Known** | PC Pluton *does* descend from Xbox HSP program — verified lineage: Xbox ASP (2013 Cortex-A5) → Azure Sphere → AMD Security Processor (+Pluton) 2020→ Ryzen Mobile 6000 (PCWorld/Tom’s 2020). So PC now has HSP-class hardware — **but** firmware is PC-provisioned (AMDs PSP + Pluton 2.0 SHACK-like), bound to PC manufacturer EK and Windows/BitLocker policy, not Xbox Live |
++| **Missing** | Xbox-fused identity (Xbox per-console certs, Live attestation, anti-rollback fused counters), Xbox SMU/HSP→SCP handshake expecting Scarlett fuse set, Xbox storage GUID expectation, GPU, GDDR6, ACPU/SoC fabric |
++| **Reproducible** | Hardware crypto/hash/decomp blocks conceptually overlapping with MSP blocks, but *instance* is PC-bound; QEMU/OEM Secure Boot could enroll custom Xbox CA and still not supply hardware root-of-trust — emulated, not hardware-rooted |
++| **Requires authorization** | Xbox identity provisioning service (no public program; MS rep enable for GDKX does not grant Xbox CA); Xbox GPU firmware/GDDR6 init |
++| **Demonstrated?** | **No — Pluton-on-PC does not make PC into Xbox-trusted platform. Microsoft explicitly migrated *technology* from Xbox to PC for Windows security (PCWorld 2020: “Xbox security approach for PCs” + “chip-to-cloud” via Windows Update), not for porting Xbox retail OS to PC** |
++
++*Note: Treating “Pluton on PC proves Xbox OS should now boot” conflates lineage with provisioning — audit downgrades this from alleged blocker #3 to correctly understood distinction between hardware-class vs instance.*
++
++## D. Custom x86-64 motherboard designed to reproduce selected Xbox platform characteristics (bespoke board, not generic PC)
++
++| Sub-question | Answer |
++|--------------|--------|
++| **Known** | Hypothetical — *could* implement subset: 20-channel GDDR6 interleaving emulation (costly, still not same bank count), spoof ACPI `MSFT` OEM + `\_SB.XBOX_` scope + `XBOX` SMBIOS string, expose Xbox GPT GUIDs via custom SPI NVMe shim that re-exports `9A056AD7…` System Update layout, mimic BAR map of embedded GPU via FPGA-attached RDNA2, expose Security Processor MMIO shim that ignores checks |  
++| **Missing** | Fused Xbox retail keys/cert chain (cannot self-provision retail trust — would need Microsoft signing), genuine HSP/Pluton Xbox identity, exact GPU driver blob *signed by Microsoft for retail OS to accept*, Hypervisor `hvax64` binary authorized for this board (MS would need to sign it), exact SMU/SoC init sequence (NDA), NVMe MSP/BCPack hardware scheduler |
++| **Reproducible in principle** | Selected **observable** platform characteristics (ACPI names, GUIDs, memory map windows, BAR sizes) are spoofable by an engineer with SoC datasheet access; they are *interfaces*, not *trust* |
++| **Requires authorization** | Retail signing for every stage (boot.bin→hypervisor→XVDs) by Microsoft Xbox CA; without signature, spoof fails attestation → retail OS intentional E-code halt (expected per community E-code repair reports, not Microsoft-quoted Series X log; not bypassed) — would require MS to sign custom board as Xbox hardware (a console hardware SKU decision, not a software project) |
++| **Demonstrated?** | **No demonstration exists; theoretically it is the *only* non-Xbox path that could even approximate retail checks — but it defeats “standard PC hardware” objective and still needs MS retail signatures, so even this path is `NOT CURRENTLY DEMONSTRATED` for the charter’s “standard PC hardware” goal** |
++
++*This scenario corrects old claim #10 (“each listed blocker independently prevents all possible PC boot paths”) — for generic PC, cumulative block is dispositive; for a custom board, some *interface* blockers are defeatable, but the *trust* blocker remains.*
++
++## E. Licensed Xbox Development Kit (GDKX-target, Xbox hardware with dev firmware)
++
++| Sub-question | Answer |
++|--------------|--------|
++| **Known** | Dev Kit **is** Xbox-derived SoC (same Scarlett family, dev-fused identity) with dev hypervisor that can launch both ERA/GameCore and UWP/SystemOS sandboxes; GDKX toolchain (Xbox graphics driver + Shader Compiler + NDA APIs) targets it; GDK recoveries target it |
++| **Missing relative to charter goal** | It is **not** generic PC — it is proprietary Xbox hardware sold/leasable only to managed program members under NDA; using it would violate success criterion “Does not require a physical Xbox” → “standard PC hardware, no console dependency” (charter §1 table) |
++| **Reproducible** | Irrelevant — success is on Xbox-silicon |
++| **Requires authorization** | Partner Center + GDK Agreement + MS rep + dev-kit hardware provisioning (exactly the program described in `MICROSOFT_ACCESS.md`) |
++| **Genuine retail OS execution demonstrated?** | **Trivially on Xbox-derived hardware, non-trivially on PC; charter treats this as `CONTROLLED EXPERIMENTS that cannot be represented as genuine execution` (Part I §3 category Research/emulation), not as Phase 7 acceptance** — so **No** for the charter objective, **Yes** for obvious trivial Xbox-hardware case that this project is not claiming |
++
++*This distinction was missing in early drafts that could be misread as “GDKX proves PC should now boot” — EVIDENCE_AUDIT §2/S10 correction clarifies.*
++
++## F. Actual Xbox Series X hardware (retail console — the control)
++
++| Sub-question | Answer |
++|--------------|--------|
++| **Known** | Entire verified chain executes: power SMC→SP ROM→2BL→SCP→Host VBI→hvax64→HostOS(host.xvd)→SystemOS(system.xvd via A/B)→GameOS/GameCore(era.xvd/gamecore.xvd), with OSU1 update payload consumed via Troubleshooter onto System Update partitions; MSP/HSP/MSP offload verified; storage/GPU/memory exact as Hot Chips |
++| **Missing** | Nothing for its own execution — this is the **reference truth**; still not inspectable inside sandbox (no proprietary binary dumped) |
++| **Reproducible** | Xbox boots Xbox — not evidence of PC boot |
++| **Requires authorization** | Ownership of retail hardware only (public) |
++| **Genuine retail OS execution demonstrated?** | **Yes — on its native hardware. This is the baseline; the project’s charter asks whether *the same* OS boots on generic PC hardware without host OS/Linux, without emulation, without dashboard clone — which remains undemonstrated** |
++
++*F corrects earlier overconfident extrapolation: because F boots, G generic PC boot was assumed to be blocked by same factors that F relies on — but audit shows some factors (CPUID allowlist, ACPI OEM gating) are **inferred**, not witnessed in F’s logs either.*
++
++---
++
++## Summary comparison
++
++| Scenario | Generic HW → Xbox RoT gap | Verdict on genuine retail OS boot (charter sense) |
++|---------|------------------------|---------------------------------------------------|
++| **A Generic AMD PC** | Multiple (CPU family, GDDR6 topology, GPU custom, storage GUIDs, PC Secure Boot CA) — some VERIFIED, some STRONGLY SUPPORTED/INFERRED | **NOT CURRENTLY DEMONSTRATED** (strong engineering case against, not exhaustive impossibility proof) |
++| B Generic Intel PC | Strictly larger gap (plus Intel vs AMD fabric) | **NOT CURRENTLY DEMONSTRATED — even weaker** |
++| C AMD Pluton PC | Pluton lineage verified but PC-instance not Xbox-identity — narrows one HW class gap, still missing Xbox provisioning | **NOT CURRENTLY DEMONSTRATED** |
++| **D Custom board** | Interface gaps spoofable; trust gap (retail signatures) still requires MS authorization | **NOT CURRENTLY DEMONSTRATED on “standard PC hardware” charter terms; theoretically nearest to hypothetical if MS cooperated — but then it wouldn’t be standard PC** |
++| E Dev Kit | Xbox silicon — trivial Xbox-side boot, but charter categories it as dev-ecosystem, not PC proof | **No (per charter) / Yes (trivially on Xbox hardware)** |
++| F Xbox Series X | Reference truth | **Yes — on native hardware, not in scope** |
++
++**No scenario shows genuine retail OS executing on generic PC hardware.** The corrected blocker set therefore does **not** need to claim “each independently proves impossibility”; it suffices to claim “cumulative, independently audited block demonstrates generic PC path is not currently established”.

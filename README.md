@@ -10,8 +10,17 @@
 **Risks:** [`RISK_REGISTER.md`](RISK_REGISTER.md)  
 **Architecture:** [`REPOSITORY_ARCHITECTURE.md`](REPOSITORY_ARCHITECTURE.md)
 
-**Current Phase:** Phase 0 — Establish Engineering Foundation (Stop-and-Report complete, awaiting owner approval for Phase 1)  
-**Branch:** `arena/00f8e176-xboxpc` @ `85c82f3`
+**Current Phase:** Phase 5.5 — Review HOLD (Staged 7 docs awaiting substantive review — see [`REVIEW_INDEX.md`](REVIEW_INDEX.md))  
+**Branch:** `arena/00f8e176-xboxpc` @ `dc01bc1` (base `85c82f3`; Phase 2+5 staged 709+/6-)  
+**Review:** Start at [`REVIEW_INDEX.md`](REVIEW_INDEX.md) → verbatim diff [`STAGED_DIFF_FOR_REVIEW.diff`](STAGED_DIFF_FOR_REVIEW.diff) (791 lines, 127881 bytes) — 7-file navigation index + evidence audit
+
+---
+
+## 🔍 Current Review — Phase 5.5 HOLD (You Are Here)
+
+> **Review entry point:** [`REVIEW_INDEX.md`](REVIEW_INDEX.md) — 7-document staged work index + verdict/verified-vs-unknown/next-decision overview  
+> **Verbatim staged diff:** [`STAGED_DIFF_FOR_REVIEW.diff`](STAGED_DIFF_FOR_REVIEW.diff) — 791 lines / 127881 bytes — exact `git diff --cached` output (no reconstruction)  
+> *7 staged docs (A6+M1, 709+/6-) await substantive review before any commit — see REVIEW_INDEX.md §1 table for links + coverage.*
 
 ---
 
