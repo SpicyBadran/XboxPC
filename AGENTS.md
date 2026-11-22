@@ -69,6 +69,31 @@ Violation → immediate revert + entry in `RISK_REGISTER.md`.
 - Use `start_process` only for long-running servers (dev site preview) — bind to `0.0.0.0`.
 - Keep `scripts/build` reproducible; pin versions; set `SOURCE_DATE_EPOCH`.
 
+## 8.1 Dashboard Single Source of Truth — Permanent Rule (Post-Merge 1eac66c)
+
+**Source:** `docs/architecture/roadmap.json` — 24 milestones, 8 workstreams, status/dependencies/criteria/evidence/blockers/next-actionable.
+
+**Regeneration (mandatory after milestone evidence changes):**
+```bash
+python docs/architecture/generate-dashboard.py  # updates metrics + docs/architecture/assets/*.png + README.md DASHBOARD block
+python scripts/verify-dashboard.py              # CI check — fails if README/assets out-of-date vs roadmap.json
+```
+
+- Never edit milestone percentages in `README.md` manually — update `roadmap.json` status/evidenceClass, then regenerate.
+- Treemap: each square = one milestone (green completed, blue in-progress, red blocked, grey planned). Genuine readiness `0/4` stays separate from overall `11/24`.
+- Assets: `docs/architecture/assets/header.png`, `treemap-overall.png`, `ws-ws1.png`..`ws-ws8.png` — generated, committed.
+
+**PR checklist (all PRs touching research/status):**
+- [ ] `roadmap.json` updated if milestone evidence/status changed (not placeholders)
+- [ ] `python docs/architecture/generate-dashboard.py` run — README + assets reflect new metrics
+- [ ] `python scripts/verify-dashboard.py` passes locally
+- [ ] `Evidence ID` + base commit SHA in PR description
+- [ ] No `PASS` without log, no green check without physical evidence
+
+**CI:** `scripts/verify-dashboard.py` is the validation script — PR CI fails if outdated. Do not bypass.
+
+**Agent instruction:** After every successful PR merge to `main`, re-run generation to reflect newly merged state (see §8.1). Do not rely on owner remembering.
+
 ## 9. Hardware
 
 - Do not purchase or provision physical hardware without owner approval.
