@@ -1,0 +1,44 @@
+# XboxPC .gitignore — preserve evidence integrity, exclude non-reproducible artifacts
+
+# Build outputs (local, verified via hashes)
+build/
+*.efi
+*.o
+*.a
+*.so
+*.elf
+*.bin
+
+# External large binaries (never commit — hashes only in evidence/source-register/)
+*.img
+*.iso
+*.wim
+*.zip
+*.cab
+# Exception: small sample hashes/fixtures explicitly allowed in evidence/ are managed below
+
+# Proprietary / sensitive (never commit)
+XBOX_OSU*.zip
+recovery*.zip
+GDKX/
+*.p12
+*.pfx
+*.key
+
+# Toolchains (reproducibly pinned, not checked in)
+edk2/
+gnu-efi-install/
+
+# Evidence cache (keep structure, ignore temp)
+evidence/build-logs/*.tmp
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Keep evidence directories tracked (README.md ensures they exist)
+!evidence/**/.gitkeep
