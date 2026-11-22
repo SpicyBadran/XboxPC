@@ -136,10 +136,10 @@
           "title": "Microsoft retail OS inquiry (unsent)",
           "description": "Six-question inquiry INQUIRY-2026-11-22-001 (Q1 complete image / Q2 PC-target / Q3 GDKX scope / Q4 research program / Q5 deployment auth / Q6 written confirmation) + definitions + routes A/B + O1-O5.",
           "status": "completed",
-          "evidence": "research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md \u2014 DRAFT DO NOT SUBMIT, all contact routes from verified Microsoft domains",
+          "evidence": "research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md + docs/decisions/W2-M4-inquiry-readiness-packet.md (owner decision packet 2026-11-22 \u2014 audit, recipient evidence, O1-O5 matrix, checklist, authorization)",
           "evidenceClass": "DOCUMENTED",
           "type": "documentation",
-          "completionCriteria": "Draft contains all 6 verbatim questions, attachment table \u00a74, routes A/B1-B4/O1-O5, review sign-off; external action blocked until owner authorizes",
+          "completionCriteria": "Draft + owner packet ready: all 6 verbatim Qs, definitions \u00a74, routes A/B1-B4 with fetched Microsoft sources, O1-O5 matrix, send-checklist, authorization section \u2014 external action blocked until owner authorizes",
           "dependencies": [
             "W2-M1",
             "W2-M2",
@@ -439,7 +439,7 @@
     "overallProgress": "50.0% (12/24)",
     "milestoneProgress": "50.0% (12/24 completed)",
     "genuineExecutionReadiness": "0.0% (0/4 on W7+W8 critical path \u2014 research completion does NOT inflate this)",
-    "nextMilestone": "W2-M4 \u2192 W7-M1 (Microsoft inquiry send \u2192 await O1-O5 response) \u2014 owner authorization required",
+    "nextMilestone": "W2-M4 packet ready \u2192 W7-M1 (await owner send via Route A or B1 ID@XBOX.com) \u2014 unsent, no enrollment",
     "currentPhase": "Phase 5.5 HOLD (merged 1eac66c) \u2014 awaiting owner decision on inquiry send; diagnostic probe is separate product",
     "majorBlockers": [
       "No legitimate retail OS artifact for generic PC in searched public sources (W7-M1)",

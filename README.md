@@ -15,6 +15,8 @@
 
 
 
+
+
 <!-- DASHBOARD:START — generated from docs/architecture/roadmap.json do not edit manually — run python docs/architecture/generate-dashboard.py -->
 
 <div align="center">
@@ -89,7 +91,7 @@
 | `W2-M1` | OSU1 official update provenance | Retail | ✅ completed | `RESEARCHED` | Support article existence verified + secondary-source unpack listing v... |
 | `W2-M2` | Public GDK provenance | Retail | ✅ completed | `VERIFIED` | README missing-elements quoted + GDK vs GDKX distinction from learn.mi... |
 | `W2-M3` | Secure GDKX scope | Retail | ✅ completed | `DOCUMENTED` | Public description quoted (recoveries of the GDK), illustrative includ... |
-| `W2-M4` | Microsoft retail OS inquiry (unsent) | Retail | ✅ completed | `DOCUMENTED` | Draft contains all 6 verbatim questions, attachment table §4, routes A... |
+| `W2-M4` | Microsoft retail OS inquiry (unsent) | Retail | ✅ completed | `DOCUMENTED` | Draft + owner packet ready: all 6 verbatim Qs, definitions §4, routes ... |
 | `W3-M1` | Boot chain mapping | Xbox | ✅ completed | `RESEARCHED` | Each stage tagged VERIFIED/INFERRED/UNKNOWN; Series X filenames marked... |
 | `W3-M2` | Trust anchor & key chain | Xbox | 🔵 in_progress | `INFERRED` | Xbox CA thumbprint vs PC db comparison + fused identity provisioning f... |
 | `W3-M3` | Security prohibitions & threat model | Xbox | ✅ completed | `DOCUMENTED` | Security Reviewer sign-off in EVIDENCE_AUDIT §6; audit S10 overclaim c... |
