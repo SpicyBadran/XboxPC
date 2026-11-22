@@ -1,7 +1,7 @@
 # UEFI Diagnostic Probe — Bounded Specification (Smallest Useful, Separate Product)
 
 **Traceability:** `PROBE-SPEC-2026-11-22-001`  
-**Branch:** `arena/7ff9d1c6-xboxpc` @ `2359883` (current head; base `8771211` on `main`) — historical provenance `1eac66c` → `8771211` preserved  
+**Branch:** `arena/7ff9d1c6-xboxpc` @ `86cccdb` (current head; base `8771211` on `main`) — historical provenance `1eac66c` → `8771211` preserved  
 **Status:** **Specification only — NOT IMPLEMENTED — owner must re-authorize as separate product `PC-hardware-report`**  
 **Depends on:** `docs/architecture/roadmap.json` W6-M1..M4, `PLATFORM/README.md`, `ENVIRONMENT_INVENTORY.md` (ENV-2026-11-22-001), `FEASIBILITY_FINAL_REVIEW.md` Phase 5 verdict  
 **Hard boundary:** This spec does **not** increase genuine Xbox OS execution readiness (stays `0/4` `NOT CURRENTLY DEMONSTRATED`). It is an *instrument* to enumerate PC hardware reproducibly, not Xbox OS compatibility proof.

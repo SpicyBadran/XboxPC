@@ -1,7 +1,7 @@
 # MICROSOFT_RETAIL_OS_INQUIRY.md — Prepared Inquiry to Establish Authorized Retail OS Acquisition Route
 
 **Traceability:** `INQUIRY-2026-11-22-001`  
-**Branch:** `arena/7ff9d1c6-xboxpc` @ `2359883` (base `8771211` on `main`; historical provenance `dc01bc1` → `1eac66c` preserved)  
+**Branch:** `arena/7ff9d1c6-xboxpc` @ `86cccdb` (base `8771211` on `main`; historical provenance `dc01bc1` → `1eac66c` preserved)  
 **Prepared:** 2026-11-22 UTC — **DRAFT for Owner review only — DO NOT SUBMIT**  
 **Author Roles:** Documentation & Evidence Agent (inquiry draft), Security Research Reviewer (legal boundary check), Verification Agent (contact-route verification)  
 **Method:** Distinguishes OSU1 / Public GDK / secure Xbox downloads content / Complete retail OS image; contact routes are only those fetched from authoritative Microsoft domains (no invented representatives)  
@@ -138,7 +138,7 @@ To prevent misreading this as a game-publishing request, every submission will i
 >
 > Dear Microsoft Xbox team,
 >
-> We are a research group conducting an authorized-artifact feasibility study of **Xbox platform portability** under charter `XboxPC — Genuine Xbox Series X Retail OS on Standard PC Hardware`. We have completed an independent public-evidence audit (2026-11-22, branch `arena/7ff9d1c6-xboxpc` @ `2359883`, base `8771211` on `main`; historical provenance `dc01bc1` → `1eac66c` preserved) that distinguishes **OSU1 update packages, Public GDK (game SDK), and secure Xbox downloads content (GDK software and GDK recoveries, documentation, Submission Validator, restricted samples per `learn.microsoft.com/.../access-resources`)** — all verified from `support.xbox.com`, `github.com/microsoft/GDK`, `learn.microsoft.com/.../access-resources`, `devdocs.xbox.com/home/onboarding`, and Hot Chips 2020 Xbox Series X silicon presentation. **No public or documented secure artifact in our sweep constituted a complete retail OS image for generic PC.**
+> We are a research group conducting an authorized-artifact feasibility study of **Xbox platform portability** under charter `XboxPC — Genuine Xbox Series X Retail OS on Standard PC Hardware`. We have completed an independent public-evidence audit (2026-11-22, branch `arena/7ff9d1c6-xboxpc` @ `86cccdb`, base `8771211` on `main`; historical provenance `dc01bc1` → `1eac66c` preserved) that distinguishes **OSU1 update packages, Public GDK (game SDK), and secure Xbox downloads content (GDK software and GDK recoveries, documentation, Submission Validator, restricted samples per `learn.microsoft.com/.../access-resources`)** — all verified from `support.xbox.com`, `github.com/microsoft/GDK`, `learn.microsoft.com/.../access-resources`, `devdocs.xbox.com/home/onboarding`, and Hot Chips 2020 Xbox Series X silicon presentation. **No public or documented secure artifact in our sweep constituted a complete retail OS image for generic PC.**
 >
 > We write only to establish the **authorized acquisition boundary** — not to request a bypass, developer hardware purchase, or agreement acceptance before your answer.
 >
@@ -211,4 +211,4 @@ All URLs re-verifiable; no invented inbox or representative name included. **Res
 ---
 
 *Prepared for Owner review — **INQUIRY UNSENT, NO MICROSOFT CONTACT** — do not submit, register, accept agreements, or download restricted materials until Owner authorizes. All external actions remain blocked per `AGENTS.md` + `ENGINEERING_RULES.md` + prompt §3. **W7-M1 remains BLOCKED (inquiry UNSENT, not complete) — a positive O1 alone does not change feasibility; probe is specification-only (no implementation). Research progress (12/24 50.0%) and genuine execution readiness (0/4 0.0% NOT CURRENTLY DEMONSTRATED) remain separate.***  
-*Git: this file at `2359883` (base `8771211`); prior `dc01bc1` → `1eac66c` historical provenance preserved — do not label historical SHAs as current head.*
+*Git: this file at `86cccdb` (base `8771211`); prior `dc01bc1` → `1eac66c` historical provenance preserved — do not label historical SHAs as current head.*

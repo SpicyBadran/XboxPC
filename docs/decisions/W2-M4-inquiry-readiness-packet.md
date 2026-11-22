@@ -1,7 +1,7 @@
 # W2-M4 Inquiry Readiness Packet — Owner Decision Package
 
 **Traceability:** `INQUIRY-READINESS-2026-11-22-001`  
-**Branch:** `arena/7ff9d1c6-xboxpc` @ `2359883` (current head; base `8771211` on `main`) — historical provenance `dc01bc1` → `1eac66c` preserved, see §9  
+**Branch:** `arena/7ff9d1c6-xboxpc` @ `86cccdb` (current head; base `8771211` on `main`) — historical provenance `dc01bc1` → `1eac66c` preserved, see §9  
 **Source inquiry:** `research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md` (`INQUIRY-2026-11-22-001`) — DRAFT DO NOT SUBMIT  
 **Evidence baseline:** `research/xbox-os/findings/EVIDENCE_AUDIT.md` (`AUDIT-CLAIMS-2026-11-22-001`) + `research/xbox-os/documentation/OSU1_ANALYSIS.md` + `BOOT_CHAIN.md` + `MICROSOFT_ACCESS.md`  
 **Status:** **Ready for owner review — NOT SENT — no Microsoft contact, no enrollment, no NDA**  
@@ -254,6 +254,6 @@
 ---
 
 *Prepared for owner review — do not submit, register, accept agreements, or download restricted materials until owner authorizes. All external actions remain blocked per `AGENTS.md` + `ENGINEERING_RULES.md` + charter §8.*  
-*This packet reflects reconciliation pass on `2359883` (base `8771211`); prior history `dc01bc1` → `1eac66c` → `8771211` preserved in prior commits and `MICROSOFT_RETAIL_OS_INQUIRY.md` provenance.*  
+*This packet reflects reconciliation pass on `86cccdb` (base `8771211`); prior history `dc01bc1` → `1eac66c` → `8771211` preserved in prior commits and `MICROSOFT_RETAIL_OS_INQUIRY.md` provenance.*  
 *Next packet on response: `FEASIBILITY_FINAL_REVIEW.md` addendum + `roadmap.json` W7 status update (W7-M1 not complete until four O1 conditions met).*
 
