@@ -9,9 +9,10 @@
 
 **Charter** [`PROJECT_CHARTER.md`](PROJECT_CHARTER.md) · **Audit** [`INITIAL_AUDIT.md`](INITIAL_AUDIT.md) · **Rules** [`ENGINEERING_RULES.md`](ENGINEERING_RULES.md) · **Security** [`SECURITY.md`](SECURITY.md) · **Risks** [`RISK_REGISTER.md`](RISK_REGISTER.md) · **Architecture** [`REPOSITORY_ARCHITECTURE.md`](REPOSITORY_ARCHITECTURE.md) · **Review** [`REVIEW_INDEX.md`](REVIEW_INDEX.md) · **Roadmap** [`docs/architecture/roadmap.json`](docs/architecture/roadmap.json)
 
-**Branch** `arena/7ff9d1c6-xboxpc` @ `43e8be6` (PR #3 head, base `8771211` on `main`) · historical `1eac66c` `docs(xboxpc): finalize retail OS feasibility — audit-calibrated Phase 5 gate` preserved · **Previous merge** `8771211` `docs(dashboard): project continuation — reconcile phase`
+**Branch** `arena/7ff9d1c6-xboxpc` @ `2359883` (PR #3 head, base `8771211` on `main`) · historical `1eac66c` `docs(xboxpc): finalize retail OS feasibility — audit-calibrated Phase 5 gate` preserved · **Previous merge** `8771211` `docs(dashboard): project continuation — reconcile phase`
 
 ---
+
 
 
 

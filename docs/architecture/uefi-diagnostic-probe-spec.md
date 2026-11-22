@@ -1,7 +1,7 @@
 # UEFI Diagnostic Probe — Bounded Specification (Smallest Useful, Separate Product)
 
 **Traceability:** `PROBE-SPEC-2026-11-22-001`  
-**Branch:** `arena/7ff9d1c6-xboxpc` @ `43e8be6` (current head; base `8771211` on `main`) — historical provenance `1eac66c` → `8771211` preserved  
+**Branch:** `arena/7ff9d1c6-xboxpc` @ `2359883` (current head; base `8771211` on `main`) — historical provenance `1eac66c` → `8771211` preserved  
 **Status:** **Specification only — NOT IMPLEMENTED — owner must re-authorize as separate product `PC-hardware-report`**  
 **Depends on:** `docs/architecture/roadmap.json` W6-M1..M4, `PLATFORM/README.md`, `ENVIRONMENT_INVENTORY.md` (ENV-2026-11-22-001), `FEASIBILITY_FINAL_REVIEW.md` Phase 5 verdict  
 **Hard boundary:** This spec does **not** increase genuine Xbox OS execution readiness (stays `0/4` `NOT CURRENTLY DEMONSTRATED`). It is an *instrument* to enumerate PC hardware reproducibly, not Xbox OS compatibility proof.
@@ -43,7 +43,7 @@ Each module owns one concern, exports `efi_status_t inventory_<module>(report_co
 
 ## 3. Tooling — `tooling/hardware-report` JSON Schema and Human Report
 
-**Illustrative JSON example (machine-readable, per `roadmap.json` W5-M2 expectations) — valid JSON, local schema identifier:**
+**Illustrative JSON example (machine-readable, per `roadmap.json` W5-M2 expectations) — valid JSON, local schema identifier — all example commit SHAs/log paths are illustrative historical samples, not current project state:**
 
 ```json
 {
@@ -255,5 +255,5 @@ Each module owns one concern, exports `efi_status_t inventory_<module>(report_co
 
 ---
 
-*This spec is code-free and hardware-free — it defines the smallest useful instrument to decide next engineering, not to claim Xbox PC feasibility. Update `roadmap.json` W6-M1..M4 when evidence changes; regenerate dashboard via `python docs/architecture/generate-dashboard.py`.*
+*This spec is code-free and hardware-free — it defines the smallest useful instrument to decide next engineering, not to claim Xbox PC feasibility. Historical sample commit identifiers (e.g., `1e5d6ff`) and example log paths in JSON are illustrative only, not current project state — see current `roadmap.json` branch/commit for live provenance. Update `roadmap.json` W6-M1..M4 when evidence changes; regenerate dashboard via `python docs/architecture/generate-dashboard.py`.*
 
