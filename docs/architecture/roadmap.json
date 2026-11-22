@@ -1,0 +1,477 @@
+{
+  "project": "XboxPC",
+  "version": "1.0.0",
+  "generatedAt": "2026-11-22",
+  "branch": "arena/f59d27eb-xboxpc",
+  "commit": "1eac66c",
+  "destination": "Genuine, unmodified Xbox Series X retail OS booting directly on non-Xbox x86-64 PC hardware, without a host operating system, emulator, or security bypass.",
+  "evidenceClasses": [
+    "VERIFIED",
+    "DOCUMENTED",
+    "RESEARCHED",
+    "INFERRED",
+    "UNKNOWN"
+  ],
+  "milestoneTypes": [
+    "research",
+    "implementation",
+    "build-verification",
+    "emulation-test",
+    "physical-validation",
+    "documentation"
+  ],
+  "overall": {
+    "notes": "Computed from milestones array \u2014 never edit percentages manually. Genuine execution readiness is separate from overall research progress."
+  },
+  "workstreams": [
+    {
+      "id": "WS1",
+      "name": "Xbox Series X hardware architecture",
+      "description": "Public Series X SoC, board, and firmware surface from Hot Chips 2020 + community teardown vs commodity PC.",
+      "color": "#107c10",
+      "milestones": [
+        {
+          "id": "W1-M1",
+          "title": "SoC core architecture",
+          "description": "CPU 8\u00d7Zen2 clusters, GPU 52CU 12TF, 16GB GDDR6 10+6 560GB/s 320 banks, Velocity + expansion storage.",
+          "status": "completed",
+          "evidence": "research/xbox-os/findings/EVIDENCE_AUDIT.md#V4 + BOOT_CHAIN.md \u00a72 (Hot Chips 2020 slides 2-7: HC32 pdf)",
+          "evidenceClass": "VERIFIED",
+          "type": "research",
+          "completionCriteria": "Hot Chips pdf quoted with transistor count, GDDR6 topology, GPU CU, MSP rates \u2014 independently re-verifiable",
+          "dependencies": [],
+          "blocker": null
+        },
+        {
+          "id": "W1-M2",
+          "title": "SoC fabric & custom blocks",
+          "description": "HSP/Pluton SHACK RoT, MSP 4\u00d7crypto/4\u00d7hash/2\u00d7decomp @ SSD BW, SPLEAP, Audio Logan/MOVAD/CFPU2.",
+          "status": "completed",
+          "evidence": "BOOT_CHAIN.md \u00a72 rows 2,4,7 (Hot Chips slide 7 + AnandTech 09:07PM RoT) \u2014 VERIFIED existence, INFERRED stage sequencing",
+          "evidenceClass": "VERIFIED",
+          "type": "research",
+          "completionCriteria": "HSP/Pluton + SHACK existence verified from Hot Chips; sequencing marked XboxOne-observed/SeriesX-expected",
+          "dependencies": [
+            "W1-M1"
+          ],
+          "blocker": null
+        },
+        {
+          "id": "W1-M3",
+          "title": "Board & firmware surface",
+          "description": "SMC/SP voltage, ACPI/SMBIOS Xbox scope, storage GPT GUIDs, thermal \u2014 expected vs witnessed OEM divergence.",
+          "status": "blocked",
+          "evidence": "BOOT_CHAIN.md \u00a74 unknowns + EVIDENCE_AUDIT.md S2,S5 \u2014 no Series X ACPI dump or SMCFW binary published",
+          "evidenceClass": "UNKNOWN",
+          "type": "research",
+          "completionCriteria": "Series X ACPI dump or Microsoft board spec published (not community inference)",
+          "dependencies": [
+            "W1-M1"
+          ],
+          "blocker": "No public Xbox Series X firmware dump; Xbox One wiki notes Series X may differ (SSD vs eMMC)"
+        },
+        {
+          "id": "W1-M4",
+          "title": "Commodity PC divergence mapping",
+          "description": "Document CPU family/model, DDR split vs unified GDDR6, RDNA2 vs Xbox custom, NVMe topology deltas for generic AMD/Intel.",
+          "status": "completed",
+          "evidence": "EVIDENCE_AUDIT.md V6 + PC_COMPATIBILITY_SCENARIOS.md A-B + Wikichip 840F70/880F40 vs Matisse",
+          "evidenceClass": "DOCUMENTED",
+          "type": "research",
+          "completionCriteria": "Per-subsystem delta table with Wikichip/Hot Chips citations, marked VERIFIED topology vs INFERRED gating",
+          "dependencies": [
+            "W1-M1",
+            "W1-M2"
+          ],
+          "blocker": null
+        }
+      ]
+    },
+    {
+      "id": "WS2",
+      "name": "Retail OS acquisition & artifact provenance",
+      "description": "Can we legitimately obtain complete retail OS? Provenance for OSU1, GDK, GDKX, inquiry route.",
+      "color": "#16a34a",
+      "milestones": [
+        {
+          "id": "W2-M1",
+          "title": "OSU1 official update provenance",
+          "description": " support.xbox.com OSU1.zip \u2192 $SystemUpdate/*.xvd + RM_Signature.bin \u2192 A/B slots via Troubleshooter, Grey-out gate.",
+          "status": "completed",
+          "evidence": "research/xbox-os/documentation/OSU1_ANALYSIS.md (OSU1-ANALYSIS-2026-11-22-001) + DOWNLOAD_SOURCES.md + ARTIFACT_MANIFEST.json",
+          "evidenceClass": "RESEARCHED",
+          "type": "research",
+          "completionCriteria": "Support article existence verified + secondary-source unpack listing via \u22652 community sources (GBAtemp/futuretweets) with STRONGLY SUPPORTED note, not personally verified",
+          "dependencies": [],
+          "blocker": "Egress to download.microsoft.com blocked in sandbox \u2014 no personally inspected OSU1.zip, no SHA256 until owner retrieval"
+        },
+        {
+          "id": "W2-M2",
+          "title": "Public GDK provenance",
+          "description": "github.com/microsoft/GDK id 348416224, public SDK builds games for Xbox/PC/cloud \u2014 missing Xbox gfx driver per README.",
+          "status": "completed",
+          "evidence": "fetch_page github.com/microsoft/GDK + GitHub API 348416224/d773744/17186B \u2014 GDK \u2260 retail OS",
+          "evidenceClass": "VERIFIED",
+          "type": "research",
+          "completionCriteria": "README missing-elements quoted + GDK vs GDKX distinction from learn.microsoft.com access-resources",
+          "dependencies": [],
+          "blocker": null
+        },
+        {
+          "id": "W2-M3",
+          "title": "Secure GDKX scope",
+          "description": "learn.microsoft.com Secure Xbox Downloads = GDK recoveries + offline docs + Submission Validator; MS rep + GDK Agreement + Entra required, MSAs excluded.",
+          "status": "completed",
+          "evidence": "fetch_page access-resources?view=gdk-2604 chunks 0-1 + MICROSOFT_ACCESS.md",
+          "evidenceClass": "DOCUMENTED",
+          "type": "research",
+          "completionCriteria": "Public description quoted (recoveries of the GDK), illustrative including: list noted as not exhaustive \u2014 full restricted inventory UNKNOWN",
+          "dependencies": [
+            "W2-M2"
+          ],
+          "blocker": "Full restricted inventory not enumerated in public docs \u2014 requires MS rep confirmation (inquiry Q3)"
+        },
+        {
+          "id": "W2-M4",
+          "title": "Microsoft retail OS inquiry (unsent)",
+          "description": "Six-question inquiry INQUIRY-2026-11-22-001 (Q1 complete image / Q2 PC-target / Q3 GDKX scope / Q4 research program / Q5 deployment auth / Q6 written confirmation) + definitions + routes A/B + O1-O5.",
+          "status": "completed",
+          "evidence": "research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md \u2014 DRAFT DO NOT SUBMIT, all contact routes from verified Microsoft domains",
+          "evidenceClass": "DOCUMENTED",
+          "type": "documentation",
+          "completionCriteria": "Draft contains all 6 verbatim questions, attachment table \u00a74, routes A/B1-B4/O1-O5, review sign-off; external action blocked until owner authorizes",
+          "dependencies": [
+            "W2-M1",
+            "W2-M2",
+            "W2-M3"
+          ],
+          "blocker": "Awaiting owner authorization to send via ID@XBOX.com / account team \u2014 response determines CONDITIONALLY FEASIBLE vs maintained NOT CURRENTLY DEMONSTRATED"
+        }
+      ]
+    },
+    {
+      "id": "WS3",
+      "name": "Xbox boot chain & security architecture",
+      "description": "Trust chain Power\u2192Boot ROM\u2192SP\u2192SCP\u2192hvax64\u2192HostOS\u2192SystemOS\u2192GameOS; Hydra, HSP, Secure Boot.",
+      "color": "#0ea5e9",
+      "milestones": [
+        {
+          "id": "W3-M1",
+          "title": "Boot chain mapping",
+          "description": "Overview diagram (SMC 0SMCBL\u2192SP 0SP\u21921SP/2SP in boot.bin\u21922BL\u2192SCP\u2192Host VBI\u2192hvax64\u2192HostOS\u2192SystemOS\u2192GameOS), 9-stage table, dependency graph.",
+          "status": "completed",
+          "evidence": "research/xbox-os/documentation/BOOT_CHAIN.md (BOOTCHAIN-2026-11-22-001) \u2014 Xbox One wiki 2024-03-26 + Hot Chips verified blocks",
+          "evidenceClass": "RESEARCHED",
+          "type": "research",
+          "completionCriteria": "Each stage tagged VERIFIED/INFERRED/UNKNOWN; Series X filenames marked XboxOne-observed/SeriesX-expected per wiki SSD note",
+          "dependencies": [
+            "W1-M1"
+          ],
+          "blocker": null
+        },
+        {
+          "id": "W3-M2",
+          "title": "Trust anchor & key chain",
+          "description": "Fused ROM RoT, HSP/Pluton SHACK, SP fuse+cert\u21922BL decrypt, RM_Signature.bin validation, anti-rollback, Xbox CA vs PC db.",
+          "status": "in_progress",
+          "evidence": "BOOT_CHAIN.md \u00a72 rows 2-3 + EVIDENCE_AUDIT.md S3-S5 \u2014 HSP existence VERIFIED, per-stage cert IDs/ceremony UNKNOWN",
+          "evidenceClass": "INFERRED",
+          "type": "research",
+          "completionCriteria": "Xbox CA thumbprint vs PC db comparison + fused identity provisioning flow \u2014 not public; marked UNKNOWN until MS inquiry O1/O5 answer",
+          "dependencies": [
+            "W3-M1",
+            "W2-M3"
+          ],
+          "blocker": "No published Xbox retail signing cert chain; exact SCP keytable / SPLEAP hook not in Hot Chips"
+        },
+        {
+          "id": "W3-M3",
+          "title": "Security prohibitions & threat model",
+          "description": "No bypass, no key extraction, preserve retail signatures, threat model for custom board vs generic PC.",
+          "status": "completed",
+          "evidence": "SECURITY.md + ENGINEERING_RULES.md + EVIDENCE_AUDIT.md S10 corrected (cumulative not independent sufficiency)",
+          "evidenceClass": "DOCUMENTED",
+          "type": "documentation",
+          "completionCriteria": "Security Reviewer sign-off in EVIDENCE_AUDIT \u00a76; audit S10 overclaim corrected to cumulative + scenario D distinction",
+          "dependencies": [],
+          "blocker": null
+        }
+      ]
+    },
+    {
+      "id": "WS4",
+      "name": "Retail OS requirements & dependencies",
+      "description": "10 dependency areas calibrated from Confirmed\u2192VERIFIED/INFERRED/UNKNOWN.",
+      "color": "#8b5cf6",
+      "milestones": [
+        {
+          "id": "W4-M1",
+          "title": "Requirements enumeration",
+          "description": "RETAIL_OS_REQUIREMENTS.md \u2014 10 rows: Boot ROM, Secure Boot, Pluton/HSP, SoC init, CPUID, memory, GPU, storage, hypervisor, ACPI/SMBIOS.",
+          "status": "completed",
+          "evidence": "research/xbox-os/documentation/RETAIL_OS_REQUIREMENTS.md (RETAIL-REQ-2026-11-22-001)",
+          "evidenceClass": "DOCUMENTED",
+          "type": "research",
+          "completionCriteria": "Each row lists known component, public doc, required HW, OSU1/GDK/GDKX presence, unknown \u2014 prior to calibration",
+          "dependencies": [
+            "W1-M1",
+            "W3-M1"
+          ],
+          "blocker": null
+        },
+        {
+          "id": "W4-M2",
+          "title": "Evidence calibration",
+          "description": "CORRECTIONS appendix + EVIDENCE_AUDIT \u2014 downgrade 10 overconfident Confirmed\u2192INFERRED/UNKNOWN, cumulative not independent.",
+          "status": "completed",
+          "evidence": "research/xbox-os/documentation/RETAIL_OS_REQUIREMENTS-CORRECTIONS.md + findings/EVIDENCE_AUDIT.md (VERIFIED 6 / STRONGLY SUPPORTED 7 / INFERRED 8 / UNKNOWN 5 / CONTRADICTED 0)",
+          "evidenceClass": "VERIFIED",
+          "type": "research",
+          "completionCriteria": "Every claim re-graded with source/direct?/corroboration/corrected wording/evidence to resolve; no fabrication",
+          "dependencies": [
+            "W4-M1"
+          ],
+          "blocker": null
+        }
+      ]
+    },
+    {
+      "id": "WS5",
+      "name": "Standard PC hardware compatibility",
+      "description": "Generic AMD/Intel/Pluton/custom/DevKit vs Xbox Series X \u2014 what fails, what could be spoofed.",
+      "color": "#f59e0b",
+      "milestones": [
+        {
+          "id": "W5-M1",
+          "title": "Compatibility scenarios A\u2013F",
+          "description": "Six scenarios: A Generic AMD, B Generic Intel, C AMD Pluton+SecureBoot, D Custom board, E Dev Kit, F Xbox control \u2014 each known/missing/reproducible/requires auth/demonstrated.",
+          "status": "completed",
+          "evidence": "research/xbox-os/findings/PC_COMPATIBILITY_SCENARIOS.md (COMPAT-SCENARIOS-2026-11-22-001) \u2014 charter category separation",
+          "evidenceClass": "DOCUMENTED",
+          "type": "research",
+          "completionCriteria": "No scenario shows genuine retail OS on generic PC; D notes interface spoofable but trust requires MS signing; E/F correctly excluded from generic-PC success",
+          "dependencies": [
+            "W1-M4",
+            "W3-M1",
+            "W4-M2"
+          ],
+          "blocker": null
+        },
+        {
+          "id": "W5-M2",
+          "title": "Structured compatibility database",
+          "description": "Machine-readable hardware-compatibility.json \u2014 per-machine: IDs, firmware, test env, evidence, result (NOT TESTED/PASS/FAIL/BLOCKED).",
+          "status": "planned",
+          "evidence": "Placeholder \u2014 no hardware-compatibility.json exists; docs/roadmap.md Phase 4 expected",
+          "evidenceClass": "UNKNOWN",
+          "type": "implementation",
+          "completionCriteria": "JSON schema published + at least Tier 1 reference PC profile populated with physical evidence logs",
+          "dependencies": [
+            "W5-M1"
+          ],
+          "blocker": "Requires Tier 1 reference PC selection + evidence discipline (no speculative green checks)"
+        },
+        {
+          "id": "W5-M3",
+          "title": "CPU/GPU/firmware compatibility docs",
+          "description": "Per-subsystem compatibility deep dives (CPUID topology, memory layout, storage GUIDs, ACPI OEM tables).",
+          "status": "planned",
+          "evidence": "Placeholder \u2014 research/pc-compatibility/README only",
+          "evidenceClass": "UNKNOWN",
+          "type": "research",
+          "completionCriteria": "Each doc lists PC vs Xbox delta, tested on QEMU vs physical, with log citations",
+          "dependencies": [
+            "W5-M1"
+          ],
+          "blocker": "Awaiting W5-M2 schema + real hardware profile"
+        }
+      ]
+    },
+    {
+      "id": "WS6",
+      "name": "Independent UEFI diagnostic environment",
+      "description": "Our instrument \u2014 not Xbox OS \u2014 to enumerate PC hardware reproducibly. Authorized only after Phase 5 gate.",
+      "color": "#06b6d4",
+      "milestones": [
+        {
+          "id": "W6-M1",
+          "title": "UEFI probe architecture",
+          "description": "Modular design: uefi-probe entry + cpu/memory/pci/gpu/storage/firmware inventories \u2014 each efi_status_t inventory_<mod>(ctx).",
+          "status": "planned",
+          "evidence": "platform/README.md \u2014 placeholder architecture table; scripts/build reproducibility planned",
+          "evidenceClass": "DOCUMENTED",
+          "type": "documentation",
+          "completionCriteria": "Architecture reviewed, module contracts frozen, AGENTS.md Phase 6 gate noted \u2014 no code yet (charter compliance)",
+          "dependencies": [
+            "W4-M2"
+          ],
+          "blocker": "Phase 5 HOLD \u2014 implementation requires explicit owner approval after feasibility gate"
+        },
+        {
+          "id": "W6-M2",
+          "title": "Build toolchain",
+          "description": "gnu-efi + EDK2/ovmf + qemu-system-x86_64 + sbsigntools \u2014 reproducible via SOURCE_DATE_EPOCH, pinned versions.",
+          "status": "blocked",
+          "evidence": "ENVIRONMENT_INVENTORY.md (ENV-2026-11-22-001) \u2014 gcc 12.2.0 + python 3.11 present, gnu-efi/ovmf/qemu absent (verified dpkg)",
+          "evidenceClass": "DOCUMENTED",
+          "type": "build-verification",
+          "completionCriteria": "dpkg -l shows gnu-efi + ovmf + qemu installed; scripts/build produces EFI binary with hash log",
+          "dependencies": [
+            "W6-M1"
+          ],
+          "blocker": "Toolchain not installed in E2B sandbox; install via apt requires Phase 6 approval"
+        },
+        {
+          "id": "W6-M3",
+          "title": "Probe implementation & QEMU smoke",
+          "description": "C/Rust EFI app enumerating CPUID, memory map, PCI BDF, GOP, Block I/O, ACPI/SMBIOS, Secure Boot \u2014 JSON + human report.",
+          "status": "blocked",
+          "evidence": "Placeholder \u2014 no platform/*/ .c files exist; tooling/hardware-report planned",
+          "evidenceClass": "UNKNOWN",
+          "type": "implementation",
+          "completionCriteria": "EFI binary boots in QEMU+OVMF, produces hardware-report JSON matching schema, reproducible build verified",
+          "dependencies": [
+            "W6-M2"
+          ],
+          "blocker": "Requires W6-M2 toolchain + owner Phase 6 authorization"
+        },
+        {
+          "id": "W6-M4",
+          "title": "Physical USB validation",
+          "description": "Boot Tier 1 reference PC from USB, collect physical test logs, compare to QEMU, publish KNOWN_LIMITATIONS.",
+          "status": "blocked",
+          "evidence": "Placeholder \u2014 no tests/physical/ logs exist; evidence/hardware-logs empty",
+          "evidenceClass": "UNKNOWN",
+          "type": "physical-validation",
+          "completionCriteria": "Physical test report with environment tag physical, commit SHA, timestamp, log file path \u2014 emulator/physical strictly separated",
+          "dependencies": [
+            "W6-M3",
+            "W5-M2"
+          ],
+          "blocker": "No physical hardware provisioned (RISK-005, charter \u00a73 \u2014 no purchase without approval)"
+        }
+      ]
+    },
+    {
+      "id": "WS7",
+      "name": "Genuine retail OS execution investigation",
+      "description": "Authorized execution only if Microsoft provides legitimate path \u2014 not emulation, not bypass.",
+      "color": "#dc2626",
+      "milestones": [
+        {
+          "id": "W7-M1",
+          "title": "Authorized execution path",
+          "description": "Microsoft-published artifact or written O1 confirmation (PC-target retail image + trust provisioning) enabling investigation.",
+          "status": "blocked",
+          "evidence": "FEASIBILITY_FINAL_REVIEW.md \u00a72.5 item #1 + MICROSOFT_RETAIL_OS_INQUIRY.md Q1-Q2 awaiting send",
+          "evidenceClass": "UNKNOWN",
+          "type": "research",
+          "completionCriteria": "Microsoft written response (O1 COMPLETE IMAGE AVAILABLE) with program name/URL + acquisition procedure \u2014 or authoritative O2/O3 boundary confirmation",
+          "dependencies": [
+            "W2-M4"
+          ],
+          "blocker": "No legitimate retail OS artifact for non-Xbox hardware in searched public sources \u2014 requires Microsoft cooperation"
+        },
+        {
+          "id": "W7-M2",
+          "title": "Repeatable genuine boot demonstration",
+          "description": "Charter \u00a72 verification matrix: provenance + signed authenticity + physical PC + independent + no console + repeatability + security integrity.",
+          "status": "blocked",
+          "evidence": "Placeholder \u2014 charter \u00a72 and Phase 7 gate require provenance hashes + physical logs",
+          "evidenceClass": "UNKNOWN",
+          "type": "physical-validation",
+          "completionCriteria": "Independent party reproduction on Tier 1 hardware with full evidence chain \u2014 no host OS, no emulator, signatures preserved",
+          "dependencies": [
+            "W7-M1",
+            "W6-M4",
+            "W5-M2"
+          ],
+          "blocker": "Blocked by W7-M1 + W6 physical validation + custom SoC gap (fused ROM, GDDR6, 52CU, HSP identity)"
+        }
+      ]
+    },
+    {
+      "id": "WS8",
+      "name": "Physical validation & repeatability",
+      "description": "Per-machine certification only after genuine execution on Tier 1 \u2014 not speculative.",
+      "color": "#6366f1",
+      "milestones": [
+        {
+          "id": "W8-M1",
+          "title": "Tier 1 reference PC certification",
+          "description": "One carefully selected reference PC (e.g., AMD Zen 3/RDNA2, UEFI 2.8+, NVMe, discrete GPU close to Series X topology) \u2014 family deferred.",
+          "status": "planned",
+          "evidence": "Placeholder \u2014 PROJECT_CHARTER.md \u00a7Tier 1 deferred to Phase 4; no per-machine profile exists",
+          "evidenceClass": "UNKNOWN",
+          "type": "physical-validation",
+          "completionCriteria": "Per-machine profile with identifiers, firmware versions, features, test env, date, evidence, result \u2014 not speculative",
+          "dependencies": [
+            "W5-M2"
+          ],
+          "blocker": "Requires W5-M2 DB schema + owner hardware approval (no purchase before Phase 5 verdict)"
+        },
+        {
+          "id": "W8-M2",
+          "title": "Hardware family expansion",
+          "description": "Certify family of PCs with documented common hardware only after Tier 1 success \u2014 continuous, not inflated.",
+          "status": "planned",
+          "evidence": "Placeholder \u2014 charter Phase 8 continuous; docs/roadmap.md estimates 1-3 wks per expansion only after genuine execution",
+          "evidenceClass": "UNKNOWN",
+          "type": "physical-validation",
+          "completionCriteria": "At least 2 additional Tier 2 machines with PASS/FAIL + independent reproduction \u2014 not emulator results",
+          "dependencies": [
+            "W8-M1",
+            "W7-M2"
+          ],
+          "blocker": "Entire workstream blocked until W7 genuine execution demonstrated"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "totalMilestones": 24,
+    "byStatus": {
+      "completed": 12,
+      "in_progress": 1,
+      "blocked": 6,
+      "planned": 5
+    },
+    "overallProgress": "50.0% (12/24)",
+    "milestoneProgress": "50.0% (12/24 completed)",
+    "genuineExecutionReadiness": "0.0% (0/4 on W7+W8 critical path \u2014 research completion does NOT inflate this)",
+    "nextMilestone": "W2-M4 \u2192 W7-M1 (Microsoft inquiry send \u2192 await O1-O5 response) \u2014 owner authorization required",
+    "currentPhase": "Phase 5.5 HOLD (merged 1eac66c) \u2014 awaiting owner decision on inquiry send; diagnostic probe is separate product",
+    "majorBlockers": [
+      "No legitimate retail OS artifact for generic PC in searched public sources (W7-M1)",
+      "Toolchain missing (gnu-efi/ovmf/qemu) + no hardware provisioned (W6-M2/W6-M4)",
+      "Board/firmware surface gaps (ACPI/SMBIOS dump, SMCFW, cert chain) remain UNKNOWN (W1-M3/W3-M2)"
+    ],
+    "destinationReadiness": "Destination requires W7-M1\u2192W7-M2 + W6-M4 + W5-M2 \u2014 all blocked. Research 50.0% \u2260 readiness 0.0%."
+  },
+  "nextActions": [
+    {
+      "id": "NA-1",
+      "title": "Owner reviews & sends Microsoft inquiry",
+      "owner": "Project Owner Lamar",
+      "dependsOn": "REVIEW_INDEX.md + MICROSOFT_RETAIL_OS_INQUIRY.md",
+      "action": "Authorize Route A (account team) or B1 ID@XBOX.com email with 6 questions + definitions table; keep unsent until explicit send authorization",
+      "outcome": "O1 moves feasibility to CONDITIONALLY FEASIBLE; O2/O3 confirms boundary (no PC image); O4/O5 requires clarification"
+    },
+    {
+      "id": "NA-2",
+      "title": "Decide UEFI diagnostic probe as independent product",
+      "owner": "Project Owner",
+      "dependsOn": "Phase 5 verdict understood",
+      "action": "Approve Phase 6 separately as PC-hardware-report product (not Xbox PC evidence) \u2014 or defer until inquiry response",
+      "outcome": "If approved: install toolchain, implement platform/*, QEMU smoke, then physical USB test with strict evidence discipline"
+    },
+    {
+      "id": "NA-3",
+      "title": "Maintain dashboard single source of truth",
+      "owner": "All agents",
+      "dependsOn": "docs/architecture/roadmap.json",
+      "action": "Update roadmap.json when milestone evidence changes; run python docs/architecture/generate-dashboard.py to regenerate README + assets",
+      "outcome": "README stays honest via CI check scripts/verify-dashboard.py"
+    }
+  ]
+}

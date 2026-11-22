@@ -1,11 +1,12 @@
-# XboxPC — Review Index (Phase 5.5 — Staged Documentation)
+# XboxPC — Review Index — Merged Phase 5 Gate + Continuation Branch
 
-> **For owners/reviewers:** This index makes the current staged work easy to navigate without relying on chat output or temporary viewers. All substantive work is the **7-file staged diff** — this file and `STAGED_DIFF_FOR_REVIEW.diff` are navigation aids only.
+> **For owners/reviewers:** This index navigates the **merged Phase 5 research** (`1eac66c` on `main`) and the current continuation work on `arena/f59d27eb-xboxpc`. The substantive 7-file research is now on `main`; this file + `STAGED_DIFF_FOR_REVIEW.diff` remain navigation aids linked from the dashboard.
 
-**Branch:** `arena/00f8e176-xboxpc` @ `dc01bc1` (base `85c82f3` per current session)  
-**Status:** **7 files staged, not committed, not pushed** — awaiting substantive review  
-**Verbatim diff:** [`STAGED_DIFF_FOR_REVIEW.diff`](STAGED_DIFF_FOR_REVIEW.diff) — 791 lines / 127,881 bytes — exact output of `git diff --cached --no-ext-diff --unified=3`  
-**README:** [`README.md`](README.md) → links here
+**Branch:** `arena/f59d27eb-xboxpc` @ `1eac66c` (continuation from merged `main` 1eac66c, base 85c82f3)  
+**Status:** **Merged to `main` via PR #1** — 7 research docs + 3 review aids (709+/6- + 86+791 README/REVIEW_INDEX) live on `main` at 1eac66c; continuation branch active for dashboard + roadmap honest reconciliation  
+**Verbatim diff (historical):** [`STAGED_DIFF_FOR_REVIEW.diff`](STAGED_DIFF_FOR_REVIEW.diff) — 791 lines / 127,881 bytes — exact `git diff --cached` from 1eac66c merge (archived for audit)  
+**Dashboard:** [`README.md`](README.md) dashboard generated from [`docs/architecture/roadmap.json`](docs/architecture/roadmap.json) — single source of truth  
+**Roadmap data:** [`docs/architecture/roadmap.json`](docs/architecture/roadmap.json) — 24 milestones, 8 workstreams, blockers, next actions
 
 ---
 
@@ -25,13 +26,13 @@
 
 ---
 
-## 2. Project Status at a Glance
+## 2. Project Status at a Glance (Updated 2026-11-22 Post-Merge)
 
 - **Objective (unchanged):** Genuine, unmodified Xbox Series X retail OS (HostOS+SystemOS+hypervisor+retail boot chain) booting directly on standard x86-64 PC hardware — no Windows/Linux host, no emulator, no dashboard clone, no trust bypass.
-- **Phase:** Phase 2 acquisition investigation complete @ `dc01bc1` → Phase 5 audit/gate complete → **Phase 5.5 review HOLD** (this index).
-- **Gates 0–4 complete, Gate 5 `FEASIBILITY_FINAL_REVIEW.md` awaiting owner approval.** No bootloader, disk image, or hardware work authorized until approval.
-- **Evidence hygiene:** No `OSU1.zip`/XVD binary/ROM/GDKX NDA material acquired or committed; no hash fabricated; no bypass attempted; no hardware purchased.
-- **What’s staged now:** `7 files changed, 709 insertions(+), 6 deletions(-)` — `git status --short` shows `A6+M1` + this review aid `?? STAGED_DIFF_FOR_REVIEW.diff` (untracked, not staged).
+- **Phase:** Phase 0 Foundation ✅ → Phase 2 acquisition ✅ (1eac66c) → Phase 5 audit/gate ✅ → **Phase 5.5 HOLD merged to `main`** → **Continuation branch `f59d27eb` active** for dashboard + honest roadmap.
+- **Gates:** Phase 0–5 deliverables audited in `roadmap.json` (11/24 milestones completed, 6 blocked, 5 planned); Gates 0–3 research complete with calibration, Gate 5 verdict `NOT CURRENTLY DEMONSTRATED` on `main`, Gate 6+ blocked until Microsoft response or separate probe approval.
+- **Evidence hygiene:** No `OSU1.zip`/XVD binary/ROM/GDKX NDA material acquired or committed; no hash fabricated; no bypass attempted; no hardware purchased — preserved via `EVIDENCE_AUDIT.md`.
+- **What landed on `main` (PR #1):** `7 files` `709+/6-` + `REVIEW_INDEX.md` `86+` + `STAGED_DIFF_FOR_REVIEW.diff` `791` + `README.md` banner — merge commit `1eac66c`. This branch adds `roadmap.json` + generated dashboard + AGENTS/validation hygiene (not yet committed).
 
 ---
 
@@ -76,11 +77,12 @@ Any Microsoft written answer (O1 complete image / O2 Dev Kit-only / O3 no PC dep
 
 ---
 
-## 6. How to Review
+## 6. How to Review (Current Continuation)
 
-1. Start here (this index) → pick a document in §1 table.
-2. For full staged changes verbatim, open [`STAGED_DIFF_FOR_REVIEW.diff`](STAGED_DIFF_FOR_REVIEW.diff) (exact `git diff --cached` output; no reconstruction).
-3. Cross-check with live docs in `research/xbox-os/{acquisition,documentation,findings}/`.
-4. When ready, give verdict per §5 — no additional engineering until explicit approval.
+1. Start at dashboard [`README.md`](README.md) → treemap + metrics from `roadmap.json` (single source, never hand-edited).
+2. Deep dive via this index §1 table → 7 research docs in `research/xbox-os/{acquisition,documentation,findings}/`.
+3. For audit trail, open [`STAGED_DIFF_FOR_REVIEW.diff`](STAGED_DIFF_FOR_REVIEW.diff) (archived exact diff from 1eac66c) + `docs/architecture/roadmap.json` + `docs/architecture/assets/` PNGs.
+4. Check actual implementation: `platform/`, `tooling/`, `scripts/`, `tests/` are still placeholders (see § Technical Foundation in README) — no inflated progress.
+5. Give verdict per §5 + decide next milestone `W2-M4 → W7-M1` (inquiry) vs independent probe `W6` — no bootloader until authorized.
 
-*Review aids (`REVIEW_INDEX.md`, `STAGED_DIFF_FOR_REVIEW.diff`) are not staged — they are untracked navigation material and will remain out of the eventual documentation commit unless owner requests inclusion.*
+*Dashboard discipline: `roadmap.json` → `python docs/architecture/generate-dashboard.py` → README + assets. Validate via `python scripts/verify-dashboard.py` before PR.*

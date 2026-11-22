@@ -77,12 +77,21 @@ Mixing categories into one metric is a charter violation.
 2. **Retail OS Availability** → provenance analysis → Stop (Critical feasibility gate)
 3. **Boot Chain & Security** → dependency graph + trust model → Stop
 4. **PC Hardware Compatibility Database** → structured JSON + docs → Stop
-5. **Feasibility Verdict** → `FEASIBILITY_FINAL_REVIEW.md` with one of FEASIBLE / CONDITIONALLY FEASIBLE / NOT CURRENTLY FEASIBLE / INSUFFICIENT EVIDENCE → **Human Decision Required**
+5. **Feasibility Verdict** → `FEASIBILITY_FINAL_REVIEW.md` with one of FEASIBLE / CONDITIONALLY FEASIBLE / NOT CURRENTLY FEASIBLE / INSUFFICIENT EVIDENCE → **Human Decision Required** *(Formal interpretation 2026-11-22: prompt taxonomy uses `NOT CURRENTLY DEMONSTRATED` / `NOT FEASIBLE UNDER CURRENTLY KNOWN CONSTRAINTS` — see §6.1 Amendment below; `NOT CURRENTLY DEMONSTRATED` ≈ charter `NOT CURRENTLY FEASIBLE` per §6.1, preserved in `FEASIBILITY_FINAL_REVIEW.md` §3)*
 6. **Independent UEFI Diagnostic Boot Environment** (only after owner approval) → EFI app + reproducible build + physical test → Stop
 7. **Genuine Xbox OS Execution Investigation** (only after prerequisites demonstrated) → evidence per §2 → Stop
 8. **PC Hardware Expansion** (only after genuine execution on Tier 1) → per-machine certification
 
 Skipping a gate is a charter violation even if technical momentum suggests otherwise.
+
+### 6.1 Amendment — Feasibility Verdict Reconciliation (2026-11-22, merged 1eac66c)
+
+**Original charter taxonomy:** `FEASIBLE / CONDITIONALLY FEASIBLE / NOT CURRENTLY FEASIBLE / INSUFFICIENT EVIDENCE`  
+**Prompt taxonomy (research instruction §5, used in `FEASIBILITY_FINAL_REVIEW.md`):** `FEASIBLE / CONDITIONALLY FEASIBLE / NOT CURRENTLY DEMONSTRATED / NOT FEASIBLE UNDER CURRENTLY KNOWN CONSTRAINTS`
+
+**Formal interpretation — preservation, not replacement:** `NOT CURRENTLY DEMONSTRATED` (selected in `FEASIBILITY_FINAL_REVIEW.md` §3, `FEAS-2026-11-22-001`) is the **charter-equivalent** of `NOT CURRENTLY FEASIBLE ≈ INSUFFICIENT EVIDENCE`. It means: *sufficient evidence that no genuine authorized PC boot path is demonstrated in searched public sources, insufficient evidence to prove exhaustive impossibility* (audit S10 `CONTRADICTED` — cumulative not independent). It does **not** equal prompt's stronger `NOT FEASIBLE UNDER CURRENTLY KNOWN CONSTRAINTS` (which would require each blocker individually sufficient). Evidence in `EVIDENCE_AUDIT.md` + `RETAIL_OS_REQUIREMENTS-CORRECTIONS.md` preserved; original charter text retained above for provenance.
+
+**Current phase (2026-11-22):** Phases 0–5 research complete per `docs/architecture/roadmap.json` (11/24 milestones completed, genuine readiness 0/4) → **Phase 5.5 HOLD merged to `main` via PR #1 (1eac66c)** → continuation branch `arena/f59d27eb-xboxpc` active for dashboard + next-milestone preparation. **Gate 5 human decision required:** owner accepts `NOT CURRENTLY DEMONSTRATED` and authorizes Microsoft inquiry (W2-M4→W7-M1) or requests revision citing claim/tag.
 
 ## 7. Non-Negotiable Engineering Rules (Summary; see ENGINEERING_RULES.md)
 
@@ -120,10 +129,10 @@ Research phases (1–4) may overlap technically but gates remain sequential.
 
 | Approver | Date | Signature (commit) |
 |----------|------|-------------------|
-| Project Owner Lamar | — | Awaiting review of Phase 0 report |
-| Systems Engineering Agent | 2026-11-22 | `INITIAL_AUDIT.md` submitted |
+| Project Owner Lamar | — | Awaiting Phase 5 HOLD review (docs at 1eac66c) |
+| Systems Engineering Agent | 2026-11-22 | `INITIAL_AUDIT.md` + Phase 5 gate submitted (1eac66c merged) |
 
-**Next Step:** Owner reviews `INITIAL_AUDIT.md`, `ENVIRONMENT_INVENTORY.md`, this charter, `REPOSITORY_ARCHITECTURE.md`, `ENGINEERING_RULES.md`, `RISK_REGISTER.md`, and authorizes Phase 1.
+**Next Step (continuation branch `f59d27eb`):** Owner reviews `REVIEW_INDEX.md` + `FEASIBILITY_FINAL_REVIEW.md` (§6 next decision = Microsoft inquiry) + `docs/architecture/roadmap.json` dashboard; authorizes inquiry send (Route A or B1) and, separately, whether UEFI probe proceeds as independent `PC-hardware-report` product.
 
 ---
 
