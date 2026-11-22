@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "XboxPC Artifact Manifest — Official Xbox Series X OS Acquisition",
+  "traceability": "MANIFEST-2026-11-22-001",
+  "branch": "arena/00f8e176-xboxpc",
+  "generated": "2026-11-22T07:30:00Z",
+  "generator": "Systems Engineering Agent + fetch_page/web_search/curl evidence",
+  "evidence_basis": "support.xbox.com fetch_page + github.com/microsoft/GDK API + learn.microsoft.com access-resources page + 6 corroborating web sources; sandbox egress blocked direct OSU1 download (see provenance)",
+  "artifacts": [
+    {
+      "id": "ART-001-OSU1",
+      "canonical_name": "OSU1.zip (Offline System Update file, OSU1)",
+      "official_sources": [
+        "https://support.xbox.com/help/hardware-network/console/offline-system-update (Step 1: Download the Offline System Update file (OSU1))",
+        "http://www.xbox.com/xboxone/osu1 (short-redirect → download.microsoft.com/.../OSU1.zip — reported, not directly verified in sandbox)"
+      ],
+      "retrieval_date": "2026-11-22",
+      "retrieval_environment": "E2B sandbox iruwctpj94q0ohdxmj6c7 (Debian bookworm, GitHub egress allow-listed, Xbox/Microsoft download hosts blocked — see PROVENANCE.md §4)",
+      "acquisition_attempt": "blocked_by_sandbox_egress",
+      "acquisition_detail": "fetch_page to support.xbox.com succeeded (page shell retrieved, title verified); direct curl -I / urllib to www.xbox.com/xboxone/osu1 and download.microsoft.com failed with SSL_ERROR_SYSCALL/EOF (consistent with sandbox egress allow-list, not 404). No OSU1.zip was downloaded; no hash can be recorded here. Owner to retrieve in approved Windows+unrestricted-network environment.",
+      "filename_as_distributed": "OSU1.zip",
+      "file_size": null,
+      "file_size_estimated_range": "Approximately 4.8–6 GB (historical 2019 5.2 GB reported; current inferred from 6 GB NTFS USB requirement; no authoritative current size published on page shell)",
+      "version_build": null,
+      "version_note": "Support page is a rolling snapshot (Reddit 2019-10-11: 'files inside October update dated Sept 30'); version is embedded in payload metadata, not in page URL. No public build number advertised; must be extracted post-download from updater.xvd / payload manifest.",
+      "sha256": null,
+      "sha256_note": "Not recorded — file not acquired in this environment. Will be recorded in SHA256SUMS.txt upon owner retrieval (see PROVENANCE.md for verification steps).",
+      "signature_status": "inferred_signed",
+      "signature_evidence": "Payload contains RM_Signature.bin at $SystemUpdate root (reported by futuretweets.com, twicethebits.com); Xbox console validates signature against hardware-fused Xbox retail keys (inferred from e-code failure paths; see RETAIL_OS_REQUIREMENTS.md). Direct signature verification not performed (no file).",
+      "encryption_status": "inferred_signed_and_possibly_encrypted",
+      "internal_structure": {
+        "top_level": "$SystemUpdate/ (must be at NTFS USB root, exact case)",
+        "reported_files": [
+          "$SystemUpdate/bootanim.dat",
+          "$SystemUpdate/empty.bin",
+          "$SystemUpdate/RM_Signature.bin",
+          "$SystemUpdate/sys_main.xvd",
+          "$SystemUpdate/host.xvd",
+          "$SystemUpdate/SettingsTemplate.xvd",
+          "$SystemUpdate/system.xvd",
+          "$SystemUpdate/systemaux.xvd",
+          "$SystemUpdate/systemmisc.xvd",
+          "$SystemUpdate/systemtools.xvd",
+          "$SystemUpdate/updater.xvd"
+        ],
+        "reported_files_confidence": "high_for_xbox_one_family_extrapolated_to_series_x_s",
+        "container_format": "ZIP (external) → XVD (Xbox Virtual Disk) internals, variant of VHD",
+        "mountable_on_pc_generically": false
+      },
+      "completeness_classification": "OFFICIAL_BUT_INCOMPLETE_UPDATE_PAYLOAD",
+      "is_entire_os": "No",
+      "is_bootable_independently": "No",
+      "includes_boot_chain": "Not observably — relies on pre-existing console Boot ROM + Startup Troubleshooter; payload contains updater/system XVD slices, not firmware/bootloader for generic PC",
+      "includes_required_firmware": "No — SoC firmware, Boot ROM, board config absent from manifest",
+      "requires_existing_xbox_installation": "Yes — update is applied to existing System Update A/B partitions; version-check enforces newer-than-installed",
+      "is_hardware_bound": "Yes, Xbox-hardware-bound (Xbox Series X|S and Xbox One applicable, each console generation gated; not PC-portable per Support page segmentation)",
+      "legally_redistributable": "No — provided for repair of owned console; no redistribution license; see LICENSE-REVIEW.md",
+      "can_support_pc_boot_objective": "No — contributes analysis value but not an independent boot path",
+      "access": "public (requires Windows PC + 6 GB NTFS USB; no account needed)",
+      "evidence": [
+        "fetch_page https://support.xbox.com/help/hardware-network/console/offline-system-update — title + requirements verbatim",
+        "fetch_page https://support.xbox.com/en-US/help/hardware-network/console/offline-system-update — duplicate",
+        "web_search 'Xbox OSU1 offline system update' → futuretweets.com $SystemUpdate layout example",
+        "web_search → techdows.com OSU1/OSU2/OSU3 table",
+        "web_search → gbatemp.net/threads/496212 internal partition + XVD list (A/host.xvd ... updater.xvd, GPT GUIDs)",
+        "web_search → twicethebits.com OSU1 download URL pattern (xbox.com/xboxone/osu1)"
+      ]
+    },
+    {
+      "id": "ART-002-OSU2",
+      "canonical_name": "OSU2.zip (Intermediate update, original Xbox One only)",
+      "official_sources": [
+        "https://support.xbox.com/help/hardware-network/console/offline-system-update (Section: Original Xbox One console only → Step 3)"
+      ],
+      "retrieval_date": "2026-11-22",
+      "acquisition_attempt": "not_attempted",
+      "acquisition_detail": "Not needed for Series X|S; documented only for completeness of offline update branching.",
+      "filename_as_distributed": "OSU2.zip",
+      "sha256": null,
+      "completeness_classification": "OFFICIAL_BUT_INCOMPLETE_INTERMEDIATE",
+      "is_entire_os": "No",
+      "is_bootable_independently": "No",
+      "can_support_pc_boot_objective": "No"
+    },
+    {
+      "id": "ART-003-OSU3",
+      "canonical_name": "OSU3.zip (Intermediate update, original Xbox One only)",
+      "official_sources": [
+        "https://support.xbox.com/help/hardware-network/console/offline-system-update (Section: Original Xbox One console only → Step 3)"
+      ],
+      "acquisition_attempt": "not_attempted",
+      "filename_as_distributed": "OSU3.zip",
+      "sha256": null,
+      "completeness_classification": "OFFICIAL_BUT_INCOMPLETE_INTERMEDIATE",
+      "is_entire_os": "No"
+    },
+    {
+      "id": "ART-004-PUBLIC-GDK",
+      "canonical_name": "Public Microsoft Game Development Kit (GDK)",
+      "official_sources": [
+        "https://github.com/microsoft/GDK",
+        "https://aka.ms/gdk (redirect → above)",
+        "https://learn.microsoft.com/en-us/gaming/gdk/docs/gdk-dev/development-downloads/access-resources?view=gdk-2604"
+      ],
+      "retrieval_date": "2026-11-22",
+      "acquisition_attempt": "verified_via_gitHub_API_and_fetch_page",
+      "acquisition_detail": "GitHub API GET /repos/microsoft/GDK returned JSON id 348416224, private false, stars 1741; GET /repos/microsoft/GDK/contents listed 6 top-level entries; README.MD (17186 bytes) decoded from base64 confirmed GDK vs GDKX distinction.",
+      "filename_as_distributed": "N/A (GitHub repo + WinGet Microsoft.Gaming.GDK + NuGet Microsoft.GDK.Windows + vcpkg ms-gdk)",
+      "repo_html_url": "https://github.com/microsoft/GDK",
+      "latest_commit": "d773744 (Merge PR #127, 2026-11-04 by zachhooper)",
+      "completeness_classification": "DEVELOPMENT_ONLY",
+      "is_entire_os": "No — it is a game SDK, not a console OS",
+      "is_bootable_independently": "N/A",
+      "access": "public (no account, no Entra)",
+      "legally_redistributable": "Per LICENSE-EN-US.MD in repo (Other/NOASSERTION) — permissive for documented sample use but not for retail OS (which it is not)",
+      "can_support_pc_boot_objective": "No — provides PC game building, not console boot; Xbox graphics driver and console environment APIs are excluded (require GDKX)"
+    },
+    {
+      "id": "ART-005-SECURE-GDKX",
+      "canonical_name": "Secure Xbox Downloads / Microsoft Game Development Kit with Xbox Extensions (GDKX)",
+      "official_sources": [
+        "https://aka.ms/gdkdl (Secure Xbox Downloads)",
+        "https://learn.microsoft.com/en-us/gaming/gdk/docs/gdk-dev/development-downloads/access-resources?view=gdk-2604 (Accessing secure resources)",
+        "https://aka.ms/gdkxdocs (GDKX Documentation — secure)"
+      ],
+      "retrieval_date": "2026-11-22",
+      "acquisition_attempt": "not_attempted_authorization_required",
+      "acquisition_detail": "Requires: Xbox development partner onboarding → Partner Center account (Xbox-provisioned) + valid GDK Agreement + Microsoft Entra ID tenant + MS rep enablement of Secure Downloads. Personal MSAs not supported. Even after onboarding, available resources are described as 'Latest release of software and recoveries of the GDK, offline docs, Submission Validator' — no documented guarantee of retail console OS image for generic PC.",
+      "completeness_classification": "AUTHORIZED_ACCESS_REQUIRED_VERIFICATION_PENDING",
+      "is_entire_os": "Unknown — even secure inventory does not advertise PC-bootable retail OS; investigation would require onboarding and insider inspection, which is blocked without approval",
+      "is_bootable_independently": "Unknown / Unproven",
+      "can_support_pc_boot_objective": "Unproven — no public description promises PC-bootable retail OS exists even under GDKX"
+    }
+  ],
+  "summary_counts": {
+    "verified_official": 0,
+    "official_but_incomplete": 3,
+    "development_only": 1,
+    "authorized_access_required": 1,
+    "unverified": 0
+  },
+  "verdict": {
+    "can_legitimately_obtain_complete_retail_os": "No — no public artifact demonstrated to be a complete, independently bootable retail OS image. Only OSU1 update payload is publicly obtainable; GDK is game SDK not OS; GDKX potential is unproven even under authorization.",
+    "can_verify_authenticity": "Yes for OSU1 (signature RM_Signature.bin, Microsoft domain) — but verification proves it is a legitimate UPDATE, not a legitimate FULL OS.",
+    "authorized_non_xbox_boot_path": "None publicly demonstrated"
+  }
+}

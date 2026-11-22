@@ -1,0 +1,39 @@
+# SHA256SUMS.txt — XboxPC Artifact Hashes
+# Traceability: HASH-2026-11-22-001 (companion to ARTIFACT_MANIFEST.json)
+# Branch: arena/00f8e176-xboxpc
+# Generated: 2026-11-22T07:30:00Z
+# Policy: Only hashes of files actually acquired locally are listed here.
+# See DOWNLOAD_SOURCES.md §4 for sandbox egress constraints.
+
+# This file intentionally contains NO hash for OSU1.zip at this time because
+# sandbox egress to support.xbox.com/download.microsoft.com/www.xbox.com was blocked:
+#   curl -I https://download.microsoft.com/.../OSU1.zip → SSL_ERROR_SYSCALL (egress allow-list)
+#   python3 urllib.request urlopen http://www.xbox.com/xboxone/osu1 → TLS/SSL closed (EOF)
+#   fetch_page https://www.xbox.com/xboxone/osu1 → HTTP 500
+#   fetch_page https://support.xbox.com/.../offline-system-update → SUCCESS (page shell only, no binary)
+# The file IS publicly obtainable outside this sandbox. This entry records the gap honestly.
+
+# Expected format (owner to append after retrieval in approved environment):
+# To verify after downloading on Windows PC:
+#   certutil -hashfile OSU1.zip SHA256
+# or on Linux:
+#   sha256sum OSU1.zip
+#
+# Replace the placeholder below with the actual hash and record metadata in provenance.
+
+# OSU1.zip — NOT YET ACQUIRED IN THIS ENVIRONMENT — NO HASH TO RECORD
+# Expected filename: OSU1.zip
+# Expected source: https://support.xbox.com/help/hardware-network/console/offline-system-update → Step 1 download link → redirect to download.microsoft.com
+# Verification: compare hash after download; record version/build/date alongside.
+# Template:
+# <sha256_hex> *OSU1.zip
+
+# Public GDK — repository (non-binary manifest, not a downloadable OS artifact)
+# GitHub API verified (2026-11-22):
+# repo: microsoft/GDK
+# HEAD commit examined: d773744 (Merge PR #127 from zachhooper/user/zachhooper/gdk-license-n…, 2026-11-04)
+# repo id: 348416224, private: false
+# contents: README.MD (17186 bytes, sha a20e39775f0a1d27cb5780ff74e92fa501c57590), CHANGELOG.MD, LICENSE-EN-US.MD, DSC/, CREATIVE_ASSETS/, resources/images/, SECURITY.MD
+# Note: GDK is not an OS image; hashing individual release archives would occur under secure access only if authorized.
+
+# === No binary hashes committed until legitimate acquisition ===
