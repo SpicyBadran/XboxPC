@@ -9,9 +9,12 @@
 
 **Charter** [`PROJECT_CHARTER.md`](PROJECT_CHARTER.md) · **Audit** [`INITIAL_AUDIT.md`](INITIAL_AUDIT.md) · **Rules** [`ENGINEERING_RULES.md`](ENGINEERING_RULES.md) · **Security** [`SECURITY.md`](SECURITY.md) · **Risks** [`RISK_REGISTER.md`](RISK_REGISTER.md) · **Architecture** [`REPOSITORY_ARCHITECTURE.md`](REPOSITORY_ARCHITECTURE.md) · **Review** [`REVIEW_INDEX.md`](REVIEW_INDEX.md) · **Roadmap** [`docs/architecture/roadmap.json`](docs/architecture/roadmap.json)
 
-**Branch** `arena/f59d27eb-xboxpc` @ `1eac66c` (merged `main`) · **Last merge** `1eac66c` `docs(xboxpc): finalize retail OS feasibility — audit-calibrated Phase 5 gate`
+**Branch** `arena/7ff9d1c6-xboxpc` @ `43e8be6` (PR #3 head, base `8771211` on `main`) · historical `1eac66c` `docs(xboxpc): finalize retail OS feasibility — audit-calibrated Phase 5 gate` preserved · **Previous merge** `8771211` `docs(dashboard): project continuation — reconcile phase`
 
 ---
+
+
+
 
 
 
@@ -91,7 +94,7 @@
 | `W2-M1` | OSU1 official update provenance | Retail | ✅ completed | `RESEARCHED` | Support article existence verified + secondary-source unpack listing v... |
 | `W2-M2` | Public GDK provenance | Retail | ✅ completed | `VERIFIED` | README missing-elements quoted + GDK vs GDKX distinction from learn.mi... |
 | `W2-M3` | Secure GDKX scope | Retail | ✅ completed | `DOCUMENTED` | Public description quoted (recoveries of the GDK), illustrative includ... |
-| `W2-M4` | Microsoft retail OS inquiry (unsent) | Retail | ✅ completed | `DOCUMENTED` | Draft + owner packet ready: all 6 verbatim Qs, definitions §4, routes ... |
+| `W2-M4` | Microsoft retail OS inquiry (unsent) | Retail | ✅ completed | `DOCUMENTED` | Packet prepared (draft + owner packet ready): all 6 Qs with Q6 neutral... |
 | `W3-M1` | Boot chain mapping | Xbox | ✅ completed | `RESEARCHED` | Each stage tagged VERIFIED/INFERRED/UNKNOWN; Series X filenames marked... |
 | `W3-M2` | Trust anchor & key chain | Xbox | 🔵 in_progress | `INFERRED` | Xbox CA thumbprint vs PC db comparison + fused identity provisioning f... |
 | `W3-M3` | Security prohibitions & threat model | Xbox | ✅ completed | `DOCUMENTED` | Security Reviewer sign-off in EVIDENCE_AUDIT §6; audit S10 overclaim c... |
@@ -104,7 +107,7 @@
 | `W6-M2` | Build toolchain | Independent | 🔴 blocked | `DOCUMENTED` | dpkg -l shows gnu-efi + ovmf + qemu installed; scripts/build produces ... |
 | `W6-M3` | Probe implementation & QEMU smoke | Independent | 🔴 blocked | `UNKNOWN` | EFI binary boots in QEMU+OVMF, produces hardware-report JSON matching ... |
 | `W6-M4` | Physical USB validation | Independent | 🔴 blocked | `UNKNOWN` | Physical test report with environment tag physical, commit SHA, timest... |
-| `W7-M1` | Authorized execution path | Genuine | 🔴 blocked | `UNKNOWN` | Microsoft written response (O1 COMPLETE IMAGE AVAILABLE) with program ... |
+| `W7-M1` | Authorized execution path | Genuine | 🔴 blocked | `UNKNOWN` | Microsoft written response (O1) establishing all four conditions: iden... |
 | `W7-M2` | Repeatable genuine boot demonstration | Genuine | 🔴 blocked | `UNKNOWN` | Independent party reproduction on Tier 1 hardware with full evidence c... |
 | `W8-M1` | Tier 1 reference PC certification | Physical | ⬜ planned | `UNKNOWN` | Per-machine profile with identifiers, firmware versions, features, tes... |
 | `W8-M2` | Hardware family expansion | Physical | ⬜ planned | `UNKNOWN` | At least 2 additional Tier 2 machines with PASS/FAIL + independent rep... |
@@ -115,8 +118,8 @@
 
 ### Major blockers — displayed honestly, not hidden
 
-- 🔴 **No legitimate retail OS artifact for generic PC in searched public sources (W7-M1)**
-- 🔴 **Toolchain missing (gnu-efi/ovmf/qemu) + no hardware provisioned (W6-M2/W6-M4)**
+- 🔴 **No legitimate retail OS artifact for generic PC in searched public sources (W7-M1 BLOCKED — inquiry UNSENT, not complete)**
+- 🔴 **Toolchain missing (gnu-efi/ovmf/qemu) + no hardware provisioned (W6-M2/W6-M4) — probe is separate product**
 - 🔴 **Board/firmware surface gaps (ACPI/SMBIOS dump, SMCFW, cert chain) remain UNKNOWN (W1-M3/W3-M2)**
 
 - **Destination requires W7-M1→W7-M2 + W6-M4 + W5-M2 — all blocked.** Research 45.8% ≠ readiness 0.0%.
@@ -125,10 +128,10 @@
 
 ### Current milestone, next action, destination readiness
 
-- **Current milestone:** `W2-M4` *Microsoft retail OS inquiry (unsent)* — DRAFT `INQUIRY-2026-11-22-001` with 6 verbatim questions, definitions table, routes A/B1-B4, O1-O5; external action blocked until owner authorizes.
-- **Next actionable:** `NA-1` Owner sends inquiry via Route A (account team) or B1 `ID@XBOX.com` after confirming contact identity — do NOT enroll Partner Center / accept NDA. Outcome O1 moves to CONDITIONALLY FEASIBLE; O2/O3 confirms boundary.
-- **Independent work:** `W6` UEFI probe can proceed as **separate product** `PC-hardware-report` only after owner re-approves it separately — not Xbox PC evidence.
-- **Dependent work:** `W7` genuine execution + `W8` physical validation blocked until Microsoft response + `W6-M4` physical logs.
+- **Current milestone:** `W2-M4` *Microsoft retail OS inquiry (unsent)* — packet `INQUIRY-READINESS-2026-11-22-001` ready with 6 questions (Q6 neutral clarification), definitions table, routes A/B1-B4 with calibrated limits, O1-O5; external action blocked until owner authorizes.
+- **Next actionable:** `NA-1` Owner sends inquiry via Route A (preferred internal routing if account relationship exists) or B1 `ID@XBOX.com` (documented initial contact, ask to route if out of scope) — do NOT enroll Partner Center / accept NDA. O1 alone does NOT set feasibility; `CONDITIONALLY FEASIBLE` only when four conditions met (artifact/provenance, route+agreement, explicit PC authorization, hardware/configuration docs); O2/O3 confirms boundary.
+- **Independent work:** `W6` UEFI probe is separate product `PC-hardware-report` (spec only) — not Xbox PC evidence; genuine readiness stays `0/4 NOT CURRENTLY DEMONSTRATED`.
+- **Dependent work:** `W7-M1` remains `BLOCKED` (inquiry unsent, not complete) + `W7` genuine execution + `W8` physical validation blocked until Microsoft response + `W6-M4` physical logs.
 
 | Metric | Value |
 |--------|-------|

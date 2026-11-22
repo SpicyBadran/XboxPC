@@ -1,10 +1,10 @@
 # UEFI Diagnostic Probe — Bounded Specification (Smallest Useful, Separate Product)
 
 **Traceability:** `PROBE-SPEC-2026-11-22-001`  
-**Branch:** `arena/7ff9d1c6-xboxpc` @ `8771211` (continuation from merged `1eac66c`)  
+**Branch:** `arena/7ff9d1c6-xboxpc` @ `43e8be6` (current head; base `8771211` on `main`) — historical provenance `1eac66c` → `8771211` preserved  
 **Status:** **Specification only — NOT IMPLEMENTED — owner must re-authorize as separate product `PC-hardware-report`**  
 **Depends on:** `docs/architecture/roadmap.json` W6-M1..M4, `PLATFORM/README.md`, `ENVIRONMENT_INVENTORY.md` (ENV-2026-11-22-001), `FEASIBILITY_FINAL_REVIEW.md` Phase 5 verdict  
-**Hard boundary:** This spec does **not** increase genuine Xbox OS execution readiness (stays `0/4`). It is an *instrument* to enumerate PC hardware reproducibly, not Xbox OS compatibility proof.
+**Hard boundary:** This spec does **not** increase genuine Xbox OS execution readiness (stays `0/4` `NOT CURRENTLY DEMONSTRATED`). It is an *instrument* to enumerate PC hardware reproducibly, not Xbox OS compatibility proof.
 
 > **Do not implement in this phase** — this is the bounded spec requested for W6 decision. Implementation requires owner approval per `PROJECT_CHARTER.md` Phase 6 gate and `AGENTS.md` §4.
 
@@ -30,7 +30,7 @@ Each module owns one concern, exports `efi_status_t inventory_<module>(report_co
 | `cpu-inventory/` | CPUID, vendor, brand, family/model/stepping, topology (APIC), ISA (x86-64, SSE/AVX), virtualization | `EFI_MP_SERVICES_PROTOCOL` (if present) + `asm cpuid`, `EFI_CPU_ARCH_PROTOCOL` | `cpu.vendor`, `cpu.family/model/stepping`, `cpu.topology.cores/threads`, `cpu.isa`, `cpu.virtualization` | W6-M3 |
 | `memory-inventory/` | UEFI memory map descriptors, reserved ranges, hypervisor/framebuffer hints | `GetMemoryMap` + `EFI_MEMORY_DESCRIPTOR` types | `memory.map[]`, `memory.total_kb`, `memory.reserved_regions`, `memory.hypervisor_windows` (observed, not claimed compatible) | W6-M3 |
 | `pci-inventory/` | PCI BDF enumeration, vendor/device/class, topology, BARs (read-only) | `EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL`, `EFI_PCI_IO_PROTOCOL` | `pci.devices[]` (BDF, vid:did, class, BARs, topology tree) | W6-M3 |
-| `gpu-inventory/` | GPU PCI IDs, Graphics Output Protocol (GOP) modes, no full driver claim | `EFI_PCI_IO_PROTOCOL` + `EFI_GRAPHICS_OUTPUT_PROTOCOL` | `gpu.pci_ids[]`, `gpu.gop.modes[]`, `gpu.display.current`, `gpu.driver_note` (e.g., no Radeon fallback) | W6-M3 |
+| `gpu-inventory/` | GPU PCI IDs, Graphics Output Protocol (GOP) modes, no full driver claim | `EFI_PCI_IO_PROTOCOL` + `EFI_GRAPHICS_OUTPUT_PROTOCOL` | `gpu.pci_ids[]`, `gpu.gop.modes[]`, `gpu.display.current`, `gpu.driver_note` (INVENTORIED only — no Xbox compatibility conclusion) | W6-M3 |
 | `storage-inventory/` | NVMe/SATA/USB via Block I/O, read-only (no write, no Xbox GUID enforcement) | `EFI_BLOCK_IO_PROTOCOL`, `EFI_DISK_INFO_PROTOCOL` | `storage.devices[]` (type NVMe/SATA/USB, size, block_size, GPT presence — no Xbox GUID check) | W6-M3 |
 | `firmware-inventory/` | UEFI revision, ACPI/SMBIOS tables, Secure Boot state (`PK/KEK/db/dbx`), firmware vendor | `EFI_ACPI_TABLE_PROTOCOL`, `SMBIOS`, `EFI_VARIABLE_SERVICES` (`SecureBoot`, `PK` etc) | `firmware.uefi_revision`, `firmware.vendor`, `firmware.acpi.oem_id`, `firmware.smbios`, `firmware.secure_boot` (enabled/disabled + db state) | W6-M3 |
 
@@ -43,32 +43,103 @@ Each module owns one concern, exports `efi_status_t inventory_<module>(report_co
 
 ## 3. Tooling — `tooling/hardware-report` JSON Schema and Human Report
 
-**JSON schema (machine-readable, per `roadmap.json` W5-M2 expectations):**
+**Illustrative JSON example (machine-readable, per `roadmap.json` W5-M2 expectations) — valid JSON, local schema identifier:**
 
 ```json
 {
-  "$schema": "https://xboxpc.example.com/schemas/hardware-report-v1.json",
+  "$schema": "local:hardware-report-v1",
   "probe": {
     "version": "0.1.0",
     "timestamp": "2026-11-22T08:00:00Z",
     "build_hash": "sha256:abc...",
     "uefi_revision": "2.8",
-    "platform": "qemu-ovmf | physical-tier1"
+    "platform": "qemu-ovmf"
   },
   "environment": {
-    "tag": "emulation | physical",
+    "tag": "emulation",
     "commit_sha": "1e5d6ff",
     "timestamp": "2026-11-22T08:00:00Z",
     "log_path": "evidence/hardware-logs/2026-11-22-qemu-smoke.log"
   },
-  "cpu": { "vendor": "GenuineIntel", "family": 6, "model": 106, "stepping": 0, "brand": "Intel Xeon @2.6GHz", "topology": { "sockets":1, "cores":1, "threads":2 }, "isa": ["sse2","avx2"], "virtualization": "KVM" },
-  "memory": { "total_kb": 4034452, "map": [{"type":"EfiConventionalMemory","phys_start":"0x100000","pages": 256}], "reserved": [] },
-  "pci": { "devices": [{"bdf":"00:01.0","vid":8086,"did":1234,"class":"Display","bars":[ ]}] },
-  "gpu": { "pci_ids": [{"vid":1002, "did": 73bf}], "gop": {"modes": [{"width":1024,"height":768}]}, "driver_note": "No Radeon fallback — Xbox 52CU non-HAL coupling not satisfied" },
-  "storage": { "devices": [{"type":"NVMe","size_gb":512,"block_size":512,"gpt":true}] },
-  "firmware": { "vendor": "EDK2 OVMF", "uefi_revision":"2.8", "acpi": {"oem_id":"BOCHS"}, "smbios": {"manufacturer":"QEMU"}, "secure_boot": {"enabled": false, "db": "Windows Production CA not Xbox CA"} },
-  "result": "NOT_TESTED | TESTED—PASS | TESTED—FAIL | UNKNOWN | BLOCKED",
-  "notes": "No compatibility green check without physical evidence — see ENGINEERING_RULES.md"
+  "cpu": {
+    "vendor": "GenuineIntel",
+    "family": 6,
+    "model": 106,
+    "stepping": 0,
+    "brand": "Intel Xeon @2.6GHz",
+    "topology": {
+      "sockets": 1,
+      "cores": 1,
+      "threads": 2
+    },
+    "isa": ["sse2", "avx2"],
+    "virtualization": "KVM"
+  },
+  "memory": {
+    "total_kb": 4034452,
+    "map": [
+      {
+        "type": "EfiConventionalMemory",
+        "phys_start": "0x100000",
+        "pages": 256
+      }
+    ],
+    "reserved": []
+  },
+  "pci": {
+    "devices": [
+      {
+        "bdf": "00:01.0",
+        "vid": 8086,
+        "did": 1234,
+        "class": "Display",
+        "bars": []
+      }
+    ]
+  },
+  "gpu": {
+    "pci_ids": [
+      {
+        "vid": 1002,
+        "did": 29631
+      }
+    ],
+    "gop": {
+      "modes": [
+        {
+          "width": 1024,
+          "height": 768
+        }
+      ]
+    },
+    "driver_note": "INVENTORIED — no compatibility conclusion; Xbox-specific GPU assumptions marked UNKNOWN"
+  },
+  "storage": {
+    "devices": [
+      {
+        "type": "NVMe",
+        "size_gb": 512,
+        "block_size": 512,
+        "gpt": true
+      }
+    ]
+  },
+  "firmware": {
+    "vendor": "EDK2 OVMF",
+    "uefi_revision": "2.8",
+    "acpi": {
+      "oem_id": "BOCHS"
+    },
+    "smbios": {
+      "manufacturer": "QEMU"
+    },
+    "secure_boot": {
+      "enabled": false,
+      "db": "UNKNOWN — Secure Boot disabled in this environment; certificate comparison to Xbox CA not verified (INFERRED mismatch not asserted)"
+    }
+  },
+  "result": "NOT_TESTED",
+  "notes": "No compatibility green check without physical evidence — see ENGINEERING_RULES.md; QEMU vs physical strictly separated"
 }
 ```
 
@@ -103,8 +174,8 @@ Each module owns one concern, exports `efi_status_t inventory_<module>(report_co
 - [ ] Block I/O devices (NVMe/SATA/USB), size, block size, GPT GUIDs (observed, not enforced) — no Xbox 9A056AD7 A/B enforcement
 
 **Firmware:**
-- [ ] UEFI revision, firmware vendor (EDK2/AMI/Phoenix), ACPI `OEM ID`/`OEM Table ID` (e.g., `BOCHS` vs Xbox `MSFT`), SMBIOS manufacturer/product
-- [ ] Secure Boot state: `SecureBoot` var, `PK`/`KEK`/`db`/`dbx` — contents (Windows Prod CA not Xbox CA — inferred, not thumbprint-verified)
+- [ ] UEFI revision, firmware vendor (EDK2/AMI/Phoenix), ACPI/SMBIOS tables — `OEM ID`/`OEM Table ID` observed (e.g., `BOCHS` in QEMU); Xbox `MSFT` is INFERRED expectation not observed for Series X in this project
+- [ ] Secure Boot state: `SecureBoot` var, `PK`/`KEK`/`db`/`dbx` — contents **recorded as observed**; any comparison to Xbox CA marked **UNKNOWN** until thumbprint-verified; do not assert “Windows Production CA not Xbox CA” as probe observation
 
 ---
 
@@ -135,9 +206,9 @@ Each module owns one concern, exports `efi_status_t inventory_<module>(report_co
 - Environment tag `emulation`, commit SHA, timestamp, log `evidence/hardware-logs/2026-11-22-qemu-smoke.log` — hash-verified, committed log.
 
 **Limitations (honest):**
-- QEMU is **not** proof of PC boot — labels strictly `emulation` per `AGENTS.md` §9 / `ENGINEERING_RULES.md`; OVMF firmware vendor `BOCHS` vs Xbox `MSFT` not Xbox trust.
+- QEMU is **not** proof of PC boot — labels strictly `emulation` per `AGENTS.md` §9 / `ENGINEERING_RULES.md`; OVMF firmware vendor `BOCHS` observed; Xbox `MSFT` expectation is INFERRED for Series X not observed.
 - Emulation does not validate physical DDR/GPU/storage divergence (W1-V6 deltas remain).
-- No Secure Boot enforcement test — Windows Production CA in `db` not Xbox CA (INFERRED mismatch, not thumbprint-verified).
+- No Secure Boot enforcement test — `db` contents recorded as observed; any comparison to Xbox CA marked **UNKNOWN** (not thumbprint-verified, not asserted as INFERRED mismatch).
 
 ---
 
