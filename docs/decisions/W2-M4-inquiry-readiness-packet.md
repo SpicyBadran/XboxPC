@@ -1,13 +1,13 @@
 # W2-M4 Inquiry Readiness Packet — Owner Decision Package
 
 **Traceability:** `INQUIRY-READINESS-2026-11-22-001`  
-**Branch:** `arena/7ff9d1c6-xboxpc` @ `86cccdb` (current head; base `8771211` on `main`) — historical provenance `dc01bc1` → `1eac66c` preserved, see §9  
+**Branch:** `arena/7ff9d1c6-xboxpc` @ `f4cf313` (current head; base `8771211` on `main`) — historical provenance `dc01bc1` → `1eac66c` preserved, see §9  
 **Source inquiry:** `research/xbox-os/acquisition/MICROSOFT_RETAIL_OS_INQUIRY.md` (`INQUIRY-2026-11-22-001`) — DRAFT DO NOT SUBMIT  
 **Evidence baseline:** `research/xbox-os/findings/EVIDENCE_AUDIT.md` (`AUDIT-CLAIMS-2026-11-22-001`) + `research/xbox-os/documentation/OSU1_ANALYSIS.md` + `BOOT_CHAIN.md` + `MICROSOFT_ACCESS.md`  
 **Status:** **Ready for owner review — NOT SENT — no Microsoft contact, no enrollment, no NDA**  
 **Date:** 2026-11-22 (calibrated pass)  
 **Authors:** Documentation & Evidence Agent (audit), Security Research Reviewer (contact-route verification), Verification Agent (scope check)  
-**PR:** #3 draft on this branch against `main` — head `43e8be6`, base `8771211`; do not merge until owner authorizes send
+**PR:** #3 draft on this branch against `main` — head `f4cf313`, base `8771211`; do not merge until owner authorizes send
 
 > **Hard boundary:** This packet does not send, submit, or contact Microsoft. It makes the inquiry *ready* and *reviewable* so you can decide whether, where, and how to send.
 
@@ -46,7 +46,7 @@
 >
 > Dear Microsoft Xbox team,
 >
-> We are a research group conducting an authorized-artifact feasibility study of **Xbox platform portability** under charter `XboxPC — Genuine Xbox Series X Retail OS on Standard PC Hardware`. We have completed an independent public-evidence audit (2026-11-22, current branch `arena/7ff9d1c6-xboxpc` @ `43e8be6`, base `8771211` on `main`; historical provenance `dc01bc1` → `1eac66c`) that distinguishes **OSU1 update packages, Public GDK (game SDK), and secure Xbox downloads content** — all verified from `support.xbox.com`, `github.com/microsoft/GDK` (id 348416224), `learn.microsoft.com/.../access-resources`, `devdocs.xbox.com/home/onboarding`, and Hot Chips 2020 Series X silicon presentation (360.4mm²/15.3B/16GB GDDR6/52CU/HSP SHACK MSP). **No public artifact in our sweep constituted a complete retail OS image for generic PC.**
+> We are a research group conducting an authorized-artifact feasibility study of **Xbox platform portability** under charter `XboxPC — Genuine Xbox Series X Retail OS on Standard PC Hardware`. We have completed an independent public-evidence audit (2026-11-22, current branch `arena/7ff9d1c6-xboxpc` @ `f4cf313`, base `8771211` on `main`; historical provenance `dc01bc1` → `1eac66c`) that distinguishes **OSU1 update packages, Public GDK (game SDK), and secure Xbox downloads content** — all verified from `support.xbox.com`, `github.com/microsoft/GDK` (id 348416224), `learn.microsoft.com/.../access-resources`, `devdocs.xbox.com/home/onboarding`, and Hot Chips 2020 Series X silicon presentation (360.4mm²/15.3B/16GB GDDR6/52CU/HSP SHACK MSP). **No public artifact in our sweep constituted a complete retail OS image for generic PC.**
 >
 > We write only to establish the **authorized acquisition boundary** — not to request a bypass, developer hardware purchase, or agreement acceptance before your answer.
 >
@@ -254,6 +254,6 @@
 ---
 
 *Prepared for owner review — do not submit, register, accept agreements, or download restricted materials until owner authorizes. All external actions remain blocked per `AGENTS.md` + `ENGINEERING_RULES.md` + charter §8.*  
-*This packet reflects reconciliation pass on `86cccdb` (base `8771211`); prior history `dc01bc1` → `1eac66c` → `8771211` preserved in prior commits and `MICROSOFT_RETAIL_OS_INQUIRY.md` provenance.*  
+*This packet reflects reconciliation pass on `f4cf313` (base `8771211`); prior history `dc01bc1` → `1eac66c` → `8771211` preserved in prior commits and `MICROSOFT_RETAIL_OS_INQUIRY.md` provenance.*  
 *Next packet on response: `FEASIBILITY_FINAL_REVIEW.md` addendum + `roadmap.json` W7 status update (W7-M1 not complete until four O1 conditions met).*
 
